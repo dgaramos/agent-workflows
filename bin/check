@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly required_paths=(
+  "README.md"
+  "AGENTS.md"
+  "CONTRIBUTING.md"
+  "SECURITY.md"
+  "docs/development.md"
+  "docs/compatibility.md"
+  "core/.gitkeep"
+  "plugins/codex/.gitkeep"
+  "plugins/claude/.gitkeep"
+  "profiles/.gitkeep"
+  "examples/.gitkeep"
+)
+
+for path in "${required_paths[@]}"; do
+  test -f "$path"
+done
+
+git diff --check
+echo "catalog foundation check: ok"
