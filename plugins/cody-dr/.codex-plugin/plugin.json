@@ -1,0 +1,20 @@
+{
+  "name": "cody-dr",
+  "version": "0.1.0",
+  "description": "Evidence-first pull request review workflows for Codex.",
+  "author": {
+    "name": "Danilo Ramos",
+    "email": "dgaramos+cody@gmail.com",
+    "url": "https://github.com/dgaramos"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Cody DR",
+    "shortDescription": "Review pull requests with evidence-first findings.",
+    "longDescription": "Cody DR reviews explicit pull requests and re-reviews resolved findings without storing publisher credentials.",
+    "developerName": "Danilo Ramos",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Review this pull request as Cody DR."
+  }
+}
