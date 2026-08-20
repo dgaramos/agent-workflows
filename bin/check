@@ -17,6 +17,12 @@ readonly required_paths=(
   "plugins/cody-dr/skills/review-pr/SKILL.md"
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
   "docs/cody-dr.md"
+  ".claude-plugin/marketplace.json"
+  "plugins/claudio-dr/.claude-plugin/plugin.json"
+  "plugins/claudio-dr/skills/review-pr/SKILL.md"
+  "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
+  "plugins/claudio-dr/agents/claudio-reviewer.md"
+  "docs/claudio-dr.md"
   "core/.gitkeep"
   "plugins/codex/.gitkeep"
   "plugins/claude/.gitkeep"
@@ -30,11 +36,29 @@ done
 
 while IFS= read -r skill; do
   awk '
+    BEGIN { valid = 0 }
     NR == 1 { if ($0 != "---") exit 1; next }
-    NR == 2 { if ($0 !~ /^name: [a-z0-9-]+$/) exit 1; next }
-    NR == 3 { if ($0 !~ /^description: .+/) exit 1; next }
-    NR == 4 { if ($0 != "---") exit 1; exit 0 }
+    NR > 1 && NR <= 20 {
+      if ($0 == "---") {
+        valid = has_description
+        exit
+      }
+
+      if ($0 ~ /^name: /) {
+        if ($0 !~ /^name: [a-z0-9-]+$/) exit 1
+        next
+      }
+
+      if ($0 ~ /^description: .+/) {
+        has_description = 1
+        next
+      }
+
+      if ($0 ~ /^[A-Za-z][A-Za-z0-9_-]*:/) next
+      exit 1
+    }
     { exit 1 }
+    END { if (!valid) exit 1 }
   ' "$skill"
 done < <(git ls-files '*SKILL.md')
 
