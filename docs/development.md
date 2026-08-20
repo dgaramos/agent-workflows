@@ -8,8 +8,10 @@ Run:
 bin/check
 ```
 
-The foundation check validates the required catalog boundaries and documents.
-Later plugin issues will extend it with Codex and Claude validation commands.
+The quality check validates required catalog boundaries, skill frontmatter,
+tracked sensitive-looking files, and whitespace. GitHub Actions runs the same
+command for pull requests and pushes to `main`. Later plugin issues will extend
+it with Codex and Claude validation commands.
 
 ## Testing a future adapter
 

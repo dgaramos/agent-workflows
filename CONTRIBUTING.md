@@ -33,5 +33,13 @@ reviewer without a publisher returns comments ready for the user to publish.
 ## Pull requests
 
 Use `type(scope): imperative summary` and include `Closes #<issue>` in the
-description. Run `bin/check` and explain the affected layer, compatibility, and
-installation impact.
+description. Run `bin/check` and explain the affected layer, compatibility,
+installation impact, and whether a profile or adapter changes.
+
+Every issue and pull request has an assignee, label, milestone, and Project
+item. Use a feature branch from `main`; do not push feature work directly to
+the default branch.
+
+The current GitHub plan does not support branch protection for this private
+repository. Until that changes, treat a passing `quality` GitHub Actions run
+and review of the PR checklist as mandatory before merging.
