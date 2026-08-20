@@ -42,7 +42,8 @@ for the delivery board.
 
 Read [development](docs/development.md), [compatibility](docs/compatibility.md),
 and [contributing](CONTRIBUTING.md). Run `bin/check` before opening a pull
-request.
+request. GitHub Actions runs the same `quality` check for pull requests and
+pushes to `main`.
 
 ## Installation status
 
