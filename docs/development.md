@@ -10,8 +10,8 @@ bin/check
 
 The quality check validates required catalog boundaries, skill frontmatter,
 tracked sensitive-looking files, and whitespace. GitHub Actions runs the same
-command for pull requests and pushes to `main`. Later plugin issues will extend
-it with Codex and Claude validation commands.
+command for pull requests and pushes to `main`. Claude plugin manifests are
+also validated with `claude plugin validate <path>` when their adapter changes.
 
 ## Testing a future adapter
 

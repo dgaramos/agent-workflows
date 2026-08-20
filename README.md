@@ -45,7 +45,13 @@ and [contributing](CONTRIBUTING.md). Run `bin/check` before opening a pull
 request. GitHub Actions runs the same `quality` check for pull requests and
 pushes to `main`.
 
-## Installation status
+## Install and use
 
-The catalog foundation does not yet ship installable plugins. The Cody DR and
-Claudio DR installation paths will be delivered in issues #3 and #4.
+Install the private marketplace adapter you need:
+
+- [Cody DR for Codex](docs/cody-dr.md)
+- [Claudio DR for Claude Code](docs/claudio-dr.md)
+
+For CraftControl, explicitly select the
+[CraftControl profile](docs/craftcontrol-profile.md). Its repository-native
+review skills remain available as a fallback during adoption.
