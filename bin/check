@@ -9,6 +9,7 @@ readonly required_paths=(
   "docs/development.md"
   "docs/compatibility.md"
   "core/pr-review/SKILL.md"
+  "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
   "core/pr-review/references/profile-contract.md"
   "core/pr-review/agents/openai.yaml"
@@ -62,6 +63,57 @@ while IFS= read -r skill; do
     END { if (!valid) exit 1 }
   ' "$skill"
 done < <(git ls-files '*SKILL.md')
+
+# Adapter drift check: adapter review-pr SKILL.md files must reference the
+# core review contract and must not embed the category table or confidence
+# threshold directly (those live only in core/pr-review/references/review-contract.md).
+readonly adapter_review_skills=(
+  "plugins/claudio-dr/skills/review-pr/SKILL.md"
+  "plugins/cody-dr/skills/review-pr/SKILL.md"
+)
+
+for skill in "${adapter_review_skills[@]}"; do
+  if ! grep -qF 'core/pr-review/references/review-contract.md' "$skill"; then
+    echo "drift: $skill does not reference core/pr-review/references/review-contract.md" >&2
+    exit 1
+  fi
+
+  if grep -qE '^\| (blocking|important|nit) \|' "$skill"; then
+    echo "drift: $skill embeds the finding class table (belongs in core)" >&2
+    exit 1
+  fi
+
+  if grep -qE 'confidence `?>= 80' "$skill"; then
+    echo "drift: $skill embeds the confidence threshold (belongs in core)" >&2
+    exit 1
+  fi
+done
+
+# Adapter handle-pr-findings SKILL.md files must reference core contracts.
+readonly adapter_findings_skills=(
+  "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
+  "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
+)
+
+for skill in "${adapter_findings_skills[@]}"; do
+  if ! grep -qF 'core/pr-review/references/review-contract.md' "$skill"; then
+    echo "drift: $skill does not reference core/pr-review/references/review-contract.md" >&2
+    exit 1
+  fi
+done
+
+# Adapter-local review-contract.md copies must not exist.
+readonly forbidden_paths=(
+  "plugins/claudio-dr/skills/review-pr/references/review-contract.md"
+  "plugins/cody-dr/skills/review-pr/references/review-contract.md"
+)
+
+for path in "${forbidden_paths[@]}"; do
+  if test -f "$path"; then
+    echo "drift: $path is an adapter-local copy of the core review contract; remove it" >&2
+    exit 1
+  fi
+done
 
 if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|token))$' >/dev/null; then
   echo "tracked sensitive-looking file detected" >&2
