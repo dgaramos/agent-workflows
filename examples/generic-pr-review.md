@@ -2,8 +2,12 @@
 
 Input: `review PR #42 with the default profile`
 
-The reviewer resolves the PR, reports the base/head, inspects the changed code
-and relevant callers, records checks consulted, and emits the review summary.
+The reviewer loads `core/pr-review/references/review-contract.md` and the target
+profile before reviewing. It resolves the PR, reports the base/head, inspects
+the changed code and relevant callers, records checks consulted, and emits the
+review summary using the contract's summary template with the configured
+reviewer name.
+
 If a new API response omits a field that existing consumers require, it reports:
 
 ```md
@@ -19,5 +23,10 @@ decide whether to request another page.
 **Suggested fix:** retain `next_page` or version the contract and update all consumers together.
 ```
 
-The example intentionally contains no project command, credential, or vendor
-assumption.
+Without publisher authorization, the review body and inline comments are
+returned as `not published`. The summary records `Publication: not requested`.
+
+The example intentionally contains no project command, credential, or
+vendor assumption. Both Claudio DR and Cody DR produce equivalent scope,
+evidence, findings, and summary structure from the same input; they differ only
+in reviewer name and platform publisher mechanics.
