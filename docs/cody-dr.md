@@ -19,6 +19,8 @@ plugin after updating the marketplace.
 
 The same publisher integration can support replies to and resolution of existing
 review threads; the target profile documents its inputs and verification steps.
+For this repository, see `profiles/agent-workflows.md` for the configuration
+names and publication boundary; it contains no credential values.
 For local changes to the plugin, update its Codex cachebuster, reinstall from
 the same marketplace, and start a new thread. The plugin never contains GitHub
 App keys or repository credentials.

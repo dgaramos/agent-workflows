@@ -23,6 +23,8 @@ plugin after updating the marketplace.
 
 The same publisher integration can support replies to and resolution of existing
 review threads; the target profile documents its inputs and verification steps.
+For this repository, see `profiles/agent-workflows.md` for the configuration
+names and publication boundary; it contains no credential values.
 After changing an installed plugin, update its version, run `/plugin marketplace
 update`, then `/plugin update claudio-dr@agent-workflows`. The plugin never
 contains GitHub App keys or target-repository credentials.
