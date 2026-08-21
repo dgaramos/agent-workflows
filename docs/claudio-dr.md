@@ -21,6 +21,8 @@ a Claudio DR GitHub App publisher, Claude may dispatch it through the existing
 personal `gh` session without switching or removing that session. Update the
 plugin after updating the marketplace.
 
+The same publisher integration can support replies to existing review threads;
+the target profile documents its reply inputs and verification step.
 After changing an installed plugin, update its version, run `/plugin marketplace
 update`, then `/plugin update claudio-dr@agent-workflows`. The plugin never
 contains GitHub App keys or target-repository credentials.
