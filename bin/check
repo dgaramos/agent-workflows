@@ -27,6 +27,7 @@ readonly required_paths=(
   "plugins/codex/.gitkeep"
   "plugins/claude/.gitkeep"
   "profiles/.gitkeep"
+  "profiles/agent-workflows.md"
   "examples/.gitkeep"
 )
 

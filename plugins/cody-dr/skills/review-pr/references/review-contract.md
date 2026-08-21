@@ -43,6 +43,11 @@ resolved, fixed but thread open, unresolved, superseded, or unverifiable. If
 the SHA is missing or history was rewritten, declare the delta unverifiable and
 review the full comparison. Thread replies are context, not proof.
 
+For authorized publication, use `REQUEST_CHANGES` for blocking or important
+findings, `COMMENT` for nit-only findings, and `APPROVE` only with no findings.
+Publish each finding as an inline comment at its evidence `file:line` when that
+line is in the diff; put findings outside the diff in the review body.
+
 Emit one summary per review:
 
 ```md
