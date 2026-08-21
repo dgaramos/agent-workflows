@@ -11,7 +11,10 @@ automatically after implementation.
 Load `references/review-contract.md` before reporting. It defines scope,
 evidence, confidence, re-review, findings, summary, and publication rules.
 
-When the user authorizes GitHub publication, use only an external publisher
-already configured outside the target repository. Otherwise return publication-
+When the user authorizes GitHub publication, a target profile may provide an
+external publisher and its documented dispatch contract. Use that publisher;
+the personal `gh` session may dispatch it, but must never be switched, refreshed,
+logged out, or used to impersonate the reviewer. Wait for the publisher and
+verify the resulting review's author and event. Otherwise return publication-
 ready comments with publication state `not published`. Never search the target
 repository for credentials.
