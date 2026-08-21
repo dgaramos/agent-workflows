@@ -8,7 +8,7 @@
       "name": "claudio-dr",
       "source": "./plugins/claudio-dr",
       "description": "Evidence-first pull request review workflows for Claude Code.",
-      "version": "0.1.1"
+      "version": "0.1.2"
     }
   ]
 }

@@ -16,13 +16,13 @@ claude plugin validate ./plugins/claudio-dr
 claude --plugin-dir ./plugins/claudio-dr
 ```
 
-Version 0.1.1 adds external-publisher dispatch: when a target profile documents
+Version 0.1.2 adds external-publisher dispatch: when a target profile documents
 a Claudio DR GitHub App publisher, Claude may dispatch it through the existing
 personal `gh` session without switching or removing that session. Update the
 plugin after updating the marketplace.
 
-The same publisher integration can support replies to existing review threads;
-the target profile documents its reply inputs and verification step.
+The same publisher integration can support replies to and resolution of existing
+review threads; the target profile documents its inputs and verification steps.
 After changing an installed plugin, update its version, run `/plugin marketplace
 update`, then `/plugin update claudio-dr@agent-workflows`. The plugin never
 contains GitHub App keys or target-repository credentials.

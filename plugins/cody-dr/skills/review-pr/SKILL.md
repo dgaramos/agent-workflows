@@ -23,3 +23,7 @@ repository for credentials.
 When replying to an existing review thread, use the publisher's documented reply
 mode and verify that the reply is authored by the reviewer App in the intended
 thread. Do not create a separate review or fall back to a personal `gh` comment.
+
+Resolve a review thread only after confirming the finding is fixed on the current
+head. Use the publisher's documented resolution mode, keep an evidence-backed
+reply when context requires one, and verify the App resolved the intended thread.
