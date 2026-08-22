@@ -2,16 +2,21 @@
 
 ## Portable contract
 
-The core contract covers explicit PR/ref input, evidence and confidence,
-incremental re-review, structured findings, review summaries, and explicit
-publication boundaries. It lives in `core/pr-review/references/` and is the
-single behavioral source of truth for all adapters.
+The core contracts cover all portable behavior. They live in `core/` and are
+the single behavioral source of truth for all adapters:
+
+| Core area | Location |
+| --- | --- |
+| PR review | `core/pr-review/references/` |
+| Issue authoring | `core/issue-authoring/references/` |
+| Findings handling | `core/findings-handling/references/` |
+| Issue-to-change workflow | `core/issue-workflow/references/` + `core/issue-workflow/skills/` |
 
 ## Adapters
 
-Both adapters implement the same portable review contract. Their intentional
+Both adapters implement the same portable contracts. Their intentional
 differences are packaging and invocation only — they must not change the meaning
-of the portable review contract without documenting a version break here.
+of any portable contract without documenting a version break here.
 
 ### Claudio DR (Claude Code)
 
