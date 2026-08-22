@@ -4,14 +4,51 @@
 
 The core contract covers explicit PR/ref input, evidence and confidence,
 incremental re-review, structured findings, review summaries, and explicit
-publication boundaries.
+publication boundaries. It lives in `core/pr-review/references/` and is the
+single behavioral source of truth for all adapters.
 
 ## Adapters
 
-Codex and Claude Code adapters may differ in command names, discovery,
-marketplace manifests, agent configuration, and local validation. They must not
-change the meaning of the portable review contract without documenting a version
-break.
+Both adapters implement the same portable review contract. Their intentional
+differences are packaging and invocation only — they must not change the meaning
+of the portable review contract without documenting a version break here.
+
+### Claudio DR (Claude Code)
+
+| Aspect | Value |
+| --- | --- |
+| Platform | Claude Code |
+| Plugin manifest | `.claude-plugin/plugin.json` |
+| Reviewer agent | `plugins/claudio-dr/agents/claudio-reviewer.md` |
+| Invocation | `/claudio-dr:review-pr <PR URL or ref>` |
+| Agent invocation | `@claudio-reviewer review <ref>` |
+| Local validation | `claude plugin validate ./plugins/claudio-dr` |
+| Local session | `claude --plugin-dir ./plugins/claudio-dr` |
+| Update flow | bump version → `/plugin marketplace update` → `/plugin update claudio-dr@agent-workflows` |
+
+### Cody DR (Codex)
+
+| Aspect | Value |
+| --- | --- |
+| Platform | Codex |
+| Plugin manifest | `.codex-plugin/plugin.json` |
+| Reviewer agent | `plugins/cody-dr/agents/cody-reviewer.md` |
+| Invocation | `review-pr <PR URL or ref>` |
+| Agent invocation | `@cody-reviewer review <ref>` |
+| Local validation | `codex plugin validate ./plugins/cody-dr` |
+| Local session | `codex --plugin-dir ./plugins/cody-dr` |
+| Update flow | bump version → reinstall from marketplace root → new thread |
+
+### Documented differences that do not weaken the core
+
+- **SKILL.md `name` field**: Claudio DR `review-pr/SKILL.md` omits the `name:`
+  frontmatter key because Claude Code discovers skills by directory name. Cody
+  DR includes `name: review-pr` for explicit Codex registration. Both load the
+  same core contract.
+- **Agent format**: both use the same markdown frontmatter schema (`name`,
+  `description`, `skills`). The agent body differs only in reviewer identity.
+- **Update mechanics**: Claude Code uses `/plugin update`; Codex requires a
+  reinstall and a new thread. Neither difference affects review behavior.
 
 ## Profiles
 
