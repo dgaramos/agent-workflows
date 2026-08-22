@@ -115,15 +115,15 @@ for skill in "${adapter_review_skills[@]}"; do
   fi
 done
 
-# Adapter handle-pr-findings SKILL.md files must reference core contracts.
+# Adapter handle-pr-findings SKILL.md files must reference the core findings contract.
 readonly adapter_findings_skills=(
   "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
 )
 
 for skill in "${adapter_findings_skills[@]}"; do
-  if ! grep -qF 'core/pr-review/references/review-contract.md' "$skill"; then
-    echo "drift: $skill does not reference core/pr-review/references/review-contract.md" >&2
+  if ! grep -qF 'core/findings-handling/references/findings-contract.md' "$skill"; then
+    echo "drift: $skill does not reference core/findings-handling/references/findings-contract.md" >&2
     exit 1
   fi
 done
