@@ -17,6 +17,7 @@ readonly required_paths=(
   "plugins/cody-dr/.codex-plugin/plugin.json"
   "plugins/cody-dr/skills/review-pr/SKILL.md"
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
+  "plugins/cody-dr/agents/cody-reviewer.md"
   "docs/cody-dr.md"
   ".claude-plugin/marketplace.json"
   "plugins/claudio-dr/.claude-plugin/plugin.json"
