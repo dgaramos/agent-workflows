@@ -92,10 +92,10 @@ custom quality commands, or bot publication configured.
 
 ## Development
 
-Read [development](docs/development.md), [compatibility](docs/compatibility.md),
-and [contributing](CONTRIBUTING.md). Run `bin/check` before opening a pull
-request. GitHub Actions runs the same `quality` check on every PR and push to
-`main`.
+Read [architecture](docs/architecture.md), [compatibility](docs/compatibility.md),
+[development](docs/development.md), and [contributing](CONTRIBUTING.md). Run
+`bin/check` before opening a pull request. GitHub Actions runs the same
+`quality` check on every PR and push to `main`.
 
 See the [Agent Workflows Project](https://github.com/users/dgaramos/projects/11)
 for the delivery board.

@@ -30,6 +30,13 @@ summary templates) in adapter SKILL.md files — reference the core file by path
 **Profiles** contain everything project-specific. They strengthen the core;
 they never weaken the evidence threshold or the explicit-publication boundary.
 
+## Architecture
+
+Read [docs/architecture.md](docs/architecture.md) for the full layer diagram,
+data flow, publication model, and how `bin/check` enforces layer boundaries.
+The short version: `core/` → contracts, `plugins/` → identity + platform,
+`profiles/` → project rules.
+
 ## Quality gate
 
 Before every commit or handoff:
