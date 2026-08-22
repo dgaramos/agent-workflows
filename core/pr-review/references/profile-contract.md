@@ -25,7 +25,10 @@ A profile that provides a publisher must document:
 - **reply mode**: how to send a reply into an existing review thread (required
   if the adapter supports thread replies);
 - **resolution mode**: how to resolve a review thread (required if the adapter
-  supports thread resolution).
+  supports thread resolution);
+- **create-issue mode**: how to create a GitHub issue (repository, title, body,
+  and profile-owned fields such as labels, assignees, milestone, and Projects);
+  required if the adapter supports issue authoring via the publisher.
 
 A profile that does not document one of these modes signals that the adapter
 must return the prepared content as `not published` for that operation.
@@ -41,6 +44,8 @@ After every publisher action, the adapter must verify:
   in the intended thread, not as a separate review or personal comment.
 - **After resolving a thread**: the expected reviewer resolved the intended
   thread; the thread state reflects resolution.
+- **After creating an issue**: the created issue's author matches the configured
+  reviewer bot identity and the issue number is recorded in the draft summary.
 
 If verification fails, report the failure and do not mark the action as
 published.
