@@ -53,6 +53,7 @@ readonly required_paths=(
   "plugins/claude/.gitkeep"
   "profiles/.gitkeep"
   "profiles/agent-workflows.md"
+  "profiles/craftcontrol.md"
   "examples/.gitkeep"
 )
 
