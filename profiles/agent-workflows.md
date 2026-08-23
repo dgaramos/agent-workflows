@@ -59,6 +59,9 @@ explicit authorization, publish as the authenticated user while clearly naming
 that actor in the review summary. It must never claim to be Cody DR or Claudio
 DR.
 
+Neither App submits `REQUEST_CHANGES`. Findings are published as a `COMMENT`;
+whether they block merging is decided by a human reviewer.
+
 ## Claudio DR publisher modes
 
 - `review`: `.github/workflows/publish-claudio-review.yml`

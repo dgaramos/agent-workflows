@@ -91,8 +91,11 @@ for credentials in the target repository.
 
 Without a publisher, return the same formatted content as `not published`.
 
-For authorized publication, use `REQUEST_CHANGES` for blocking or important
-findings, `COMMENT` for nit-only findings, and `APPROVE` only with no findings.
+For authorized agent publication, use `COMMENT` for every finding class. An
+agent review may identify a blocking or important risk, but it must not submit
+`REQUEST_CHANGES`; merge blocking remains a human decision. Use `APPROVE` only
+with no findings and only when the target profile explicitly authorizes agent
+approval.
 
 Submit **one single PR review** through a publication manifest that bundles all
 findings and thread actions together:
