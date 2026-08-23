@@ -26,6 +26,10 @@ Agent review is performed only when an authorized Cody or Claudio executor is
 explicitly asked to review this PR. These checkboxes do not run a model, approve,
 merge, create issues, or execute issues on their own.
 
+When neither reviewer App is configured for this repository, an explicitly
+authorized local reviewer may review as its authenticated user. It must not
+impersonate Cody DR or Claudio DR.
+
 ## Compatibility and installation
 
 - [ ] Existing installation behavior is unchanged

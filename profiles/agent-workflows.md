@@ -49,6 +49,16 @@ never authorizes approval, merge, issue creation, or issue execution.
 Use the same request shape for both reviewers. The only differences are the
 adapter identity and its publisher workflow.
 
+## Fallback reviewer
+
+Use a local, user-authorized reviewer only when **neither** Cody DR nor Claudio
+DR is configured for the target repository. If either App is configured, use
+that App's matching publisher; never silently replace it with a personal
+account or a different bot. The fallback may analyze the PR and, only with
+explicit authorization, publish as the authenticated user while clearly naming
+that actor in the review summary. It must never claim to be Cody DR or Claudio
+DR.
+
 ## Claudio DR publisher modes
 
 - `review`: `.github/workflows/publish-claudio-review.yml`
