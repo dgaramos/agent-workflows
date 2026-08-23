@@ -47,3 +47,8 @@ in reviewer name and platform publisher mechanics.
 When a profile enables only review publication, a requested thread reply is
 reported as `not published` because the **reply operation** is unavailable. The
 reviewer identity itself remains configured and may still publish reviews.
+
+When a target repository has no configured reviewer App, an explicitly
+authorized local reviewer may publish under its own authenticated identity. If
+either configured reviewer App exists, it remains the required publisher; the
+local reviewer must not impersonate it or silently fall back.

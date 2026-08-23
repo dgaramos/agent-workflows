@@ -38,6 +38,30 @@ Issue creation is dispatched with a title, Markdown body, and optional labels,
 assignees, and milestone number. The workflow must verify the created author is
 `cody-dr[bot]`; a different author is a failed publication, not a fallback.
 
+## Explicit review requests
+
+The PR template lets contributors request Cody DR, Claudio DR, or no agent
+review. It is a collaboration signal, not an automation trigger: an authorized
+model executor must still be explicitly asked to review the PR and may dispatch
+the matching publisher only after preparing a verified manifest. The checkbox
+never authorizes approval, merge, issue creation, or issue execution.
+
+Use the same request shape for both reviewers. The only differences are the
+adapter identity and its publisher workflow.
+
+## Fallback reviewer
+
+Use a local, user-authorized reviewer only when **neither** Cody DR nor Claudio
+DR is configured for the target repository. If either App is configured, use
+that App's matching publisher; never silently replace it with a personal
+account or a different bot. The fallback may analyze the PR and, only with
+explicit authorization, publish as the authenticated user while clearly naming
+that actor in the review summary. It must never claim to be Cody DR or Claudio
+DR.
+
+Neither App submits `REQUEST_CHANGES`. Findings are published as a `COMMENT`;
+whether they block merging is decided by a human reviewer.
+
 ## Claudio DR publisher modes
 
 - `review`: `.github/workflows/publish-claudio-review.yml`

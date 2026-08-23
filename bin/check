@@ -121,6 +121,12 @@ done < <(git ls-files '*SKILL.md')
 
 bash -n .github/scripts/publish-review.sh
 
+# Agent reviews inform humans; they do not block a PR through REQUEST_CHANGES.
+if grep -qF 'REQUEST_CHANGES' .github/workflows/publish-*-review.yml; then
+  echo "policy: agent review publishers must not offer REQUEST_CHANGES" >&2
+  exit 1
+fi
+
 # Adapter drift check: adapter review-pr SKILL.md files must reference the
 # core review contract and must not embed the category table or confidence
 # threshold directly (those live only in core/pr-review/references/review-contract.md).
