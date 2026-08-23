@@ -41,6 +41,7 @@ requested mode, return publication-ready text as `not published`.
 ## Cody DR publisher modes
 
 - `review`: `.github/workflows/publish-cody-review.yml`
+- `apply-pr-metadata`: `.github/workflows/publish-cody-pr-metadata.yml`
 - `reply`: `.github/workflows/publish-cody-review.yml`
 - `resolve-thread`: `.github/workflows/publish-cody-review.yml`
 - `create-issue`: `.github/workflows/publish-cody-issue.yml`
@@ -81,6 +82,7 @@ whether they block merging is decided by a human reviewer.
 ## Claudio DR publisher modes
 
 - `review`: `.github/workflows/publish-claudio-review.yml`
+- `apply-pr-metadata`: `.github/workflows/publish-claudio-pr-metadata.yml`
 - `reply`: `.github/workflows/publish-claudio-reply.yml`
 - `resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`
 - `create-issue`: `.github/workflows/publish-claudio-issue.yml`
