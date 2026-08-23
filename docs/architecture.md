@@ -156,6 +156,11 @@ For a repository-neutral walkthrough of `start-issue`, `implement-issue`, and
   and must not embed the finding class table or confidence threshold.
 - **Parity**: both adapter reviewer agents must bind to `review-pr`; both sets
   of workflow adapter skills must reference their corresponding core skills.
+- **Public surface**: every README-announced skill must exist in both adapters,
+  manifests must be valid and version-aligned, and consumer profiles must stay
+  out of the catalog.
+- **Examples**: review, findings, issue authoring, and lifecycle contracts each
+  have a generic, repository-neutral example.
 - **Core bundles**: each plugin's generated `core/` distribution bundle must
   exactly match the canonical `core/`; ad-hoc copies inside adapter skills are
   forbidden.
