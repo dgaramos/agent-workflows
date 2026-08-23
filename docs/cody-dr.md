@@ -47,7 +47,10 @@ reinstall from the same marketplace root, and start a new thread:
 codex plugin add cody-dr@agent-workflows
 ```
 
-The plugin never contains GitHub App keys or target-repository credentials.
+The installed plugin includes a read-only bundle of the portable core contracts,
+so it works after marketplace installation without relying on a sibling catalog
+checkout. The plugin never contains GitHub App keys or target-repository
+credentials.
 
 ## Publisher dispatch
 

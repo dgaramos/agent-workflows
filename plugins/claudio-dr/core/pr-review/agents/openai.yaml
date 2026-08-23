@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Review Core"
+  short_description: "Portable evidence-first PR review workflow"
+  default_prompt: "Review this pull request using the portable PR review contract."
