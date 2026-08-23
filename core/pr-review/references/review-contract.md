@@ -17,6 +17,16 @@ fact, concrete impact, and confidence `>= 80/100`. Put lower-confidence
 hypotheses only in the summary as limitations or observations. Do not use style
 preference as a finding. A `nit` never justifies requesting changes.
 
+Before creating a finding, load every current review thread and top-level review
+comment. Treat a thread as the same finding when its current evidence describes
+the same failing behavior or correction, even if it was authored by a human or
+another review bot. For an open matching thread, do not create a new inline
+comment: verify it against the current head and add a factual reply to that
+thread instead. Open a new thread only for a materially distinct cause, impact,
+or evidence location. A resolved matching thread stays historical; reply there
+only when the current head proves the issue regressed, and state that it needs
+human reopening if the platform cannot reopen it.
+
 Choose one category and one class:
 
 | Category | Examples |
@@ -106,6 +116,11 @@ never collapse those findings into one general comment. `replies` and
 The publisher transports this manifest unchanged. The reviewer owns the review
 summary and must not delegate its factual analysis to the publisher.
 
+`replies` also carries duplicate findings: it references the existing top-level
+review-comment identifier and adds the current-head evidence, rather than
+creating a competing thread. The summary reports new inline findings and
+thread updates separately.
+
 After publishing, verify the resulting review's author and event match the
 expected reviewer identity. After replying to a thread, verify the reply is
 authored by the expected reviewer in the intended thread. After resolving a
@@ -123,6 +138,7 @@ Emit one summary block per review:
 **Profile:** <profile name or none>
 **Checks:** <consulted results>; not run: <reason or none>
 **Findings:** 🔴 Critical: N · 🟠 Major: N · 🟡 Minor: N
+**Thread updates:** `<N replies to existing findings; or none>`
 **Risk axes:** <evaluated>; not applicable: <axes>
 **Verdict:** `<approve|request changes|comment|no findings>`
 **Publication:** `<not requested|not published|published by <reviewer name>>`

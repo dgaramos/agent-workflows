@@ -22,6 +22,8 @@ with walkthrough, evidence-based merge risk, actual pre-merge checks, and a
 Mermaid behavior diagram only when it clarifies the change. Place every
 changed-line formal finding in its own inline entry,
 and batch thread replies and resolutions only after their targets are verified.
+Before adding an inline finding, match it against all current human and bot
+threads; update an open matching thread with verified current-head evidence.
 For re-review, classify every existing thread from current-head evidence; reply
 factually with the correction and validation, then resolve only when verified.
 

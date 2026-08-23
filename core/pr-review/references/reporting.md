@@ -58,6 +58,14 @@ briefly, keep the change minimal, and run the relevant validation.
 Inline findings require a changed line. General findings use `[general]` as the
 location and go in the review body.
 
+## Existing-thread rule
+
+Search current human and bot review threads before publishing. If an open thread
+already describes the same verified defect, append a concise reply with the
+current-head evidence instead of creating another inline finding. Do not treat
+matching words alone as duplication: the behavior, cause, and affected flow
+must match. Report those replies as thread updates in the summary.
+
 ## Review summary
 
 ```md
