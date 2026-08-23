@@ -11,6 +11,8 @@ readonly required_paths=(
   "docs/compatibility.md"
   ".github/workflows/publish-cody-issue.yml"
   ".github/workflows/publish-claudio-issue.yml"
+  ".github/workflows/publish-cody-review.yml"
+  ".github/workflows/publish-claudio-review.yml"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
