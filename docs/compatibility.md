@@ -18,6 +18,18 @@ Both adapters implement the same portable contracts. Their intentional
 differences are packaging and invocation only — they must not change the meaning
 of any portable contract without documenting a version break here.
 
+## Canonical reviewer identities
+
+The display name, GitHub App, and verified GitHub actor below are different
+representations of one reviewer identity. Publisher availability is per
+operation and is declared by the target profile; an unavailable operation does
+not mean an App is inactive.
+
+| Reviewer | Display name | GitHub App | Verified GitHub actor |
+| --- | --- | --- | --- |
+| Cody DR | Cody DR | Cody DR GitHub App | `cody-dr[bot]` |
+| Claudio DR | Claudio DR | Claudio DR GitHub App | `claudio-dr[bot]` |
+
 ### Claudio DR (Claude Code)
 
 | Aspect | Value |

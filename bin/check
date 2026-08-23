@@ -18,6 +18,7 @@ readonly required_paths=(
   "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
   "core/pr-review/references/profile-contract.md"
+  "core/pr-review/references/reviewer-identity-contract.md"
   "core/pr-review/agents/openai.yaml"
   "core/issue-authoring/SKILL.md"
   "core/issue-authoring/references/issue-contract.md"
@@ -43,6 +44,7 @@ readonly required_paths=(
   "plugins/cody-dr/skills/ship-change/SKILL.md"
   "plugins/cody-dr/skills/execute-issue/SKILL.md"
   "plugins/cody-dr/agents/cody-reviewer.md"
+  "plugins/cody-dr/references/reviewer-identity.md"
   "docs/cody-dr.md"
   ".claude-plugin/marketplace.json"
   "plugins/claudio-dr/.claude-plugin/plugin.json"
@@ -53,6 +55,7 @@ readonly required_paths=(
   "plugins/claudio-dr/skills/ship-change/SKILL.md"
   "plugins/claudio-dr/skills/execute-issue/SKILL.md"
   "plugins/claudio-dr/agents/claudio-reviewer.md"
+  "plugins/claudio-dr/references/reviewer-identity.md"
   "docs/claudio-dr.md"
   "core/.gitkeep"
   "plugins/codex/.gitkeep"
@@ -66,6 +69,24 @@ readonly required_paths=(
 for path in "${required_paths[@]}"; do
   test -f "$path"
 done
+
+# Reviewer identity is adapter-owned, while capability availability belongs to
+# profiles. Keep the display/App/actor mapping explicit and symmetric.
+readonly cody_identity="plugins/cody-dr/references/reviewer-identity.md"
+readonly claudio_identity="plugins/claudio-dr/references/reviewer-identity.md"
+grep -qF '| Display name | Cody DR |' "$cody_identity"
+grep -qF '| Publisher | Cody DR GitHub App |' "$cody_identity"
+grep -qF '| Verified GitHub actor | `cody-dr[bot]` |' "$cody_identity"
+grep -qF '| Display name | Claudio DR |' "$claudio_identity"
+grep -qF '| Publisher | Claudio DR GitHub App |' "$claudio_identity"
+grep -qF '| Verified GitHub actor | `claudio-dr[bot]` |' "$claudio_identity"
+
+grep -qF 'cody-dr[bot]' profiles/agent-workflows.md
+grep -qF 'claudio-dr[bot]' profiles/agent-workflows.md
+grep -qF '`review`' profiles/agent-workflows.md
+grep -qF '`reply`' profiles/agent-workflows.md
+grep -qF '`resolve-thread`' profiles/agent-workflows.md
+grep -qF '`create-issue`' profiles/agent-workflows.md
 
 while IFS= read -r skill; do
   awk '
@@ -118,6 +139,11 @@ for skill in "${adapter_review_skills[@]}"; do
 
   if grep -qE 'confidence `?>= 80' "$skill"; then
     echo "drift: $skill embeds the confidence threshold (belongs in core)" >&2
+    exit 1
+  fi
+
+  if ! grep -qF 'references/reviewer-identity.md' "$skill"; then
+    echo "drift: $skill does not reference its adapter reviewer identity" >&2
     exit 1
   fi
 done

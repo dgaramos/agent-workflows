@@ -6,6 +6,10 @@ their review contracts. Run `bin/check` before handoff.
 
 ## Publication contract
 
+Use `core/pr-review/references/reviewer-identity-contract.md`. Cody DR, the
+Cody DR GitHub App, and `cody-dr[bot]` are one reviewer identity; Claudio DR,
+the Claudio DR GitHub App, and `claudio-dr[bot]` are likewise one identity.
+
 Publication is always explicitly authorized. The local publisher configuration
 is discovered from repository variables and secrets by name only: Cody uses
 `CODY_DR_CLIENT_ID` and `CODY_DR_PRIVATE_KEY`; Claudio uses
@@ -21,11 +25,14 @@ requested mode, return publication-ready text as `not published`.
 ## Cody DR publisher modes
 
 - `review`: `.github/workflows/publish-cody-review.yml`
+- `reply`: `.github/workflows/publish-cody-review.yml`
+- `resolve-thread`: `.github/workflows/publish-cody-review.yml`
 - `create-issue`: `.github/workflows/publish-cody-issue.yml`
 
-`reply` and `resolve-thread` are unavailable in this catalog until a publisher
-implements and verifies those operations; return publication-ready output as
-`not published` rather than claiming that the Cody DR App is inactive.
+The review publisher accepts one review body plus optional inline findings,
+thread replies, and thread resolutions. A profile that lacks one of those modes
+must report only that operation as unavailable, rather than claiming that the
+Cody DR App is inactive.
 
 Issue creation is dispatched with a title, Markdown body, and optional labels,
 assignees, and milestone number. The workflow must verify the created author is
@@ -34,9 +41,14 @@ assignees, and milestone number. The workflow must verify the created author is
 ## Claudio DR publisher modes
 
 - `review`: `.github/workflows/publish-claudio-review.yml`
+- `reply`: `.github/workflows/publish-claudio-review.yml`
+- `resolve-thread`: `.github/workflows/publish-claudio-review.yml`
 - `create-issue`: `.github/workflows/publish-claudio-issue.yml`
 
-`reply` and `resolve-thread` follow the same unavailable-mode behavior.
+The review publisher accepts one review body plus optional inline findings,
+thread replies, and thread resolutions. Missing modes follow the same
+unavailable-operation behavior; their absence does not indicate an inactive
+Claudio DR App.
 
 Issue creation follows the same inputs and verification requirement, with
 `claudio-dr[bot]` as the expected author.

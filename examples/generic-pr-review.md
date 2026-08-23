@@ -36,3 +36,7 @@ The example intentionally contains no project command, credential, or
 vendor assumption. Both Claudio DR and Cody DR produce equivalent scope,
 evidence, findings, and summary structure from the same input; they differ only
 in reviewer name and platform publisher mechanics.
+
+When a profile enables only review publication, a requested thread reply is
+reported as `not published` because the **reply operation** is unavailable. The
+reviewer identity itself remains configured and may still publish reviews.

@@ -4,7 +4,8 @@ description: Claudio DR reviews an explicit pull request, branch, commit range, 
 
 # Claudio DR review
 
-Reviewer identity: **Claudio DR** (Claude App reviewer).
+Reviewer identity: **Claudio DR**. Load
+`plugins/claudio-dr/references/reviewer-identity.md` before using a publisher.
 
 Load `core/pr-review/references/review-contract.md` before reporting. It
 defines scope, evidence, confidence, findings, re-review, publication boundary,
