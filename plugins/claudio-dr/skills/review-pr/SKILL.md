@@ -12,6 +12,11 @@ defines scope, evidence, confidence, findings, re-review, publication boundary,
 post-publication verification, and summary format. Use `Claudio DR` as the
 reviewer name in the summary and publication fields.
 
+When the target profile declares knowledge sources, load
+`core/pr-review/references/knowledge-sources-contract.md` before using them.
+Apply its provenance and untrusted-content rules exactly as the portable
+contract defines.
+
 When the user authorizes GitHub publication, use the publisher documented in the
 target profile's dispatch contract. The personal `gh` session may dispatch it,
 but must never be switched, refreshed, logged out, or used to impersonate the

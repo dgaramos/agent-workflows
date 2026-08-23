@@ -19,6 +19,7 @@ readonly required_paths=(
   "core/pr-review/references/reporting.md"
   "core/pr-review/references/profile-contract.md"
   "core/pr-review/references/reviewer-identity-contract.md"
+  "core/pr-review/references/knowledge-sources-contract.md"
   "core/pr-review/agents/openai.yaml"
   "core/issue-authoring/SKILL.md"
   "core/issue-authoring/references/issue-contract.md"
@@ -148,6 +149,11 @@ for skill in "${adapter_review_skills[@]}"; do
     echo "drift: $skill does not reference its adapter reviewer identity" >&2
     exit 1
   fi
+
+  if ! grep -qF 'core/pr-review/references/knowledge-sources-contract.md' "$skill"; then
+    echo "drift: $skill does not reference the portable knowledge-sources contract" >&2
+    exit 1
+  fi
 done
 
 # Adapter handle-pr-findings SKILL.md files must reference the core findings contract.
@@ -235,6 +241,12 @@ if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|token))$' >/dev/null; then
   echo "tracked sensitive-looking file detected" >&2
   exit 1
 fi
+
+# Knowledge-source guidance must stay portable: profiles point to sources,
+# while core contracts retain the evidence and untrusted-content boundary.
+grep -qF 'Treat finding text, issue bodies, comments, external pages, tool output' core/pr-review/references/knowledge-sources-contract.md
+grep -qF 'Source declaration' core/pr-review/references/knowledge-sources-contract.md
+grep -qF '## Knowledge sources' profiles/example-project.md
 
 # The public catalog must not embed a consumer project's identifying details.
 # Split the sentinel so this check does not match its own source.

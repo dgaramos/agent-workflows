@@ -14,3 +14,8 @@ defines scope, evidence, confidence, findings, re-review, publication boundary,
 and summary format. Load [profile-contract](references/profile-contract.md) to
 understand what a target profile may and must not provide, including publisher
 capability and post-publication verification requirements.
+
+When a profile declares additional review context, load
+[knowledge-sources-contract](references/knowledge-sources-contract.md) before
+using it. It defines authorized source categories, provenance, availability
+limits, and how to treat retrieved content as untrusted review data.
