@@ -10,12 +10,17 @@ A profile may define:
 - reviewer identity and optional publisher capability. Load
   `core/pr-review/references/reviewer-identity-contract.md` when a profile
   defines either.
+- knowledge sources by pointing to authorized local guidance, GitHub delivery
+  context, official documentation, or optional MCP integrations. Load
+  `core/pr-review/references/knowledge-sources-contract.md` before using them.
 
 A profile must not:
 
 - weaken the core evidence threshold or explicit-publication boundary;
 - contain credentials, secrets, private keys, or installation tokens;
 - make automatic review mandatory without an explicit workflow outside the core.
+- copy private source content, credentials, or cloned target repositories into
+  the catalog instead of declaring their location and purpose.
 
 ## Publisher capability contract
 
