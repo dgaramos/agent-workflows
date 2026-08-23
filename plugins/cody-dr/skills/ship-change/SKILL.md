@@ -10,4 +10,5 @@ Reviewer identity: **Cody DR** (Codex App reviewer).
 Load `core/issue-workflow/skills/ship-change/SKILL.md` and follow its
 referenced contracts. Use `gh pr create` for PR creation when authorized.
 Apply profile-required metadata via `gh pr edit` after creation and verify
-the PR targets the profile's base branch.
+the PR targets the profile's base branch. Apply and verify labels, milestone,
+assignees, reviewers, and Project state individually; emit a handoff on failure.

@@ -4,6 +4,17 @@ Use this profile when reviewing this repository. Read `AGENTS.md`, `README.md`,
 `CONTRIBUTING.md`, the issue, changed plugin manifests, both adapter skills, and
 their review contracts. Run `bin/check` before handoff.
 
+## PR metadata
+
+- **Labels:** `enhancement` plus scope labels selected by the issue
+- **Milestone:** `3`
+- **Assignee:** `dgaramos`
+- **Project:** `Agent Workflows` (`11`), status `In Progress` while active
+- **Reviewers:** only when explicitly requested
+
+After shipping, apply and verify every declared field. Do not silently omit a
+field because a CLI command or permission failed.
+
 ## Publication contract
 
 Use `core/pr-review/references/reviewer-identity-contract.md`. Cody DR, the

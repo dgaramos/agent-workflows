@@ -13,11 +13,13 @@ Do not ship without confirmed passing quality gates.
    - Title: derived from the issue title.
    - Body: implementation summary, acceptance criteria checklist, and the
      profile's PR template (if provided).
-   - Metadata: labels, milestone, reviewers, and Projects from the profile.
+   - Metadata: labels, milestone, assignees, reviewers, and Projects from the profile.
 3. Push the branch and create the PR only when the user explicitly authorizes
    both actions. Do not push without authorization even if the PR body is ready.
-4. After creating the PR, verify it targets the profile's base branch and that
-   the required metadata was applied.
+4. After creating the PR, apply every configured field and verify the base
+   branch, labels, milestone, assignees, reviewers, and Project item state. If
+   a required field cannot be applied or verified, stop and emit a handoff with
+   the PR URL, field, and failed command or permission.
 
 ## Output
 
@@ -27,7 +29,8 @@ Do not ship without confirmed passing quality gates.
 **Branch:** `<branch-name>`
 **Final quality gate:** <passed|failed: reason>
 **PR:** <not requested|not published|<URL>>
-**Metadata applied:** <labels, milestone, reviewers, Projects or none>
+**Metadata applied:** <labels, milestone, assignees, reviewers, Projects or none>
+**Metadata verified:** <field → observed value, or failed field>
 ```
 
 Without push and PR-creation authorization, return the prepared PR title, body,

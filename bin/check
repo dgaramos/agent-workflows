@@ -230,6 +230,10 @@ for skill_name in "${workflow_skill_names[@]}"; do
   done
 done
 
+grep -qF 'Metadata verified:' core/issue-workflow/references/ship-change-contract.md
+grep -qF 'assignees, reviewers, and Project state individually' plugins/cody-dr/skills/ship-change/SKILL.md
+grep -qF 'assignees, reviewers, and Project state individually' plugins/claudio-dr/skills/ship-change/SKILL.md
+
 # Adapter-local review-contract.md copies must not exist.
 readonly forbidden_paths=(
   "plugins/claudio-dr/skills/review-pr/references/review-contract.md"
