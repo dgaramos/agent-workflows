@@ -84,6 +84,12 @@ its actual profile in its own repository, where it can define
 architecture-specific review rules, custom quality commands, and bot
 publication configuration without exposing those details here.
 
+## Lifecycle example
+
+Read the [generic issue-to-change lifecycle](examples/generic-issue-lifecycle.md)
+for a profile-neutral walkthrough of dependency handling, incremental quality
+gates, shipping, and handoffs.
+
 ## Safety
 
 - Issue execution publishes its normal delivery only when explicitly requested;

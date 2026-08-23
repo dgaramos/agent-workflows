@@ -49,6 +49,7 @@ readonly required_paths=(
   "examples/generic-profile-discovery.md"
   "examples/generic-issue-authoring.md"
   "examples/generic-findings-handling.md"
+  "examples/generic-issue-lifecycle.md"
   "examples/generic-pr-shipping.md"
   "plugins/cody-dr/.codex-plugin/plugin.json"
   "plugins/cody-dr/skills/review-pr/SKILL.md"
