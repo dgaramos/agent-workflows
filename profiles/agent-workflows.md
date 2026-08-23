@@ -47,8 +47,9 @@ Cody DR GitHub App, and `cody-dr[bot]` are one reviewer identity; Claudio DR,
 the Claudio DR GitHub App, and `claudio-dr[bot]` are likewise one identity.
 
 An explicit issue-execution request authorizes its normal delivery, including
-push and PR creation. Review, comment, reply, resolution, and issue-creation
-publication remain separately authorized. The local publisher configuration is
+branch creation, commits, push, PR creation, and complete PR metadata. Review,
+comment, reply, resolution, and issue-creation publication remain separately
+authorized. The local publisher configuration is
 discovered from repository variables and secrets by name only: Cody uses
 `CODY_DR_CLIENT_ID` and `CODY_DR_PRIVATE_KEY`; Claudio uses
 `CLAUDIO_DR_CLIENT_ID` and `CLAUDIO_DR_PRIVATE_KEY`. Never read, print, copy,
