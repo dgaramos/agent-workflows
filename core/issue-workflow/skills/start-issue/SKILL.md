@@ -13,3 +13,6 @@ the handoff format, and the start-issue steps and output.
 Load the target project's profile before resolving the issue. Stop and emit a
 handoff block if any blocking dependency is unresolved or required profile
 values are missing.
+
+Discover it first with
+`core/profile-discovery/references/profile-discovery-contract.md`.

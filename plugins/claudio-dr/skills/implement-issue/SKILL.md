@@ -9,3 +9,6 @@ Reviewer identity: **Claudio DR** (Claude App reviewer).
 Load `core/issue-workflow/skills/implement-issue/SKILL.md` and follow its
 referenced contracts. Use Claude Code file editing and shell tools for making
 changes and running the profile's quality command.
+
+Discover the target profile first with
+`core/profile-discovery/references/profile-discovery-contract.md`.

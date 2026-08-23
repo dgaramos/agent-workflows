@@ -8,6 +8,9 @@ description: Cody DR drafts a structured GitHub issue and publishes it only with
 Reviewer identity: **Cody DR**. Load
 `plugins/cody-dr/references/reviewer-identity.md` before using a publisher.
 
+Discover the target profile first with
+`core/profile-discovery/references/profile-discovery-contract.md`.
+
 Load `core/issue-authoring/SKILL.md` and follow its referenced contract. Use
 `Cody DR` in the draft summary. When publication is explicitly authorized, use
 only the target profile's `create-issue` mode, then verify that the created
