@@ -13,7 +13,10 @@ readonly required_paths=(
   ".github/workflows/publish-claudio-issue.yml"
   ".github/workflows/publish-cody-review.yml"
   ".github/workflows/publish-claudio-review.yml"
+  ".github/workflows/publish-claudio-reply.yml"
+  ".github/workflows/publish-claudio-resolve.yml"
   ".github/scripts/publish-review.sh"
+  ".github/scripts/publish-claudio-thread-action.sh"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
@@ -92,6 +95,8 @@ grep -qF '`review`' profiles/agent-workflows.md
 grep -qF '`reply`' profiles/agent-workflows.md
 grep -qF '`resolve-thread`' profiles/agent-workflows.md
 grep -qF '`create-issue`' profiles/agent-workflows.md
+grep -qF '`reply`: `.github/workflows/publish-claudio-reply.yml`' profiles/agent-workflows.md
+grep -qF '`resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`' profiles/agent-workflows.md
 
 while IFS= read -r skill; do
   awk '
@@ -122,8 +127,10 @@ while IFS= read -r skill; do
 done < <(git ls-files '*SKILL.md')
 
 bash -n .github/scripts/publish-review.sh
+bash -n .github/scripts/publish-claudio-thread-action.sh
 bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
+tests/test_publish_claudio_thread_action.sh
 
 # Agent reviews inform humans; they do not block a PR through REQUEST_CHANGES.
 if grep -qF 'REQUEST_CHANGES' .github/workflows/publish-*-review.yml; then

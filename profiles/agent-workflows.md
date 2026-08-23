@@ -81,12 +81,14 @@ whether they block merging is decided by a human reviewer.
 ## Claudio DR publisher modes
 
 - `review`: `.github/workflows/publish-claudio-review.yml`
-- `reply`: `.github/workflows/publish-claudio-review.yml`
-- `resolve-thread`: `.github/workflows/publish-claudio-review.yml`
+- `reply`: `.github/workflows/publish-claudio-reply.yml`
+- `resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`
 - `create-issue`: `.github/workflows/publish-claudio-issue.yml`
 
-The review publisher accepts a reviewed head SHA plus an optional review body,
-inline findings, thread replies, and thread resolutions. Missing modes follow the same
+The review publisher accepts a reviewed head SHA plus an optional review body and
+inline findings. The dedicated thread publishers verify that the GraphQL review-thread
+ID belongs to the supplied pull request before replying or resolving it; reply
+publication additionally verifies `claudio-dr[bot]` as the author. Missing modes follow the same
 unavailable-operation behavior; their absence does not indicate an inactive
 Claudio DR App.
 
