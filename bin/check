@@ -3,6 +3,7 @@ set -euo pipefail
 
 readonly required_paths=(
   "README.md"
+  "CHANGELOG.md"
   "AGENTS.md"
   "CONTRIBUTING.md"
   "SECURITY.md"
