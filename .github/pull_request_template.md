@@ -16,6 +16,16 @@
 - [ ] Required plugin validation was run, or is not applicable
 - [ ] Generic examples or contract checks updated when the core changed
 
+## Review request
+
+- [ ] Request Cody DR review
+- [ ] Request Claudio DR review
+- [ ] No agent review requested
+
+Agent review is performed only when an authorized Cody or Claudio executor is
+explicitly asked to review this PR. These checkboxes do not run a model, approve,
+merge, create issues, or execute issues on their own.
+
 ## Compatibility and installation
 
 - [ ] Existing installation behavior is unchanged
