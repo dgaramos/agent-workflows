@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Maintain a private catalog of reusable, cross-model agent workflows. The
+Maintain a reusable catalog of cross-model agent workflows. The
 catalog supports Codex and Claude Code without making either implementation the
 source of truth for portable behavior.
 

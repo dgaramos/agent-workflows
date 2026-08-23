@@ -56,7 +56,7 @@ readonly required_paths=(
   "plugins/claude/.gitkeep"
   "profiles/.gitkeep"
   "profiles/agent-workflows.md"
-  "profiles/craftcontrol.md"
+  "profiles/example-project.md"
   "examples/.gitkeep"
 )
 
@@ -178,6 +178,14 @@ done
 
 if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|token))$' >/dev/null; then
   echo "tracked sensitive-looking file detected" >&2
+  exit 1
+fi
+
+# The public catalog must not embed a consumer project's identifying details.
+# Split the sentinel so this check does not match its own source.
+readonly forbidden_target_pattern='craft''control|dgaramos/craft''control'
+if git grep -n -i -E "$forbidden_target_pattern" -- . >/dev/null; then
+  echo "target-project reference detected; consumer profiles belong in their target repository" >&2
   exit 1
 fi
 

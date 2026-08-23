@@ -9,7 +9,7 @@ responsibility and a strict boundary — no layer reaches into the one above it.
 ┌─────────────────────────────────────────────────────────────────┐
 │                          PROFILES                               │
 │  Project-specific: architecture, commands, metadata, publishers │
-│  profiles/agent-workflows.md   profiles/craftcontrol.md   …    │
+│  profiles/agent-workflows.md   profiles/example-project.md     │
 └────────────────────────┬────────────────────────────────────────┘
                          │ loads
 ┌────────────────────────▼────────────────────────────────────────┐
@@ -81,15 +81,19 @@ strengthens the core — adding architecture rules, required files, quality
 commands, PR metadata, and publisher dispatch — but cannot weaken the evidence
 threshold or the explicit-publication boundary.
 
+Consumer profiles are target-owned: they live in the consumer repository, not
+in this catalog. The catalog keeps only its self-profile and a neutral example
+that demonstrates the required shape without naming a target.
+
 ```
-profiles/craftcontrol.md
-  ├── Project identity (repo, branch naming, quality command)
+profiles/example-project.md
+  ├── Project identity (placeholder repository and branch)
   ├── Required context (files to read before reviewing)
-  ├── Architecture boundaries (layer ownership table)
+  ├── Project boundaries (local ownership rules)
   ├── Review checklist (project-specific additions to core)
-  ├── Lifecycle skill mapping (entry points → portable skills)
-  ├── PR metadata (base branch, labels, reviewers, merge policy)
-  └── Publisher dispatch contract (modes, secret names only)
+  ├── Lifecycle skill mapping (local entry points → portable skills)
+  ├── PR metadata (placeholder base branch and merge policy)
+  └── Publisher dispatch contract (supported modes, no credential values)
 ```
 
 ## Data flow
