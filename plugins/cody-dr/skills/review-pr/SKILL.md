@@ -5,7 +5,8 @@ description: Cody DR reviews an explicit pull request, branch, commit range, or 
 
 # Cody DR review
 
-Reviewer identity: **Cody DR** (Codex App reviewer).
+Reviewer identity: **Cody DR**. Load
+`plugins/cody-dr/references/reviewer-identity.md` before using a publisher.
 
 Load `core/pr-review/references/review-contract.md` before reporting. It
 defines scope, evidence, confidence, findings, re-review, publication boundary,
