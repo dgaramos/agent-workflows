@@ -18,9 +18,7 @@ for plugin in cody-dr claudio-dr; do
   while IFS= read -r contract_path; do
     test -f "$artifact_root/$contract_path"
   done < <(
-    rg -o 'core/[A-Za-z0-9_./-]+\.(md|sh|yaml)' "plugins/$plugin" \
-      -g '*.md' \
-      | cut -d: -f2- \
+    grep -rhoE --include='*.md' 'core/[A-Za-z0-9_./-]+\.(md|sh|yaml)' "plugins/$plugin" \
       | sort -u
   )
 done
