@@ -142,6 +142,10 @@ Every external action follows the same three-step gate:
 The personal `gh` session dispatches the publisher but is never used to
 impersonate the reviewer or to post directly.
 
+For a repository-neutral walkthrough of `start-issue`, `implement-issue`, and
+`ship-change`, including dependency and quality-gate handoffs, see the
+[generic issue-to-change lifecycle](../examples/generic-issue-lifecycle.md).
+
 ## Validation
 
 `bin/check` enforces the layer boundaries at commit time:
