@@ -71,7 +71,57 @@ not mean an App is inactive.
 
 ## Profiles
 
-A profile supplies target-repository context such as architecture, security
-constraints, quality commands, metadata conventions, and reviewer identity. A
-profile can strengthen the core contract but cannot weaken its evidence or
-explicit-publication requirements.
+A profile is the target repository's specialization layer. It supplies local
+facts such as architecture, security constraints, quality commands, metadata
+conventions, and publisher capability; it can strengthen the core contract but
+cannot weaken its evidence or explicit-publication requirements.
+
+Place one profile in the target repository at:
+
+```text
+.agent-review/<project-name>/PROFILE.md
+```
+
+Global Cody DR and Claudio DR agents discover the sole matching profile from
+the current repository. With no profile, an explicitly authorized generic
+review may continue without project rules; lifecycle and publication actions
+stop. With multiple profiles, the agents stop and ask which one applies rather
+than selecting by directory order.
+
+### Put project behavior in `PROFILE.md`
+
+Keep every project-specific divergence from the portable contract in the
+profile, including:
+
+- the quality-gate command and known check limitations;
+- branch naming, base branch, and merge policy;
+- labels, milestone, assignees, reviewers, Project state, and PR template;
+- required context files, architecture boundaries, and layer checklists;
+- extra push remotes or deployment restrictions;
+- the publisher dispatch contract, inputs, verified actor, and available or
+  unavailable publisher modes.
+
+This keeps `core/` portable and lets the same installed plugin operate in more
+than one repository without copying target architecture or credentials.
+
+### Keep local wrappers thin
+
+Local agents are optional compatibility entrypoints. A wrapper should contain
+only the reviewer identity, a binding to the installed adapter skill, and (when
+needed for an older repository layout) an explicit profile reference. It must
+not repeat review rules, lifecycle steps, checklists, publisher commands, or
+quality gates.
+
+As a rule of thumb, a local agent longer than roughly ten lines is probably
+carrying behavior that belongs in `PROFILE.md`. Prefer the global plugin agents
+(`cody-reviewer`, `cody-workflow`, `cody-findings`, and their Claudio
+counterparts) for new projects; they discover the profile automatically.
+
+### Example split
+
+| Concern | Correct owner |
+| --- | --- |
+| Evidence threshold, finding format, explicit-publication boundary | `core/` |
+| Cody/Claudio identity and platform invocation | `plugins/` |
+| `bin/check`, architecture guidance, PR metadata, deployment policy | target `PROFILE.md` |
+| A legacy alias that delegates to an installed skill | thin local wrapper |
