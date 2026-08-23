@@ -15,6 +15,11 @@ their review contracts. Run `bin/check` before handoff.
 After shipping, apply and verify every declared field. Do not silently omit a
 field because a CLI command or permission failed.
 
+Invoke `core/issue-workflow/scripts/apply-pr-metadata.sh` with `--base main`,
+the selected labels, `--milestone 3`, `--assignee dgaramos`, and
+`--project-owner dgaramos --project-number 11 --project-status "In Progress"`.
+Reviewers remain absent unless explicitly requested.
+
 ## Publication contract
 
 Use `core/pr-review/references/reviewer-identity-contract.md`. Cody DR, the

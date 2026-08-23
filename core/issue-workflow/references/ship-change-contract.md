@@ -16,10 +16,14 @@ Do not ship without confirmed passing quality gates.
    - Metadata: labels, milestone, assignees, reviewers, and Projects from the profile.
 3. Push the branch and create the PR only when the user explicitly authorizes
    both actions. Do not push without authorization even if the PR body is ready.
-4. After creating the PR, apply every configured field and verify the base
-   branch, labels, milestone, assignees, reviewers, and Project item state. If
-   a required field cannot be applied or verified, stop and emit a handoff with
-   the PR URL, field, and failed command or permission.
+4. After creating the PR, run
+   `core/issue-workflow/scripts/apply-pr-metadata.sh` with values from the
+   profile. The helper applies and verifies the base branch, labels, milestone,
+   assignees, reviewers, and Project item state. Its arguments, including any
+   Project owner, number, and status, are profile-owned.
+5. If a required field cannot be applied or verified, stop and emit a handoff
+   with the PR URL, field, and failed command or permission. Do not claim a PR
+   was shipped with complete metadata when the helper fails.
 
 ## Output
 

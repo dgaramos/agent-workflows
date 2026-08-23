@@ -13,3 +13,8 @@ the handoff format, and the ship-change steps and output.
 Require a passing quality gate before preparing the PR. Do not push or create
 the PR without explicit user authorization. Return the prepared PR as
 `not published` if authorization is not given.
+
+After creating an authorized PR, invoke
+`core/issue-workflow/scripts/apply-pr-metadata.sh` with the profile's declared
+metadata. Do not manually substitute partial `gh pr edit` calls: the helper
+also verifies each configured field and must succeed before handoff.
