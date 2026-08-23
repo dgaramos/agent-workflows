@@ -15,8 +15,11 @@ readonly required_paths=(
   ".github/workflows/publish-claudio-review.yml"
   ".github/workflows/publish-claudio-reply.yml"
   ".github/workflows/publish-claudio-resolve.yml"
+  ".github/workflows/publish-cody-pr-metadata.yml"
+  ".github/workflows/publish-claudio-pr-metadata.yml"
   ".github/scripts/publish-review.sh"
   ".github/scripts/publish-claudio-thread-action.sh"
+  ".github/scripts/publish-pr-metadata.sh"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
@@ -142,6 +145,7 @@ bash -n core/profile-discovery/scripts/discover-project-profile.sh
 bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
 tests/test_publish_claudio_thread_action.sh
+tests/test_publish_pr_metadata.sh
 tests/test_discover_project_profile.sh
 tests/test_plugin_core_bundles.sh
 bin/sync-plugin-core-bundles.sh --check
