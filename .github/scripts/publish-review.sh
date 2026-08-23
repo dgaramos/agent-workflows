@@ -26,8 +26,7 @@ while IFS= read -r thread_id; do
   [[ "$(gh api graphql -f query='query($thread: ID!) { node(id: $thread) { ... on PullRequestReviewThread { pullRequest { number } } } }' -f thread="$thread_id" --jq '.data.node.pullRequest.number')" == "$PR_NUMBER" ]] || { echo "resolution target mismatch" >&2; exit 1; }
 done < <(jq -r '.[]' <<<"$resolve_thread_ids_json")
 head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq .head.sha)"
-diagram=$'## Publication map\n\n```mermaid\nflowchart LR\n  Scope[PR scope] --> Inline[Inline findings]\n  Scope --> General[General findings]\n  Inline --> Review[One review]\n  General --> Review\n  Review --> Threads[Replies and resolutions]\n```'
-jq -n --arg event "$REVIEW_EVENT" --arg body "${REVIEW_BODY}\n\n${diagram}" --arg commit_id "$head_sha" --argjson comments "$inline_comments_json" '{event: $event, body: $body, commit_id: $commit_id} + (if ($comments | length) == 0 then {} else {comments: ($comments | map({path, line, side: "RIGHT", body}))} end)' > review.json
+jq -n --arg event "$REVIEW_EVENT" --arg body "$REVIEW_BODY" --arg commit_id "$head_sha" --argjson comments "$inline_comments_json" '{event: $event, body: $body, commit_id: $commit_id} + (if ($comments | length) == 0 then {} else {comments: ($comments | map({path, line, side: "RIGHT", body}))} end)' > review.json
 gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews" --input review.json > created-review.json
 [[ "$(jq -r '.user.login' created-review.json)" == "$EXPECTED_AUTHOR" ]] || { echo "unexpected review author" >&2; exit 1; }
 [[ "$(jq -r '.pull_request_url' created-review.json)" == "$expected_pr_url" ]] || { echo "review target mismatch" >&2; exit 1; }

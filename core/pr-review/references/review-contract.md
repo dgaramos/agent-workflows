@@ -99,8 +99,8 @@ every formal finding on a changed line gets its own entry. A publisher that
 cannot submit that array must return the manifest as `not published`; it must
 never collapse those findings into one general comment. `replies` and
 `resolve_thread_ids` are validated against the supplied PR before publication.
-The publisher appends the standard Mermaid publication diagram to the review
-body, so agents do not have to reproduce diagram syntax.
+The publisher transports this manifest unchanged. The reviewer owns the review
+summary and must not delegate its factual analysis to the publisher.
 
 After publishing, verify the resulting review's author and event match the
 expected reviewer identity. After replying to a thread, verify the reply is
@@ -111,7 +111,7 @@ thread, verify the App resolved the intended thread.
 
 Emit one summary block per review:
 
-```md
+````md
 ## Review — <reviewer name>
 
 **Scope:** <PR/ref>, `<base>` → `<head>`
@@ -123,15 +123,38 @@ Emit one summary block per review:
 **Verdict:** `<approve|request changes|comment|no findings>`
 **Publication:** `<not requested|not published|published by <reviewer name>>`
 
+## Walkthrough
+
+| Area / files | What changed | Why it matters |
+| --- | --- | --- |
+| `<area or path>` | `<factual behavior change>` | `<observable consequence>` |
+
+## Behavior map
+
+Include a small Mermaid flow or sequence diagram only when it makes a changed
+interaction, state transition, or data flow easier to understand. Every node
+and edge must be supported by the reviewed diff or its verified callers. Omit
+this section when a diagram would merely repeat prose.
+
+## Merge risk
+
+**Risk:** `<minimal|low|moderate|high>` — `<evidence-based reason>`.
+
+## Pre-merge checks
+
+| Check | Status | Evidence / limitation |
+| --- | --- | --- |
+| `<test, build, migration, or review condition>` | `<passed|failed|not run>` | `<actual result or reason>` |
+
+Do not invent checks, estimates, risk, or warnings. A concern belongs here only
+when current evidence supports it; otherwise state the applicable limitation.
+
 ```mermaid
 flowchart LR
-  Scope[PR scope] --> Inline[Inline findings: one comment per changed-line finding]
-  Scope --> General[General findings in summary]
-  Inline --> Review[One published review]
-  General --> Review
-  Review --> Threads[Replies and resolved threads]
+  Input[Changed input] --> Service[Changed behavior]
+  Service --> Result[Observed result]
 ```
-```
+````
 
 With no findings, keep the zero counts and state actual review limitations.
 
