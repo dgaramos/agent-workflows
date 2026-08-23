@@ -13,6 +13,7 @@ readonly required_paths=(
   ".github/workflows/publish-claudio-issue.yml"
   ".github/workflows/publish-cody-review.yml"
   ".github/workflows/publish-claudio-review.yml"
+  ".github/scripts/publish-review.sh"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
@@ -93,6 +94,8 @@ while IFS= read -r skill; do
     END { if (!valid) exit 1 }
   ' "$skill"
 done < <(git ls-files '*SKILL.md')
+
+bash -n .github/scripts/publish-review.sh
 
 # Adapter drift check: adapter review-pr SKILL.md files must reference the
 # core review contract and must not embed the category table or confidence

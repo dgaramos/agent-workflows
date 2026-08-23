@@ -17,6 +17,10 @@ but must never be switched, refreshed, logged out, or used to impersonate the
 reviewer. Wait for the publisher and verify the resulting review's author and
 event per the post-publication verification requirements in the review contract.
 
+Build the contract's batched publication manifest: keep the Mermaid diagram in
+the summary, place every changed-line formal finding in its own inline entry,
+and batch thread replies and resolutions only after their targets are verified.
+
 When replying to an existing review thread, use the publisher's documented reply
 mode and verify that the reply is authored by Claudio DR in the intended thread.
 Do not create a separate review or fall back to a personal `gh` comment. If the

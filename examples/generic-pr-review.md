@@ -8,6 +8,11 @@ the changed code and relevant callers, records checks consulted, and emits the
 review summary using the contract's summary template with the configured
 reviewer name.
 
+For authorized publication it emits one manifest: a summary containing the
+Mermaid diagram, one `{path, line, body}` entry for each diff-bound finding,
+and optional reply and resolution batches. General findings stay in the summary;
+they never replace valid inline findings.
+
 If a new API response omits a field that existing consumers require, it reports:
 
 ```md

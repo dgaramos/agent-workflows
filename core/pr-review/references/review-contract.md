@@ -80,7 +80,8 @@ Without a publisher, return the same formatted content as `not published`.
 For authorized publication, use `REQUEST_CHANGES` for blocking or important
 findings, `COMMENT` for nit-only findings, and `APPROVE` only with no findings.
 
-Submit **one single PR review** that bundles all findings together:
+Submit **one single PR review** through a publication manifest that bundles all
+findings and thread actions together:
 
 - Findings whose evidence line is in the diff → inline comments in the review's
   `comments` array, each at the exact `path` and `line` (or `position`) from
@@ -91,6 +92,13 @@ Submit **one single PR review** that bundles all findings together:
 
 Never submit multiple review events for the same pass. Never post findings as
 standalone pull request comments outside a review submission.
+
+The manifest contains `review_body`, `inline_comments`, `replies`, and
+`resolve_thread_ids`. `inline_comments` is an array of `{path, line, body}`:
+every formal finding on a changed line gets its own entry. A publisher that
+cannot submit that array must return the manifest as `not published`; it must
+never collapse those findings into one general comment. `replies` and
+`resolve_thread_ids` are validated against the supplied PR before publication.
 
 After publishing, verify the resulting review's author and event match the
 expected reviewer identity. After replying to a thread, verify the reply is
@@ -112,6 +120,15 @@ Emit one summary block per review:
 **Risk axes:** <evaluated>; not applicable: <axes>
 **Verdict:** `<approve|request changes|comment|no findings>`
 **Publication:** `<not requested|not published|published by <reviewer name>>`
+
+```mermaid
+flowchart LR
+  Scope[PR scope] --> Inline[Inline findings: one comment per changed-line finding]
+  Scope --> General[General findings in summary]
+  Inline --> Review[One published review]
+  General --> Review
+  Review --> Threads[Replies and resolved threads]
+```
 ```
 
 With no findings, keep the zero counts and state actual review limitations.
