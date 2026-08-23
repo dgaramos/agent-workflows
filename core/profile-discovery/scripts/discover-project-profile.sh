@@ -23,6 +23,6 @@ fi
 
 case "${#profiles[@]}" in
   1) printf '%s\n' "${profiles[0]}" ;;
-  0) echo "no project profile found below $root/.agent-review" >&2; exit 2 ;;
+  0) exit 0 ;;
   *) printf 'ambiguous project profiles:\n%s\n' "$(printf '%s\n' "${profiles[@]}")" >&2; exit 3 ;;
 esac

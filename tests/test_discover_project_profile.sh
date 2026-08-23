@@ -6,10 +6,7 @@ readonly script="$repository_root/core/profile-discovery/scripts/discover-projec
 readonly temporary_directory="$(mktemp -d)"
 trap 'rm -rf "$temporary_directory"' EXIT
 
-if "$script" --root "$temporary_directory" >/dev/null 2>&1; then
-  echo "expected no-profile discovery to fail" >&2
-  exit 1
-fi
+[[ -z "$("$script" --root "$temporary_directory")" ]]
 
 mkdir -p "$temporary_directory/.agent-review/example"
 touch "$temporary_directory/.agent-review/example/PROFILE.md"
