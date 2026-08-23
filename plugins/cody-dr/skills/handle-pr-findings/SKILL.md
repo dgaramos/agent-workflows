@@ -21,6 +21,10 @@ user decision for each finding. Do not fix, create an issue, reply, resolve,
 push, or merge based on the triage alone. For each approved fix, make a
 dedicated commit and cite it in the eventual thread reply.
 
+Never publish a pull-request review as part of finding triage. Publishing a
+review is the exclusive scope of the `review-pr` skill and requires separate
+explicit user authorization. Triage ends after fixes are committed and pushed.
+
 When authorized to publish, use the publisher documented in the target profile
 per the dispatch and reply contracts in `core/pr-review/references/profile-contract.md`.
 Verify that every reply and resolution is authored by Cody DR in the intended
