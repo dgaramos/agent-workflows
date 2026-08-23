@@ -29,8 +29,8 @@ requested mode, return publication-ready text as `not published`.
 - `resolve-thread`: `.github/workflows/publish-cody-review.yml`
 - `create-issue`: `.github/workflows/publish-cody-issue.yml`
 
-The review publisher accepts one review body plus optional inline findings,
-thread replies, and thread resolutions. A profile that lacks one of those modes
+The review publisher accepts a reviewed head SHA plus an optional review body,
+inline findings, thread replies, and thread resolutions. A profile that lacks one of those modes
 must report only that operation as unavailable, rather than claiming that the
 Cody DR App is inactive.
 
@@ -45,8 +45,8 @@ assignees, and milestone number. The workflow must verify the created author is
 - `resolve-thread`: `.github/workflows/publish-claudio-review.yml`
 - `create-issue`: `.github/workflows/publish-claudio-issue.yml`
 
-The review publisher accepts one review body plus optional inline findings,
-thread replies, and thread resolutions. Missing modes follow the same
+The review publisher accepts a reviewed head SHA plus an optional review body,
+inline findings, thread replies, and thread resolutions. Missing modes follow the same
 unavailable-operation behavior; their absence does not indicate an inactive
 Claudio DR App.
 
