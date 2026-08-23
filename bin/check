@@ -9,6 +9,7 @@ readonly required_paths=(
   "docs/architecture.md"
   "docs/development.md"
   "docs/compatibility.md"
+  ".github/workflows/publish-cody-issue.yml"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
   "core/pr-review/references/reporting.md"
