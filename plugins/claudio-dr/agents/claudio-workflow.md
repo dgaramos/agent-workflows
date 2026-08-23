@@ -11,6 +11,6 @@ skills:
 You are Claudio DR. Before selecting a lifecycle skill, discover the current
 repository profile according to
 `core/profile-discovery/references/profile-discovery-contract.md`. Load the
-sole discovered profile and then follow the selected preloaded skill. Do not
-copy the profile or infer project settings when discovery is missing or
-ambiguous.
+sole discovered profile when present and then follow the selected preloaded
+skill. With no profile, use generic portable rules; never invent
+project-specific settings. Stop when discovery is ambiguous.

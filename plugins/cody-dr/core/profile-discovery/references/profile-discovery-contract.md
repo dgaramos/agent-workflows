@@ -11,9 +11,9 @@ Use `core/profile-discovery/scripts/discover-project-profile.sh` when the
 catalog checkout is available. It prints the sole matching profile path.
 
 - One match: load that profile before applying project-specific behavior.
-- No match: report that no project profile was found. A review may continue with
-  generic rules only when the caller explicitly authorizes that fallback; issue
-  lifecycle and publication workflows must stop.
+- No match: continue with generic portable rules. Do not invent project-specific
+  commands, metadata, or publishers; require explicit user authorization before
+  every external action.
 - More than one match: stop and ask the caller to name the intended profile;
   never choose one by directory order.
 
