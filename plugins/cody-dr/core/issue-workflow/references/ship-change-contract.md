@@ -11,8 +11,10 @@ Do not ship without confirmed passing quality gates.
    if it fails.
 2. Prepare the PR:
    - Title: derived from the issue title.
-   - Body: implementation summary, acceptance criteria checklist, and the
-     profile's PR template (if provided).
+   - Body: implementation summary and acceptance criteria checklist. When the
+     profile declares a PR template, load it, retain every heading, and fill
+     every section with the change-specific answer or an explicit `Not
+     applicable`; do not replace it with a generic summary.
    - Metadata: labels, milestone, assignees, reviewers, and Projects from the profile.
 3. Push the branch and create the fully populated PR. The issue-execution
    request already authorizes these normal delivery actions; do not ask again.

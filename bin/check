@@ -93,6 +93,77 @@ for path in "${required_paths[@]}"; do
   test -f "$path"
 done
 
+# The public README is the catalog surface. Every advertised capability must
+# exist in both adapters, and adapters may not ship an undocumented skill.
+readonly public_skill_names=(
+  "review-pr"
+  "handle-pr-findings"
+  "author-issue"
+  "start-issue"
+  "implement-issue"
+  "ship-change"
+  "execute-issue"
+)
+readonly public_adapter_prefixes=("plugins/cody-dr" "plugins/claudio-dr")
+
+for skill_name in "${public_skill_names[@]}"; do
+  if ! grep -qF "\`$skill_name\`" README.md; then
+    echo "public surface: README.md does not announce $skill_name" >&2
+    exit 1
+  fi
+
+  for prefix in "${public_adapter_prefixes[@]}"; do
+    skill="$prefix/skills/$skill_name/SKILL.md"
+    if ! test -f "$skill"; then
+      echo "public surface: $skill_name is missing from $prefix" >&2
+      exit 1
+    fi
+  done
+done
+
+for prefix in "${public_adapter_prefixes[@]}"; do
+  while IFS= read -r skill; do
+    skill_name="$(basename "$(dirname "$skill")")"
+    case " ${public_skill_names[*]} " in
+      *" $skill_name "*) ;;
+      *)
+        echo "public surface: $skill is not documented in README.md" >&2
+        exit 1
+        ;;
+    esac
+  done < <(find "$prefix/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | sort)
+done
+
+# Validate the portable areas that users can install, not merely their files.
+# A lifecycle example composes the start, implement, and ship contracts.
+readonly required_generic_examples=(
+  "examples/generic-pr-review.md"
+  "examples/generic-findings-handling.md"
+  "examples/generic-issue-authoring.md"
+  "examples/generic-issue-lifecycle.md"
+)
+
+for example in "${required_generic_examples[@]}"; do
+  if ! test -f "$example"; then
+    echo "examples: missing required generic example $example" >&2
+    exit 1
+  fi
+done
+
+# Keep manifests parseable and make the marketplace describe the installed
+# Claudio adapter version. This avoids publishing a catalog whose public
+# installation surface differs from its source tree.
+jq -e '.name == "cody-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/"' \
+  plugins/cody-dr/.codex-plugin/plugin.json >/dev/null
+jq -e '.name == "claudio-dr" and (.version | type == "string")' \
+  plugins/claudio-dr/.claude-plugin/plugin.json >/dev/null
+claudio_version="$(jq -r '.version' plugins/claudio-dr/.claude-plugin/plugin.json)"
+marketplace_version="$(jq -r '.plugins[] | select(.name == "claudio-dr") | .version' .claude-plugin/marketplace.json)"
+if [[ "$claudio_version" != "$marketplace_version" ]]; then
+  echo "manifest: Claudio marketplace version does not match plugin version" >&2
+  exit 1
+fi
+
 # Reviewer identity is adapter-owned, while capability availability belongs to
 # profiles. Keep the display/App/actor mapping explicit and symmetric.
 readonly cody_identity="plugins/cody-dr/references/reviewer-identity.md"
@@ -268,6 +339,9 @@ done
 
 grep -qF 'Metadata verified:' core/issue-workflow/references/ship-change-contract.md
 grep -qF 'apply-pr-metadata.sh' core/issue-workflow/references/ship-change-contract.md
+grep -qF 'retain every heading' core/issue-workflow/references/ship-change-contract.md
+grep -qF 'PR description' profiles/agent-workflows.md
+grep -qF 'pull_request_template.md' profiles/agent-workflows.md
 grep -qF 'apply-pr-metadata.sh' plugins/cody-dr/skills/ship-change/SKILL.md
 grep -qF 'apply-pr-metadata.sh' plugins/claudio-dr/skills/ship-change/SKILL.md
 
@@ -312,6 +386,16 @@ grep -qF '## Knowledge sources' profiles/example-project.md
 readonly forbidden_target_pattern='craft''control|dgaramos/craft''control'
 if git grep -n -i -E "$forbidden_target_pattern" -- . >/dev/null; then
   echo "target-project reference detected; consumer profiles belong in their target repository" >&2
+  exit 1
+fi
+
+# This catalog may keep only its own profile and the neutral template. A
+# consumer profile belongs in the consumer repository, never in this public
+# catalog.
+readonly allowed_profile_paths=$'.gitkeep\nagent-workflows.md\nexample-project.md'
+actual_profile_paths="$(git ls-files profiles/ | sed 's#^profiles/##' | sort)"
+if [[ "$actual_profile_paths" != "$allowed_profile_paths" ]]; then
+  echo "profiles: consumer project profiles must not be committed to the catalog" >&2
   exit 1
 fi
 
