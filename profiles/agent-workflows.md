@@ -15,8 +15,17 @@ or commit their values.
 The target publisher must use an installation token, publish as the matching
 GitHub App, then verify its author, event, and target PR/thread. It needs Pull
 requests read/write for reviews and replies, and Issues read/write for resolving
-conversations. If no target publisher documents the requested mode, return
-publication-ready text as `not published`.
+conversations and creating issues. If no target publisher documents the
+requested mode, return publication-ready text as `not published`.
+
+## Cody DR publisher modes
+
+- `review`, `reply`, and `resolve-thread`: `.github/workflows/publish-cody-review.yml`
+- `create-issue`: `.github/workflows/publish-cody-issue.yml`
+
+Issue creation is dispatched with a title, Markdown body, and optional labels,
+assignees, and milestone number. The workflow must verify the created author is
+`cody-dr[bot]`; a different author is a failed publication, not a fallback.
 
 ## Boundaries
 
