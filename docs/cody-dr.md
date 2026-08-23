@@ -20,9 +20,9 @@ You can also invoke the `review-pr` skill directly without the agent for a
 lightweight pass. Add a project profile when the target repository has
 architecture or quality rules beyond the portable core.
 
-The plugin also exposes global agents: `cody-reviewer` for an isolated review,
-`cody-workflow` for an issue lifecycle, and `cody-findings` for findings
-handling. From a target repository, they discover exactly one local profile at
+The plugin also exposes global agents: `cody-helper` for usage guidance,
+`cody-reviewer` for an isolated review, `cody-workflow` for an issue lifecycle,
+and `cody-findings` for findings handling. From a target repository, they discover exactly one local profile at
 `.agent-review/*/PROFILE.md`. They stop rather than guess when there is no
 profile for a lifecycle action or when more than one profile exists.
 
