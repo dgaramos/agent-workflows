@@ -99,6 +99,8 @@ every formal finding on a changed line gets its own entry. A publisher that
 cannot submit that array must return the manifest as `not published`; it must
 never collapse those findings into one general comment. `replies` and
 `resolve_thread_ids` are validated against the supplied PR before publication.
+The publisher appends the standard Mermaid publication diagram to the review
+body, so agents do not have to reproduce diagram syntax.
 
 After publishing, verify the resulting review's author and event match the
 expected reviewer identity. After replying to a thread, verify the reply is
