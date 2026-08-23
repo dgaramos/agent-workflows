@@ -6,36 +6,53 @@ Verify every finding against the current head before classifying or fixing it.
 If the evidence location no longer exists or the described condition is gone,
 classify the finding as `superseded` and do not act on it.
 
-## Triage
+## Triage and decision gate
 
 Classify each finding as exactly one of:
 
 | Classification | Condition |
 | --- | --- |
-| `fix now` | The finding is valid, the fix is within the PR's scope, and the change is minimal. |
-| `defer` | The finding is valid but the fix is out of scope for this PR. |
-| `reject` | The finding is invalid, already fixed, or the described condition does not exist on the current head. |
+| `pertinent, in scope` | The finding is valid and its minimal fix belongs in this PR. |
+| `pertinent, separate issue` | The finding is valid but its fix is out of scope for this PR. |
+| `not pertinent` | The finding is invalid, already fixed, or the described condition does not exist on the current head. |
+| `unverifiable` | Current-head evidence is insufficient to reach a reliable conclusion. |
+
+Before any state-changing action, list **every** finding with current-head
+evidence, classification, rationale, and a proposed action. Then ask the user
+for a decision on each item individually. Never infer consent from a request to
+handle findings generally.
+
+For example, an itemized decision request can offer:
+
+| Finding | Verdict | Ask the user to choose |
+| --- | --- | --- |
+| `#1` | pertinent, in scope | fix in this PR; reply only; leave open |
+| `#2` | pertinent, separate issue | create a separate issue; reply only; leave open |
+| `#3` | not pertinent | publish a factual reply; leave open; fix anyway |
 
 Do not fix more than the finding describes. Do not refactor, clean up, or
 extend beyond the minimal correction. If a fix would require touching files or
-logic outside the PR's scope, defer it instead.
+logic outside the PR's scope, offer a separate issue rather than deciding to
+defer it unilaterally.
 
 ## Fixing
 
-For each `fix now` finding:
+For each user-approved `pertinent, in scope` finding:
 
 1. Make the minimal correction on the current head.
 2. Run the profile's quality command. If it fails, stop; do not claim the
    finding is resolved until validation passes.
-3. Keep the commit logically isolated — one finding per commit unless the
-   profile explicitly allows batching.
+3. Create a dedicated commit for that finding. Include the PR/issue reference
+   required by the target profile; never batch distinct findings without an
+   explicit user decision.
 
 If no profile is loaded, state that no quality command is available and ask
 the user which validation to run before claiming resolution.
 
 ## Deferring out-of-scope findings
 
-For each `defer` finding, produce a publication-ready issue draft using the
+For each user-approved `pertinent, separate issue` finding, produce a
+publication-ready issue draft using the
 portable issue-authoring contract (`core/issue-authoring/references/issue-contract.md`).
 The draft's context must reference the original finding and its evidence. Do
 not create an unscoped code change as a substitute.
@@ -46,10 +63,10 @@ Prepare reply text and thread-resolution text for every handled finding.
 Do not publish a reply, resolve a thread, push, or merge unless the user
 explicitly authorizes that external action.
 
-For `fix now`: the reply states what was changed and that validation passed.
-For `defer`: the reply states that the finding is valid but out of scope and
-links the draft issue (or its published number if already created).
-For `reject`: the reply states why the finding does not apply on the current head.
+For an approved fix: the reply states what changed, links the dedicated commit,
+and records validation. For an approved separate issue: the reply links the
+published issue. For a not-pertinent or unverifiable finding: publish a factual
+reply only when the user selected that action; otherwise leave the thread open.
 
 When authorized to publish, use the target profile's publisher per the reply
 mode and resolution mode documented in
@@ -66,7 +83,10 @@ Emit one summary block per handling session:
 
 **PR/ref:** <ref>
 **Head verified:** `<sha>`
-**Fix now:** N · **Defer:** N · **Reject:** N · **Superseded:** N
+**Pertinent, in scope:** N · **Separate issue:** N · **Not pertinent:** N · **Unverifiable:** N
 **Validation:** <passed|failed|not run: reason>
+**Decisions:** <per-finding user selections>
+**Commits:** <finding → commit or none>
+**Issues:** <finding → issue or none>
 **Replies prepared:** N · **Published:** <N published|not requested|not published>
 ```

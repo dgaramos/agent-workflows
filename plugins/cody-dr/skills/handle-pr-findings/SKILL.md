@@ -13,6 +13,11 @@ out-of-scope deferral via the issue-authoring contract, reply and resolution
 behavior, and the outcome summary format. Use `Cody DR` as the reviewer name
 in outcome summaries and publication fields.
 
+First produce the contract's complete itemized triage and obtain an explicit
+user decision for each finding. Do not fix, create an issue, reply, resolve,
+push, or merge based on the triage alone. For each approved fix, make a
+dedicated commit and cite it in the eventual thread reply.
+
 When authorized to publish, use the publisher documented in the target profile
 per the dispatch and reply contracts in `core/pr-review/references/profile-contract.md`.
 Verify that every reply and resolution is authored by Cody DR in the intended

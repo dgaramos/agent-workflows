@@ -177,6 +177,11 @@ for skill in "${adapter_findings_skills[@]}"; do
     echo "drift: $skill does not reference core/findings-handling/references/findings-contract.md" >&2
     exit 1
   fi
+
+  if ! grep -qF 'user decision for each finding' "$skill"; then
+    echo "parity: $skill does not require per-finding user decisions" >&2
+    exit 1
+  fi
 done
 
 # Authoring adapters must remain thin identity bindings over the portable
