@@ -1,7 +1,7 @@
 {
   "name": "claudio-dr",
   "description": "Evidence-first pull request review workflows for Claude Code.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": {
     "name": "Danilo Ramos",
     "email": "dgaramos+claudio@gmail.com",

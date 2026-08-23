@@ -1,6 +1,6 @@
 {
   "name": "cody-dr",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Evidence-first pull request review workflows for Codex.",
   "author": {
     "name": "Danilo Ramos",

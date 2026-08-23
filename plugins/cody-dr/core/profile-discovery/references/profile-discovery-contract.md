@@ -12,8 +12,8 @@ catalog checkout is available. It prints the sole matching profile path.
 
 - One match: load that profile before applying project-specific behavior.
 - No match: continue with generic portable rules. Do not invent project-specific
-  commands, metadata, or publishers; require explicit user authorization before
-  every external action.
+  commands, metadata, or publishers. Issue execution still authorizes normal
+  delivery actions; review and comment publication remain explicit.
 - More than one match: stop and ask the caller to name the intended profile;
   never choose one by directory order.
 

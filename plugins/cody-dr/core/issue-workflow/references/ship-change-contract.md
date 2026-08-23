@@ -14,8 +14,8 @@ Do not ship without confirmed passing quality gates.
    - Body: implementation summary, acceptance criteria checklist, and the
      profile's PR template (if provided).
    - Metadata: labels, milestone, assignees, reviewers, and Projects from the profile.
-3. Push the branch and create the PR only when the user explicitly authorizes
-   both actions. Do not push without authorization even if the PR body is ready.
+3. Push the branch and create the fully populated PR. The issue-execution
+   request already authorizes these normal delivery actions; do not ask again.
 4. After creating the PR, run
    `core/issue-workflow/scripts/apply-pr-metadata.sh` with values from the
    profile. The helper applies and verifies the base branch, labels, milestone,
@@ -37,5 +37,5 @@ Do not ship without confirmed passing quality gates.
 **Metadata verified:** <field → observed value, or failed field>
 ```
 
-Without push and PR-creation authorization, return the prepared PR title, body,
-and metadata as `not published` and stop.
+Do not publish review, comment, reply, or thread-resolution content as part of
+shipping unless the user separately authorizes that publication.

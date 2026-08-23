@@ -3,26 +3,24 @@
 ## Purpose
 
 `execute-issue` composes `start-issue`, `implement-issue`, and `ship-change`
-in sequence. It does not grant broader publication authorization than each
-phase would allow standalone — push and PR creation still require explicit
-user authorization when `ship-change` is reached.
+in sequence. An explicit request to execute an issue authorizes the full
+normal delivery, including push and PR creation.
 
 ## Steps
 
 1. Run `start-issue`. Stop on any handoff.
 2. Run `implement-issue`. Stop on any handoff.
-3. Run `ship-change`. Stop if the quality gate fails or the user does not
-   authorize push and PR creation.
+3. Run `ship-change`. Stop only for a failed quality gate, missing permission,
+   unresolved dependency, or material out-of-scope decision.
 
 Load the target profile once at step 1 and pass its context through all
 phases. Do not reload or override the profile mid-execution.
 
 ## Authorization boundary
 
-Confirm with the user before each external action (push, PR creation). A
-"proceed end-to-end" instruction authorizes the orchestrator to run all phases
-but does not pre-authorize external actions — each is confirmed at the point
-where the phase reaches it.
+The explicit issue-execution request authorizes branch creation,
+implementation, validation, commits, push, and a fully populated PR. It does
+not authorize review, comment, reply, or thread-resolution publication.
 
 ## Output
 

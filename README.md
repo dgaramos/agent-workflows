@@ -63,12 +63,14 @@ validation flow.
 | `author-issue` | Draft and optionally publish a structured GitHub issue |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
 | `implement-issue` | Make minimal in-scope changes with quality-gate validation |
-| `ship-change` | Run final quality gate, prepare PR with profile metadata, push when authorized |
+| `ship-change` | Run final quality gate, prepare PR with profile metadata, then push and open it |
 | `execute-issue` | Orchestrate the full start → implement → ship lifecycle |
 
-All publication actions (reviews, replies, thread resolution, issue creation,
-push, PR creation) require explicit user authorization. Without a configured
-publisher, every skill returns publication-ready output as `not published`.
+An explicit issue-execution request authorizes the normal delivery path:
+branch, implementation, validation, commits, push, and a complete PR. Reviews,
+replies, thread resolution, and issue creation remain separately authorized.
+Without a configured publisher, publisher-backed actions return
+publication-ready output as `not published`.
 
 ## Profiles
 
@@ -84,7 +86,9 @@ publication configuration without exposing those details here.
 
 ## Safety
 
-- Workflows never publish without explicit user authorization.
+- Issue execution publishes its normal delivery only when explicitly requested;
+  reviews, comments, replies, and thread resolution always need separate
+  authorization.
 - The repository never stores GitHub App keys, tokens, or target-project
   secrets. Publisher configuration references secret names only.
 - A missing publisher returns publication-ready text rather than a credential
