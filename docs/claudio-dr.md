@@ -16,9 +16,9 @@ claude plugin validate ./plugins/claudio-dr
 claude --plugin-dir ./plugins/claudio-dr
 ```
 
-The plugin also exposes global agents: `claudio-reviewer` for an isolated
-review, `claudio-workflow` for an issue lifecycle, and `claudio-findings` for
-findings handling. From a target repository, they discover exactly one local
+The plugin also exposes global agents: `claudio-helper` for usage guidance,
+`claudio-reviewer` for an isolated review, `claudio-workflow` for an issue
+lifecycle, and `claudio-findings` for findings handling. From a target repository, they discover exactly one local
 profile at `.agent-review/*/PROFILE.md`. They stop rather than guess when there
 is no profile for a lifecycle action or when more than one profile exists.
 
