@@ -44,6 +44,11 @@ vendor assumption. Both Claudio DR and Cody DR produce equivalent scope,
 evidence, findings, and summary structure from the same input; they differ only
 in reviewer name and platform publisher mechanics.
 
+When shipping a change, the target profile declares its labels, milestone,
+assignees, reviewers, and Project. The adapter applies and verifies every
+declared field after PR creation; a failed field is a handoff, never a silent
+omission.
+
 When a profile enables only review publication, a requested thread reply is
 reported as `not published` because the **reply operation** is unavailable. The
 reviewer identity itself remains configured and may still publish reviews.
