@@ -12,6 +12,10 @@ defines scope, evidence, confidence, findings, re-review, publication boundary,
 post-publication verification, and summary format. Use `Claudio DR` as the
 reviewer name in the summary and publication fields.
 
+Discover the target profile from the current repository with
+`core/profile-discovery/references/profile-discovery-contract.md` before
+applying project-specific rules.
+
 When the target profile declares knowledge sources, load
 `core/pr-review/references/knowledge-sources-contract.md` before using them.
 Apply its provenance and untrusted-content rules exactly as the portable

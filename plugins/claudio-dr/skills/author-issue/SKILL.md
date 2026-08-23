@@ -7,6 +7,9 @@ description: Claudio DR drafts a structured GitHub issue and publishes it only w
 Reviewer identity: **Claudio DR**. Load
 `plugins/claudio-dr/references/reviewer-identity.md` before using a publisher.
 
+Discover the target profile first with
+`core/profile-discovery/references/profile-discovery-contract.md`.
+
 Load `core/issue-authoring/SKILL.md` and follow its referenced contract. Use
 `Claudio DR` in the draft summary. When publication is explicitly authorized,
 use only the target profile's `create-issue` mode, then verify that the created

@@ -24,6 +24,8 @@ readonly required_paths=(
   "core/pr-review/references/reviewer-identity-contract.md"
   "core/pr-review/references/knowledge-sources-contract.md"
   "core/pr-review/agents/openai.yaml"
+  "core/profile-discovery/references/profile-discovery-contract.md"
+  "core/profile-discovery/scripts/discover-project-profile.sh"
   "core/issue-authoring/SKILL.md"
   "core/issue-authoring/references/issue-contract.md"
   "core/findings-handling/SKILL.md"
@@ -39,6 +41,7 @@ readonly required_paths=(
   "core/issue-workflow/skills/ship-change/SKILL.md"
   "core/issue-workflow/skills/execute-issue/SKILL.md"
   "examples/generic-pr-review.md"
+  "examples/generic-profile-discovery.md"
   "examples/generic-issue-authoring.md"
   "examples/generic-findings-handling.md"
   "examples/generic-pr-shipping.md"
@@ -51,6 +54,8 @@ readonly required_paths=(
   "plugins/cody-dr/skills/ship-change/SKILL.md"
   "plugins/cody-dr/skills/execute-issue/SKILL.md"
   "plugins/cody-dr/agents/cody-reviewer.md"
+  "plugins/cody-dr/agents/cody-workflow.md"
+  "plugins/cody-dr/agents/cody-findings.md"
   "plugins/cody-dr/references/reviewer-identity.md"
   "docs/cody-dr.md"
   ".claude-plugin/marketplace.json"
@@ -63,6 +68,8 @@ readonly required_paths=(
   "plugins/claudio-dr/skills/ship-change/SKILL.md"
   "plugins/claudio-dr/skills/execute-issue/SKILL.md"
   "plugins/claudio-dr/agents/claudio-reviewer.md"
+  "plugins/claudio-dr/agents/claudio-workflow.md"
+  "plugins/claudio-dr/agents/claudio-findings.md"
   "plugins/claudio-dr/references/reviewer-identity.md"
   "docs/claudio-dr.md"
   "core/.gitkeep"
@@ -128,9 +135,11 @@ done < <(git ls-files '*SKILL.md')
 
 bash -n .github/scripts/publish-review.sh
 bash -n .github/scripts/publish-claudio-thread-action.sh
+bash -n core/profile-discovery/scripts/discover-project-profile.sh
 bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
 tests/test_publish_claudio_thread_action.sh
+tests/test_discover_project_profile.sh
 
 # Agent reviews inform humans; they do not block a PR through REQUEST_CHANGES.
 if grep -qF 'REQUEST_CHANGES' .github/workflows/publish-*-review.yml; then

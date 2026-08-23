@@ -15,6 +15,10 @@ and summary format. Load [profile-contract](references/profile-contract.md) to
 understand what a target profile may and must not provide, including publisher
 capability and post-publication verification requirements.
 
+Discover the target profile with
+`core/profile-discovery/references/profile-discovery-contract.md` before
+applying project-specific rules.
+
 When a profile declares additional review context, load
 [knowledge-sources-contract](references/knowledge-sources-contract.md) before
 using it. It defines authorized source categories, provenance, availability

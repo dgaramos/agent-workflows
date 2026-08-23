@@ -7,6 +7,9 @@ description: Cody DR triages actionable pull request findings, applies valid in-
 
 Reviewer identity: **Cody DR** (Codex App reviewer).
 
+Discover the target profile first with
+`core/profile-discovery/references/profile-discovery-contract.md`.
+
 Load `core/findings-handling/references/findings-contract.md` before acting.
 It defines current-head verification, triage classifications, fix requirements,
 out-of-scope deferral via the issue-authoring contract, reply and resolution
