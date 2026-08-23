@@ -4,6 +4,26 @@ Use this profile when reviewing this repository. Read `AGENTS.md`, `README.md`,
 `CONTRIBUTING.md`, the issue, changed plugin manifests, both adapter skills, and
 their review contracts. Run `bin/check` before handoff.
 
+## Claudio DR self-review
+
+Use Claudio DR's `review-pr` skill (or the `claudio-reviewer` agent) against an
+explicit pull request URL. In the review request, name this profile explicitly:
+
+```text
+Review <PR URL> with Claudio DR using the agent-workflows profile at
+profiles/agent-workflows.md.
+```
+
+Before reviewing, Claudio DR must load this profile and read `CLAUDE.md`, the
+issue and pull-request context, every changed skill and its referenced portable
+contract, plus `bin/check` output for the reviewed head. Apply the catalog
+checklist: keep portable behavior in `core/`, keep model-specific mechanics in
+`plugins/`, keep target-project rules in `profiles/`, preserve Codex/Claude
+adapter parity where the portable contract applies, require a generic example
+for a core-contract change, and reject any credential or implicit-publication
+change. Publish a review only with explicit authorization, through the Claudio
+DR publisher, and verify the resulting author is `claudio-dr[bot]`.
+
 ## PR metadata
 
 - **Labels:** `enhancement` plus scope labels selected by the issue
