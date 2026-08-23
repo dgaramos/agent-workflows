@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# install-global-agents — symlink agent-workflows plugin agents into ~/.claude/agents/
+#
+# Run from anywhere. Re-running is safe: existing symlinks are replaced.
+# To uninstall: remove the symlinks from ~/.claude/agents/.
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+AGENTS_DIR="${HOME}/.claude/agents"
+PLUGINS_DIR="${REPO_DIR}/plugins"
+
+mkdir -p "${AGENTS_DIR}"
+
+install_agent() {
+    local src="$1"
+    local name
+    name="$(basename "${src}")"
+    local dest="${AGENTS_DIR}/${name}"
+
+    if [[ -L "${dest}" ]]; then
+        rm "${dest}"
+    elif [[ -e "${dest}" ]]; then
+        echo "  skip  ${name}  (non-symlink file exists — remove manually to replace)"
+        return
+    fi
+
+    ln -s "${src}" "${dest}"
+    echo "  linked  ${name}"
+}
+
+echo "Installing agent-workflows global agents from:"
+echo "  ${PLUGINS_DIR}"
+echo "Into:"
+echo "  ${AGENTS_DIR}"
+echo ""
+
+for agent_file in "${PLUGINS_DIR}"/*/agents/*.md; do
+    install_agent "${agent_file}"
+done
+
+echo ""
+echo "Done. Run 'git pull' in ${REPO_DIR} to update all agents."
