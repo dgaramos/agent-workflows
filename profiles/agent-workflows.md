@@ -40,6 +40,14 @@ the selected labels, `--milestone 3`, `--assignee dgaramos`, and
 `--project-owner dgaramos --project-number 11 --project-status "In Progress"`.
 Reviewers remain absent unless explicitly requested.
 
+## PR description
+
+Use [`.github/pull_request_template.md`](../.github/pull_request_template.md).
+Retain every section and fill it with the change-specific answer; mark a
+section `Not applicable` rather than deleting it. The `What changes` section
+explains the intent and workflow impact, not a diff inventory. Include
+`Closes #<issue-number>` in Additional context.
+
 ## Publication contract
 
 Use `core/pr-review/references/reviewer-identity-contract.md`. Cody DR, the

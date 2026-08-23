@@ -66,6 +66,9 @@ For an explicit `execute-issue` request, the normal delivery path is already
 authorized: commit, push, and opening a fully populated PR. `ship-change`
 runs the final quality gate, derives the title and body from the issue, and
 uses the profile values rather than hardcoding them in the portable workflow.
+When the profile supplies a PR template, the body retains every template
+heading and fills each section with a change-specific answer or `Not
+applicable`.
 
 ```md
 ## Ship — #42
