@@ -38,6 +38,7 @@ readonly required_paths=(
   "examples/generic-findings-handling.md"
   "plugins/cody-dr/.codex-plugin/plugin.json"
   "plugins/cody-dr/skills/review-pr/SKILL.md"
+  "plugins/cody-dr/skills/author-issue/SKILL.md"
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/cody-dr/skills/start-issue/SKILL.md"
   "plugins/cody-dr/skills/implement-issue/SKILL.md"
@@ -49,6 +50,7 @@ readonly required_paths=(
   ".claude-plugin/marketplace.json"
   "plugins/claudio-dr/.claude-plugin/plugin.json"
   "plugins/claudio-dr/skills/review-pr/SKILL.md"
+  "plugins/claudio-dr/skills/author-issue/SKILL.md"
   "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/claudio-dr/skills/start-issue/SKILL.md"
   "plugins/claudio-dr/skills/implement-issue/SKILL.md"
@@ -160,6 +162,28 @@ for skill in "${adapter_findings_skills[@]}"; do
     exit 1
   fi
 done
+
+# Authoring adapters must remain thin identity bindings over the portable
+# authoring contract and verify the matching GitHub App actor after publication.
+readonly adapter_author_issue_skills=(
+  "plugins/claudio-dr/skills/author-issue/SKILL.md"
+  "plugins/cody-dr/skills/author-issue/SKILL.md"
+)
+
+for skill in "${adapter_author_issue_skills[@]}"; do
+  if ! grep -qF 'core/issue-authoring/SKILL.md' "$skill"; then
+    echo "parity: $skill does not reference core/issue-authoring/SKILL.md" >&2
+    exit 1
+  fi
+
+  if ! grep -qF 'references/reviewer-identity.md' "$skill"; then
+    echo "parity: $skill does not reference its adapter reviewer identity" >&2
+    exit 1
+  fi
+done
+
+grep -qF 'cody-dr[bot]' plugins/cody-dr/skills/author-issue/SKILL.md
+grep -qF 'claudio-dr[bot]' plugins/claudio-dr/skills/author-issue/SKILL.md
 
 # Adapter reviewer agents must bind to the review-pr skill (parity check).
 readonly adapter_reviewer_agents=(

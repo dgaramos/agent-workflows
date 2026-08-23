@@ -38,6 +38,7 @@ not mean an App is inactive.
 | Plugin manifest | `.claude-plugin/plugin.json` |
 | Reviewer agent | `plugins/claudio-dr/agents/claudio-reviewer.md` |
 | Invocation | `/claudio-dr:review-pr <PR URL or ref>` |
+| Issue authoring | `/claudio-dr:author-issue <problem statement>` |
 | Agent invocation | `@claudio-reviewer review <ref>` |
 | Local validation | `claude plugin validate ./plugins/claudio-dr` |
 | Local session | `claude --plugin-dir ./plugins/claudio-dr` |
@@ -51,6 +52,7 @@ not mean an App is inactive.
 | Plugin manifest | `.codex-plugin/plugin.json` |
 | Reviewer agent | `plugins/cody-dr/agents/cody-reviewer.md` |
 | Invocation | `review-pr <PR URL or ref>` |
+| Issue authoring | `author-issue <problem statement>` |
 | Agent invocation | `@cody-reviewer review <ref>` |
 | Local validation | `codex plugin validate ./plugins/cody-dr` |
 | Local session | `codex --plugin-dir ./plugins/cody-dr` |
