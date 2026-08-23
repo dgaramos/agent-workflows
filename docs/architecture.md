@@ -56,6 +56,10 @@ Each adapter is a thin wrapper that contributes exactly two things:
 
 Adapter SKILL.md files reference the corresponding core contract by path. They
 must not embed finding tables, confidence thresholds, or summary templates.
+Each installable plugin also contains a generated `core/` bundle at its root:
+marketplace runtimes install one plugin directory, not the catalog's sibling
+`core/` directory. The catalog `core/` remains the only editable source; CI
+rejects a bundled file that differs from it.
 
 ```
 plugins/claudio-dr/
@@ -147,5 +151,7 @@ impersonate the reviewer or to post directly.
   and must not embed the finding class table or confidence threshold.
 - **Parity**: both adapter reviewer agents must bind to `review-pr`; both sets
   of workflow adapter skills must reference their corresponding core skills.
-- **Forbidden copies**: adapter-local copies of core contracts must not exist.
+- **Core bundles**: each plugin's generated `core/` distribution bundle must
+  exactly match the canonical `core/`; ad-hoc copies inside adapter skills are
+  forbidden.
 - **Secrets**: tracked files matching credential-like patterns fail the check.

@@ -40,6 +40,7 @@ readonly required_paths=(
   "core/issue-workflow/skills/implement-issue/SKILL.md"
   "core/issue-workflow/skills/ship-change/SKILL.md"
   "core/issue-workflow/skills/execute-issue/SKILL.md"
+  "bin/sync-plugin-core-bundles.sh"
   "examples/generic-pr-review.md"
   "examples/generic-profile-discovery.md"
   "examples/generic-issue-authoring.md"
@@ -142,6 +143,8 @@ bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
 tests/test_publish_claudio_thread_action.sh
 tests/test_discover_project_profile.sh
+tests/test_plugin_core_bundles.sh
+bin/sync-plugin-core-bundles.sh --check
 
 # Agent reviews inform humans; they do not block a PR through REQUEST_CHANGES.
 if grep -qF 'REQUEST_CHANGES' .github/workflows/publish-*-review.yml; then
@@ -262,7 +265,8 @@ grep -qF 'apply-pr-metadata.sh' core/issue-workflow/references/ship-change-contr
 grep -qF 'apply-pr-metadata.sh' plugins/cody-dr/skills/ship-change/SKILL.md
 grep -qF 'apply-pr-metadata.sh' plugins/claudio-dr/skills/ship-change/SKILL.md
 
-# Adapter-local review-contract.md copies must not exist.
+# Core bundles belong only at each plugin root and must be generated from the
+# canonical core directory. Skills must not grow their own contract copies.
 readonly forbidden_paths=(
   "plugins/claudio-dr/skills/review-pr/references/review-contract.md"
   "plugins/cody-dr/skills/review-pr/references/review-contract.md"
@@ -270,7 +274,7 @@ readonly forbidden_paths=(
 
 for path in "${forbidden_paths[@]}"; do
   if test -f "$path"; then
-    echo "drift: $path is an adapter-local copy of the core review contract; remove it" >&2
+    echo "drift: $path is an adapter-local contract copy; use the generated plugin core bundle" >&2
     exit 1
   fi
 done
