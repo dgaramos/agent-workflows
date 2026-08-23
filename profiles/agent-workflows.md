@@ -27,6 +27,14 @@ Issue creation is dispatched with a title, Markdown body, and optional labels,
 assignees, and milestone number. The workflow must verify the created author is
 `cody-dr[bot]`; a different author is a failed publication, not a fallback.
 
+## Claudio DR publisher modes
+
+- `review`, `reply`, and `resolve-thread`: `.github/workflows/publish-claudio-review.yml`
+- `create-issue`: `.github/workflows/publish-claudio-issue.yml`
+
+Issue creation follows the same inputs and verification requirement, with
+`claudio-dr[bot]` as the expected author.
+
 ## Boundaries
 
 Keep portable behavior in `core/`, model mechanics in `plugins/`, and this
