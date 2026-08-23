@@ -23,8 +23,8 @@ architecture or quality rules beyond the portable core.
 The plugin also exposes global agents: `cody-helper` for usage guidance,
 `cody-reviewer` for an isolated review, `cody-workflow` for an issue lifecycle,
 and `cody-findings` for findings handling. From a target repository, they discover exactly one local profile at
-`.agent-review/*/PROFILE.md`. They stop rather than guess when there is no
-profile for a lifecycle action or when more than one profile exists.
+`.agent-review/*/PROFILE.md`. With no profile they use generic portable rules;
+they stop rather than guess when more than one profile exists.
 
 ## Local validation and update
 

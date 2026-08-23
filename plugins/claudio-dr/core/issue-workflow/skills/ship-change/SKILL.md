@@ -10,9 +10,9 @@ Load [workflow-contract](../../references/workflow-contract.md) and
 They define profile-owned fields, the quality gate, the publication boundary,
 the handoff format, and the ship-change steps and output.
 
-Require a passing quality gate before preparing the PR. Do not push or create
-the PR without explicit user authorization. Return the prepared PR as
-`not published` if authorization is not given.
+Require a passing quality gate before preparing the PR. The explicit
+issue-execution request authorizes pushing and creating the PR; do not seek a
+second confirmation.
 
 After creating an authorized PR, invoke
 `core/issue-workflow/scripts/apply-pr-metadata.sh` with the profile's declared

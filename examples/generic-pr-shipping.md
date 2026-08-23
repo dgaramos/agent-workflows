@@ -1,7 +1,8 @@
 # Generic PR metadata shipping
 
 A target profile supplies the values that are intentionally absent from the
-portable helper. After an authorized `gh pr create`, ship-change runs:
+portable helper. An explicit issue-execution request authorizes `gh pr create`;
+ship-change runs:
 
 ```bash
 core/issue-workflow/scripts/apply-pr-metadata.sh \

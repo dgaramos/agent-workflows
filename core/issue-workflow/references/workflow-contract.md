@@ -11,8 +11,9 @@ in core workflow behavior:
 - merge policy (squash, merge commit, rebase);
 - quality command and known check limitations.
 
-When no profile is loaded, state that limitation at the start of each phase
-and ask the user to supply the missing values before proceeding.
+When no profile is loaded, use the generic portable defaults where they are
+defined. Stop only when a required value cannot be resolved without a material
+out-of-scope decision.
 
 ## Quality gate
 
@@ -26,18 +27,19 @@ again before shipping. If the quality command fails at any point:
 
 ## Publication boundary
 
-Push, PR creation, and merge are external actions. Require explicit user
-authorization before each external action. Do not infer authorization from a
-prior phase or from a general "proceed" instruction that does not name the
-specific action.
+An explicit request to execute an issue authorizes creating its working branch,
+committing, pushing, and opening and completing its pull request. Do not ask
+for a second confirmation as the workflow reaches push or PR creation. Merge
+remains separately authorized.
 
-The orchestrator (`execute-issue`) composes phases sequentially but does not
-grant broader publication authorization than each standalone phase would allow.
+Review, comment, reply, and thread-resolution publication remain separately
+authorized actions; issue execution never authorizes them.
 
 ## Handoff at stop
 
 When a phase stops without completing (quality gate failure, missing
-authorization, or missing profile values), emit a handoff block:
+permission, unresolved dependency, or material out-of-scope decision), emit a
+handoff block:
 
 ```md
 ## Handoff — <phase name>

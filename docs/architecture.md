@@ -131,8 +131,9 @@ Publisher
 
 Every external action follows the same three-step gate:
 
-1. **Authorization** — the user must explicitly request publication for each
-   action (review, reply, resolution, issue creation, push, PR creation).
+1. **Authorization** — an explicit issue-execution request authorizes its
+   branch, commits, push, and PR. Review, reply, resolution, and issue creation
+   each remain separately authorized.
 2. **Publisher** — the target profile must document the publisher mode. Without
    it, the skill returns `not published`.
 3. **Verification** — after every publisher action, the adapter verifies that

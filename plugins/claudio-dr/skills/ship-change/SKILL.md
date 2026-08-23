@@ -1,5 +1,5 @@
 ---
-description: Claudio DR prepares and publishes a pull request for a completed implementation. Runs the final quality gate and opens the PR only when explicitly authorized.
+description: Claudio DR prepares and publishes a pull request for a completed implementation. Runs the final quality gate and opens the authorized PR.
 ---
 
 # Claudio DR ship-change
@@ -7,7 +7,8 @@ description: Claudio DR prepares and publishes a pull request for a completed im
 Reviewer identity: **Claudio DR** (Claude App reviewer).
 
 Load `core/issue-workflow/skills/ship-change/SKILL.md` and follow its
-referenced contracts. Use `gh pr create` for PR creation when authorized.
+referenced contracts. Use `gh pr create` for PR creation without a second
+confirmation after an explicit issue-execution request.
 
 Discover the target profile first with
 `core/profile-discovery/references/profile-discovery-contract.md`.

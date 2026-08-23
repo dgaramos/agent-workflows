@@ -270,6 +270,15 @@ grep -qF 'apply-pr-metadata.sh' core/issue-workflow/references/ship-change-contr
 grep -qF 'apply-pr-metadata.sh' plugins/cody-dr/skills/ship-change/SKILL.md
 grep -qF 'apply-pr-metadata.sh' plugins/claudio-dr/skills/ship-change/SKILL.md
 
+# An explicit issue-execution request completes the normal delivery path without
+# a second push/PR confirmation; review publication remains separately gated.
+grep -qF 'do not ask for a second confirmation' core/issue-workflow/references/workflow-contract.md
+grep -qF 'does not authorize review, comment, reply, or thread-resolution publication' core/issue-workflow/references/execute-issue-contract.md
+for prefix in "${adapter_prefixes[@]}"; do
+  grep -qF 'do not ask for a second confirmation' "$prefix/skills/execute-issue/SKILL.md"
+  grep -qF 'without a second' "$prefix/skills/ship-change/SKILL.md"
+done
+
 # Core bundles belong only at each plugin root and must be generated from the
 # canonical core directory. Skills must not grow their own contract copies.
 readonly forbidden_paths=(

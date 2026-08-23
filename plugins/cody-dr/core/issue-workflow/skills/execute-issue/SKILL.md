@@ -1,6 +1,6 @@
 ---
 name: execute-issue
-description: Orchestrate the full issue-to-change lifecycle: start-issue, implement-issue, and ship-change in sequence. Does not grant broader publication authorization than each phase would allow standalone.
+description: Orchestrate the full issue-to-change lifecycle: start-issue, implement-issue, and ship-change in sequence, including normal delivery publication.
 ---
 
 # Portable execute-issue
@@ -12,5 +12,5 @@ acting. They define the orchestration sequence, the authorization boundary
 the handoff format, and the final summary output.
 
 Load the target project's profile once at start and pass its context through
-all phases. Confirm with the user before each external action (push, PR
-creation) even when running end-to-end.
+all phases. An explicit issue-execution request authorizes push and PR
+creation; do not ask for a second confirmation.

@@ -86,16 +86,18 @@ board status.
 
 ## Publication safety
 
-All external actions — reviews, replies, thread resolution, issue creation,
-push, PR creation — require explicit user authorization. Never infer
-authorization from context or a prior phase. Never store or read credentials;
-reference secret names only. Return publication-ready output as `not published`
-when no publisher is configured or authorization is absent.
+An explicit issue-execution request authorizes branch creation, implementation,
+validation, commits, push, and PR creation. Reviews, replies, thread
+resolution, and issue creation still require separate explicit authorization.
+Never store or read credentials; reference secret names only. Return
+publication-ready output as `not published` when a separately authorized
+publisher action has no configured publisher.
 
 ## Never do
 
 - Hardcode branch names, labels, commands, or remotes in `core/`.
 - Duplicate contract content across adapters — reference the core file.
 - Commit credentials, tokens, private keys, or installation tokens.
-- Publish, push, or merge without explicit user authorization.
+- Publish review content or merge without explicit user authorization; do not
+  interrupt an explicitly authorized issue execution before push or PR creation.
 - Skip `bin/check` before handoff.
