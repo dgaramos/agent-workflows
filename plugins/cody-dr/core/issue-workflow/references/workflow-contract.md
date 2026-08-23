@@ -28,7 +28,7 @@ again before shipping. If the quality command fails at any point:
 ## Publication boundary
 
 An explicit request to execute an issue authorizes creating its working branch,
-committing, pushing, and opening and completing its pull request. Do not ask
+committing, pushing, and opening a fully populated pull request. Do not ask
 for a second confirmation as the workflow reaches push or PR creation. Merge
 remains separately authorized.
 
