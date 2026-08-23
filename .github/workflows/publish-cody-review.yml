@@ -1,0 +1,98 @@
+name: Publish Cody DR review
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number
+        required: true
+        type: string
+      event:
+        description: Review event
+        required: true
+        default: REQUEST_CHANGES
+        type: choice
+        options: [REQUEST_CHANGES, COMMENT, APPROVE]
+      review_body:
+        description: Review summary in Markdown
+        required: true
+        type: string
+      comment_path:
+        description: Optional changed-file path for an inline finding
+        required: false
+        type: string
+      comment_line:
+        description: Optional line on the RIGHT side of the diff
+        required: false
+        type: string
+      comment_body:
+        description: Optional inline finding in Markdown
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a Cody DR installation token
+        id: cody-token
+        # v3.2.0
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1
+        with:
+          client-id: ${{ vars.CODY_DR_CLIENT_ID }}
+          private-key: ${{ secrets.CODY_DR_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-pull-requests: write
+
+      - name: Submit and verify review
+        env:
+          GH_TOKEN: ${{ steps.cody-token.outputs.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          REVIEW_EVENT: ${{ inputs.event }}
+          REVIEW_BODY: ${{ inputs.review_body }}
+          COMMENT_PATH: ${{ inputs.comment_path }}
+          COMMENT_LINE: ${{ inputs.comment_line }}
+          COMMENT_BODY: ${{ inputs.comment_body }}
+          EXPECTED_AUTHOR: cody-dr[bot]
+        run: |
+          set -euo pipefail
+          [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]] || { echo "pr_number must be a positive integer" >&2; exit 1; }
+          [[ -n "$REVIEW_BODY" ]] || { echo "review_body is required" >&2; exit 1; }
+          supplied_comment_fields=0
+          for value in "$COMMENT_PATH" "$COMMENT_LINE" "$COMMENT_BODY"; do
+            [[ -n "$value" ]] && ((supplied_comment_fields += 1))
+          done
+          [[ "$supplied_comment_fields" -eq 0 || "$supplied_comment_fields" -eq 3 ]] || { echo "inline comment path, line, and body must be provided together" >&2; exit 1; }
+          [[ "$supplied_comment_fields" -eq 0 || "$COMMENT_LINE" =~ ^[1-9][0-9]*$ ]] || { echo "comment_line must be a positive integer" >&2; exit 1; }
+          head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq .head.sha)"
+          jq -n \
+            --arg event "$REVIEW_EVENT" \
+            --arg body "$REVIEW_BODY" \
+            --arg commit_id "$head_sha" \
+            --arg path "$COMMENT_PATH" \
+            --arg line "$COMMENT_LINE" \
+            --arg comment "$COMMENT_BODY" \
+            '{event: $event, body: $body, commit_id: $commit_id}
+             + (if $path != "" and $line != "" and $comment != ""
+                then {comments: [{path: $path, line: ($line | tonumber), side: "RIGHT", body: $comment}]}
+                else {}
+                end)' > review.json
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews" --input review.json > created-review.json
+          actual_author="$(jq -r '.user.login' created-review.json)"
+          actual_pr_url="$(jq -r '.pull_request_url' created-review.json)"
+          actual_state="$(jq -r '.state' created-review.json)"
+          expected_pr_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}"
+          case "$REVIEW_EVENT" in
+            APPROVE) expected_state=APPROVED ;;
+            COMMENT) expected_state=COMMENTED ;;
+            REQUEST_CHANGES) expected_state=CHANGES_REQUESTED ;;
+            *) echo "unsupported review event: $REVIEW_EVENT" >&2; exit 1 ;;
+          esac
+          [[ "$actual_author" == "$EXPECTED_AUTHOR" ]] || { echo "unexpected review author: $actual_author" >&2; exit 1; }
+          [[ "$actual_pr_url" == "$expected_pr_url" ]] || { echo "review target does not match pr_number" >&2; exit 1; }
+          [[ "$actual_state" == "$expected_state" ]] || { echo "unexpected review state: $actual_state" >&2; exit 1; }
+          jq -r '"Published and verified Cody DR review: \(.html_url)"' created-review.json

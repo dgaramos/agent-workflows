@@ -20,8 +20,12 @@ requested mode, return publication-ready text as `not published`.
 
 ## Cody DR publisher modes
 
-- `review`, `reply`, and `resolve-thread`: `.github/workflows/publish-cody-review.yml`
+- `review`: `.github/workflows/publish-cody-review.yml`
 - `create-issue`: `.github/workflows/publish-cody-issue.yml`
+
+`reply` and `resolve-thread` are unavailable in this catalog until a publisher
+implements and verifies those operations; return publication-ready output as
+`not published` rather than claiming that the Cody DR App is inactive.
 
 Issue creation is dispatched with a title, Markdown body, and optional labels,
 assignees, and milestone number. The workflow must verify the created author is
@@ -29,8 +33,10 @@ assignees, and milestone number. The workflow must verify the created author is
 
 ## Claudio DR publisher modes
 
-- `review`, `reply`, and `resolve-thread`: `.github/workflows/publish-claudio-review.yml`
+- `review`: `.github/workflows/publish-claudio-review.yml`
 - `create-issue`: `.github/workflows/publish-claudio-issue.yml`
+
+`reply` and `resolve-thread` follow the same unavailable-mode behavior.
 
 Issue creation follows the same inputs and verification requirement, with
 `claudio-dr[bot]` as the expected author.
