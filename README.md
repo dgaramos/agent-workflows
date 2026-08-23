@@ -1,6 +1,6 @@
 # Agent Workflows
 
-Private catalog of reusable, cross-model agent workflows for reviewing pull
+Reusable, cross-model catalog of agent workflows for reviewing pull
 requests, handling findings, authoring issues, and driving the full
 issue-to-change lifecycle. Behavior is defined once in `core/`, consumed by
 Codex and Claude Code adapters, and tuned per project through profiles.
@@ -11,7 +11,7 @@ Codex and Claude Code adapters, and tuned per project through profiles.
 core/                         Portable contracts (review, findings, issue authoring, lifecycle)
 plugins/claudio-dr/           Claudio DR adapter for Claude Code
 plugins/cody-dr/              Cody DR adapter for Codex
-profiles/                     Project-specific profiles (CraftControl, agent-workflows, …)
+profiles/                     This catalog's self-profile and a generic profile example
 examples/                     Generic, safe usage examples for each core skill
 docs/                         Compatibility, development, and release guidance
 bin/check                     Catalog quality gate
@@ -32,7 +32,7 @@ Invoke a review:
 
 ```text
 /claudio-dr:review-pr <PR URL or ref>
-/claudio-dr:review-pr <PR URL> using profiles/craftcontrol.md
+/claudio-dr:review-pr <PR URL> using a profile from the target repository
 ```
 
 See [docs/claudio-dr.md](docs/claudio-dr.md) for the full installation,
@@ -75,10 +75,12 @@ publisher, every skill returns publication-ready output as `not published`.
 | Profile | Target |
 | --- | --- |
 | `profiles/agent-workflows.md` | This repository |
-| `profiles/craftcontrol.md` | CraftControl |
+| `profiles/example-project.md` | Neutral template for a consumer project |
 
-Add a profile for any repository that needs architecture-specific review rules,
-custom quality commands, or bot publication configured.
+The catalog ships only its self-profile and a neutral example. A consumer keeps
+its actual profile in its own repository, where it can define
+architecture-specific review rules, custom quality commands, and bot
+publication configuration without exposing those details here.
 
 ## Safety
 
