@@ -65,6 +65,10 @@ reviewer.
    `unresolved`, `superseded`, or `unverifiable`. Thread replies are context,
    not proof. Do not repeat resolved findings.
 
+For every prior thread, record the current-head evidence and choose exactly one
+action: `reply and resolve`, `reply but keep open`, `leave open`, or `defer`.
+Never thank or resolve a thread merely because its author says it was fixed.
+
 Use the re-review preamble in the summary section below before the
 new-findings section.
 
@@ -129,6 +133,9 @@ Emit one summary block per review:
 | --- | --- | --- |
 | `<area or path>` | `<factual behavior change>` | `<observable consequence>` |
 
+Omit this section for a small, single-purpose change that the opening summary
+already explains. Keep it when the PR crosses modules, layers, or contracts.
+
 ## Behavior map
 
 Include a small Mermaid flow or sequence diagram only when it makes a changed
@@ -168,4 +175,8 @@ With no findings, keep the zero counts and state actual review limitations.
 **Delta:** <prior head → current head, or full comparison and reason>
 **Previous findings:** resolved: N · fixed but thread open: N · unresolved: N · superseded: N · unverifiable: N
 **Discussion checked:** <threads and general comments consulted>
+
+| Previous finding | Current-head evidence | Decision |
+| --- | --- | --- |
+| `<thread or finding>` | `<verified fact>` | `<reply and resolve|reply but keep open|leave open|defer>` |
 ```
