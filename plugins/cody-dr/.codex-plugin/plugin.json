@@ -1,7 +1,7 @@
 {
   "name": "cody-dr",
-  "version": "0.1.6",
-  "description": "Evidence-first pull request review workflows for Codex.",
+  "version": "0.1.7",
+  "description": "Portable PR review, findings, issue authoring, and issue-delivery workflows for Codex.",
   "author": {
     "name": "Danilo Ramos",
     "email": "dgaramos+cody@gmail.com",
@@ -11,11 +11,11 @@
   "agents": "./agents/",
   "interface": {
     "displayName": "Cody DR",
-    "shortDescription": "Review pull requests with evidence-first findings.",
-    "longDescription": "Cody DR reviews explicit pull requests and re-reviews resolved findings without storing publisher credentials.",
+    "shortDescription": "Review PRs, handle findings, author issues, and ship changes.",
+    "longDescription": "Cody DR provides portable workflows for explicit PR review, findings handling, issue authoring, and issue-to-PR delivery without storing publisher credentials.",
     "developerName": "Danilo Ramos",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": "Review this pull request as Cody DR."
+    "defaultPrompt": "Use Cody DR to review this pull request or execute this issue."
   }
 }

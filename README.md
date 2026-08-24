@@ -28,11 +28,13 @@ remotes, and publisher configuration — without touching the shared contracts.
 /plugin install claudio-dr@agent-workflows
 ```
 
-Invoke a review:
+Use a workflow agent or invoke an installed skill directly:
 
 ```text
 /claudio-dr:review-pr <PR URL or ref>
 /claudio-dr:review-pr <PR URL> using a profile from the target repository
+/claudio-dr:execute-issue #42
+/claudio-dr:author-issue <structured issue request>
 ```
 
 See [docs/claudio-dr.md](docs/claudio-dr.md) for the full installation,
@@ -45,10 +47,12 @@ codex plugin marketplace add /path/to/agent-workflows
 codex plugin add cody-dr@agent-workflows
 ```
 
-Invoke a review:
+Use a workflow agent or invoke an installed skill directly:
 
 ```text
 @cody-reviewer review <PR URL or ref>
+@cody-workflow execute issue #42
+@cody-helper explain how to use Cody DR in this repository
 ```
 
 See [docs/cody-dr.md](docs/cody-dr.md) for the full installation and local
@@ -71,6 +75,11 @@ branch, implementation, validation, commits, push, and a complete PR. Reviews,
 replies, thread resolution, and issue creation remain separately authorized.
 Without a configured publisher, publisher-backed actions return
 publication-ready output as `not published`.
+
+Both plugins provide the same portable capabilities. Their differences are
+platform invocation, agent identity, and plugin update commands; project
+architecture, quality commands, metadata, and publishers come from an optional
+profile in the target repository.
 
 ## Profiles
 

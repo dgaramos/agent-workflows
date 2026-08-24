@@ -18,14 +18,16 @@ claude --plugin-dir ./plugins/claudio-dr
 
 The plugin also exposes global agents: `claudio-helper` for usage guidance,
 `claudio-reviewer` for an isolated review, `claudio-workflow` for an issue
-lifecycle, and `claudio-findings` for findings handling. From a target repository, they discover exactly one local
-profile at `.agent-review/*/PROFILE.md`. With no profile they use generic
-portable rules; they stop rather than guess when more than one profile exists.
+lifecycle, and `claudio-findings` for findings handling. Use
+`/claudio-dr:execute-issue #42` for normal issue delivery and
+`/claudio-dr:handle-pr-findings` for review findings. From a target repository,
+they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With
+no profile they use generic portable rules; they stop rather than guess when
+more than one profile exists.
 
-Version 0.1.2 adds external-publisher dispatch: when a target profile documents
-a Claudio DR GitHub App publisher, Claude may dispatch it through the existing
-personal `gh` session without switching or removing that session. Update the
-plugin after updating the marketplace.
+When a target profile documents a Claudio DR GitHub App publisher, Claude may
+dispatch it through the existing personal `gh` session without switching or
+removing that session. Update the plugin after updating the marketplace.
 
 The same publisher integration can support replies to and resolution of existing
 review threads; the target profile documents its inputs and verification steps.

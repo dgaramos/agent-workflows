@@ -22,21 +22,20 @@ architecture or quality rules beyond the portable core.
 
 The plugin also exposes global agents: `cody-helper` for usage guidance,
 `cody-reviewer` for an isolated review, `cody-workflow` for an issue lifecycle,
-and `cody-findings` for findings handling. From a target repository, they discover exactly one local profile at
-`.agent-review/*/PROFILE.md`. With no profile they use generic portable rules;
-they stop rather than guess when more than one profile exists.
+and `cody-findings` for findings handling. Use `@cody-workflow execute issue
+#42` for normal issue delivery, `@cody-findings` to handle review findings,
+and `@cody-helper` to select the right capability. From a target repository,
+they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With
+no profile they use generic portable rules; they stop rather than guess when
+more than one profile exists.
 
 ## Local validation and update
 
-To validate the plugin without installing it, run:
+Codex has no standalone plugin-validation command. Run the catalog quality
+check, then load the plugin directory in a local session:
 
 ```bash
-codex plugin validate ./plugins/cody-dr
-```
-
-To load it locally for a session without publishing to the marketplace:
-
-```bash
+bin/check
 codex --plugin-dir ./plugins/cody-dr
 ```
 
@@ -54,10 +53,9 @@ credentials.
 
 ## Publisher dispatch
 
-Version 0.1.2 adds external-publisher dispatch: when a target profile documents
-a Cody DR GitHub App publisher, Codex may dispatch it through the existing
-personal `gh` session without switching or removing that session. Reinstall the
-plugin after updating the marketplace.
+When a target profile documents a Cody DR GitHub App publisher, Codex may
+dispatch it through the existing personal `gh` session without switching or
+removing that session. Reinstall the plugin after updating the marketplace.
 
 The same publisher integration can support replies to and resolution of existing
 review threads; the target profile documents its inputs and verification steps.

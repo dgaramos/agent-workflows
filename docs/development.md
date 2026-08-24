@@ -8,16 +8,34 @@ Run:
 bin/check
 ```
 
-The quality check validates required catalog boundaries, skill frontmatter,
-tracked sensitive-looking files, and whitespace. GitHub Actions runs the same
-command for pull requests and pushes to `main`. Later plugin issues will extend
-it with Codex and Claude validation commands.
+The quality check validates catalog boundaries, skill frontmatter, public
+capability parity, manifests, generic examples, tracked sensitive-looking
+files, and whitespace. GitHub Actions runs the same command for pull requests
+and pushes to `main`.
 
-## Testing a future adapter
+## Testing installed adapters
 
-- Codex plugins are tested from a local marketplace during development.
-- Claude Code plugins are tested with `claude --plugin-dir <path>` and validated
-  with `claude plugin validate <path>`.
+Validate the Claude distributable plugin before testing it locally:
+
+```bash
+claude plugin validate ./plugins/claudio-dr
+```
+
+Codex has no standalone plugin-validation command. Run `bin/check` from the
+catalog, then load the Cody DR directory in a local session to validate its
+installable behavior.
+
+For a local development session, load the plugin directory directly:
+
+```bash
+codex --plugin-dir ./plugins/cody-dr
+claude --plugin-dir ./plugins/claudio-dr
+```
+
+After a Cody DR change, bump its manifest version, reinstall it from the
+marketplace root, and start a new Codex thread. After a Claudio DR change,
+bump its version, run `/plugin marketplace update`, then
+`/plugin update claudio-dr@agent-workflows`.
 
 Do not treat a locally installed plugin as proof that an installation workflow
 works; document and validate the fresh-install path as part of each adapter.
