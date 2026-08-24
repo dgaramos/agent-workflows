@@ -12,6 +12,7 @@ readonly required_paths=(
   "docs/compatibility.md"
   ".github/ISSUE_TEMPLATE/feature.md"
   ".github/ISSUE_TEMPLATE/bug.md"
+  ".github/workflows/ci.yml"
   ".github/workflows/publish-cody-issue.yml"
   ".github/workflows/publish-claudio-issue.yml"
   ".github/workflows/publish-cody-review.yml"
