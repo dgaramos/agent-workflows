@@ -12,4 +12,8 @@ the issue, and `profiles/agent-workflows.md`; run `bin/check` before handoff.
 - Metadata publisher: Cody `.github/workflows/publish-cody-pr-metadata.yml`;
   Claudio `.github/workflows/publish-claudio-pr-metadata.yml`
 
-Never use a personal `gh` session for publisher-backed metadata mutations.
+Dispatch the matching App publisher first and verify its result. If it is
+unavailable or fails, an explicitly user-authorized authenticated personal
+account may apply the same metadata as a fallback. Verify every field and
+report that account as `personal fallback`; never represent it as Cody DR or
+Claudio DR.

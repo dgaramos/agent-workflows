@@ -38,9 +38,10 @@ field because a CLI command or permission failed.
 Dispatch the matching `apply-pr-metadata` publisher workflow with base `main`,
 the selected labels, milestone number `3`, assignee `dgaramos`, and Project
 owner `dgaramos`, number `11`, status `In Progress`. Wait for and verify the
-matching App result. The workflow invokes the local helper with its installation
-token; never run that helper through the personal `gh` session. Reviewers
-remain absent unless explicitly requested.
+matching App result. If it is unavailable or fails, an explicitly
+user-authorized authenticated personal account may apply and verify the same
+fields as a personal fallback; report that account and never present it as the
+App. Reviewers remain absent unless explicitly requested.
 
 ## PR description
 
