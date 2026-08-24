@@ -1,0 +1,14 @@
+{
+  "name": "agent-workflows",
+  "owner": {
+    "name": "Danilo Ramos"
+  },
+  "plugins": [
+    {
+      "name": "cody-dr",
+      "source": "./plugins/cody-dr",
+      "description": "Portable PR review, findings, issue authoring, and issue-delivery workflows for Codex.",
+      "version": "0.1.9"
+    }
+  ]
+}

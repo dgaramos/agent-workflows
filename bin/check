@@ -59,6 +59,7 @@ readonly required_paths=(
   "examples/generic-issue-lifecycle.md"
   "examples/generic-test-first-planning.md"
   "examples/generic-pr-shipping.md"
+  ".codex-plugin/marketplace.json"
   "plugins/cody-dr/.codex-plugin/plugin.json"
   "plugins/cody-dr/skills/review-pr/SKILL.md"
   "plugins/cody-dr/skills/author-issue/SKILL.md"
@@ -100,7 +101,10 @@ readonly required_paths=(
 )
 
 for path in "${required_paths[@]}"; do
-  test -f "$path"
+  if ! test -f "$path"; then
+    echo "required path missing: $path" >&2
+    exit 1
+  fi
 done
 
 # The public README is the catalog surface. Every advertised capability must
@@ -161,17 +165,23 @@ for example in "${required_generic_examples[@]}"; do
   fi
 done
 
-# Keep manifests parseable and make the marketplace describe the installed
-# Claudio adapter version. This avoids publishing a catalog whose public
-# installation surface differs from its source tree.
+# Keep manifests parseable and make each marketplace describe its installed
+# adapter version. This avoids publishing a catalog whose public installation
+# surface differs from its source tree.
 jq -e '.name == "cody-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/"' \
   plugins/cody-dr/.codex-plugin/plugin.json >/dev/null
 jq -e '.name == "claudio-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/" and (.interface | type == "object") and (.interface.displayName | type == "string") and (.interface.capabilities | type == "array")' \
   plugins/claudio-dr/.claude-plugin/plugin.json >/dev/null
 claudio_version="$(jq -r '.version' plugins/claudio-dr/.claude-plugin/plugin.json)"
-marketplace_version="$(jq -r '.plugins[] | select(.name == "claudio-dr") | .version' .claude-plugin/marketplace.json)"
-if [[ "$claudio_version" != "$marketplace_version" ]]; then
+cody_version="$(jq -r '.version' plugins/cody-dr/.codex-plugin/plugin.json)"
+claudio_marketplace_version="$(jq -r '.plugins[] | select(.name == "claudio-dr") | .version' .claude-plugin/marketplace.json)"
+cody_marketplace_version="$(jq -r '.plugins[] | select(.name == "cody-dr") | .version' .codex-plugin/marketplace.json)"
+if [[ "$claudio_version" != "$claudio_marketplace_version" ]]; then
   echo "manifest: Claudio marketplace version does not match plugin version" >&2
+  exit 1
+fi
+if [[ "$cody_version" != "$cody_marketplace_version" ]]; then
+  echo "manifest: Cody marketplace version does not match plugin version" >&2
   exit 1
 fi
 
