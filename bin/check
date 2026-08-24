@@ -15,6 +15,8 @@ readonly required_paths=(
   ".github/workflows/publish-cody-issue.yml"
   ".github/workflows/publish-claudio-issue.yml"
   ".github/workflows/publish-cody-review.yml"
+  ".github/workflows/publish-cody-reply.yml"
+  ".github/workflows/publish-cody-resolve.yml"
   ".github/workflows/publish-claudio-review.yml"
   ".github/workflows/publish-claudio-reply.yml"
   ".github/workflows/publish-claudio-resolve.yml"
@@ -22,6 +24,7 @@ readonly required_paths=(
   ".github/workflows/publish-claudio-pr-metadata.yml"
   ".github/scripts/publish-review.sh"
   ".github/scripts/publish-claudio-thread-action.sh"
+  ".github/scripts/publish-cody-thread-action.sh"
   ".github/scripts/publish-pr-metadata.sh"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
@@ -193,6 +196,8 @@ grep -qF '`resolve-thread`' profiles/agent-workflows.md
 grep -qF '`create-issue`' profiles/agent-workflows.md
 grep -qF '`reply`: `.github/workflows/publish-claudio-reply.yml`' profiles/agent-workflows.md
 grep -qF '`resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`' profiles/agent-workflows.md
+grep -qF '`reply`: `.github/workflows/publish-cody-reply.yml`' profiles/agent-workflows.md
+grep -qF '`resolve-thread`: `.github/workflows/publish-cody-resolve.yml`' profiles/agent-workflows.md
 
 while IFS= read -r skill; do
   awk '
@@ -224,10 +229,12 @@ done < <(git ls-files '*SKILL.md')
 
 bash -n .github/scripts/publish-review.sh
 bash -n .github/scripts/publish-claudio-thread-action.sh
+bash -n .github/scripts/publish-cody-thread-action.sh
 bash -n core/profile-discovery/scripts/discover-project-profile.sh
 bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
 tests/test_publish_claudio_thread_action.sh
+tests/test_publish_cody_thread_action.sh
 tests/test_publish_pr_metadata.sh
 tests/test_discover_project_profile.sh
 tests/test_plugin_core_bundles.sh

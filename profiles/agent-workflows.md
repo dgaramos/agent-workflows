@@ -76,8 +76,8 @@ requested mode, return publication-ready text as `not published`.
 
 - `review`: `.github/workflows/publish-cody-review.yml`
 - `apply-pr-metadata`: `.github/workflows/publish-cody-pr-metadata.yml`
-- `reply`: `.github/workflows/publish-cody-review.yml`
-- `resolve-thread`: `.github/workflows/publish-cody-review.yml`
+- `reply`: `.github/workflows/publish-cody-reply.yml`
+- `resolve-thread`: `.github/workflows/publish-cody-resolve.yml`
 - `create-issue`: `.github/workflows/publish-cody-issue.yml`
 
 The review publisher accepts a reviewed head SHA plus an optional review body,
