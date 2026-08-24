@@ -35,6 +35,15 @@ addressed it. Classification: `reject`.
 Reply text: "The condition described no longer exists on the current head at
 `src/retry.py:12`; the finding is superseded."
 
+## Publisher-first outcome
+
+For an explicitly authorized reply or resolution, the handler first uses the
+configured reviewer App and verifies its actor and target thread. If that
+operation is unavailable before dispatch, an explicitly authorized authenticated
+personal account may publish instead; the result names that account as a
+personal fallback. A failed App dispatch or actor verification is reported as a
+failed App publication and never retried through the personal account.
+
 ## Outcome summary (not published)
 
 ```md
@@ -45,6 +54,7 @@ Reply text: "The condition described no longer exists on the current head at
 **Fix now:** 1 · **Defer:** 1 · **Reject:** 1 · **Superseded:** 0
 **Validation:** passed
 **Replies prepared:** 3 · **Published:** not requested
+**Publication identity:** none
 ```
 
 Both Claudio DR and Cody DR produce equivalent triage, fix, and deferral
