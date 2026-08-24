@@ -23,7 +23,6 @@ publisher workflow via `gh workflow run`, passing every profile-declared
 metadata field as a workflow input. This step is mandatory when the profile
 declares any metadata fields; skip only when the profile declares none. Wait
 for the run to complete and verify the bot identity and all declared fields.
-Calling `apply-pr-metadata.sh` directly through a personal `gh` session is a
-contract violation — the workflow uses an installation token so actions appear
-as the bot, not the authenticated user. Emit a handoff if the mode is
-unavailable or verification fails.
+If the publisher is unavailable or fails, use a personal `gh` fallback only
+with explicit user authorization; verify all fields and name that account in
+the result. Never represent the fallback as the reviewer App.

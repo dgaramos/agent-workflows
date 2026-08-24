@@ -41,12 +41,10 @@ Do not ship without confirmed passing quality gates.
    its configured App identity plus the base branch, labels, milestone,
    assignees, and Project item state. The workflow uses an installation token
    internally and may invoke `core/issue-workflow/scripts/apply-pr-metadata.sh`
-   as an implementation detail. Calling that helper directly through a personal
-   `gh` session is a **contract violation**: metadata actions must appear as
-   the bot identity (`claudio-dr[bot]` or `cody-dr[bot]`), not as the
-   authenticated user. Never invoke that helper through a personal `gh` session;
-   if the mode is unavailable or verification fails, report metadata as not
-   published and stop with a handoff.
+   as an implementation detail. If that publisher is unavailable or fails,
+   an explicitly user-authorized authenticated personal account may run the
+   helper as a fallback. Verify every field and report that account explicitly
+   as the metadata publisher; never represent it as the reviewer App.
 5. If a required field cannot be applied or verified, stop and emit a handoff
    with the PR URL, field, and failed command or permission. Do not claim a PR
    was shipped with complete metadata when the helper fails.
@@ -61,7 +59,7 @@ Do not ship without confirmed passing quality gates.
 **PR:** <not requested|not published|<URL>>
 **Metadata applied:** <labels, milestone, assignees, reviewers, Projects or none>
 **Metadata verified:** <field → observed value, or failed field>
-**Metadata publisher:** <verified App actor|not published: unavailable|failed: reason>
+**Metadata publisher:** <verified App actor|personal fallback: @login|not published: reason>
 ```
 
 Do not publish review, comment, reply, or thread-resolution content as part of
