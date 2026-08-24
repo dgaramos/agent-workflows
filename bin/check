@@ -554,5 +554,22 @@ if [[ "$actual_profile_paths" != "$allowed_profile_paths" ]]; then
   exit 1
 fi
 
+# Validate that branch commits carry the matching adapter co-author trailer.
+# This repository is executed by Claudio DR; every adapter commit must carry
+# the claudio-dr[bot] trailer, not any other adapter's bot identity.
+readonly expected_adapter="claudio-dr[bot]"
+readonly expected_trailer="Co-Authored-By: claudio-dr[bot] <claudio-dr[bot]@users.noreply.github.com>"
+
+branch_log="$(git log "$(git merge-base HEAD main)"..HEAD --format="%B" 2>/dev/null || true)"
+if [[ -n "$branch_log" ]]; then
+  wrong_trailers="$(echo "$branch_log" | grep -iE 'Co-Authored-By:.*-dr\[bot\]' | grep -iv "$expected_adapter" || true)"
+  if [[ -n "$wrong_trailers" ]]; then
+    echo "trailer: branch commits carry a co-author trailer that does not match the configured adapter identity" >&2
+    echo "  expected: $expected_trailer" >&2
+    echo "  observed: $wrong_trailers" >&2
+    exit 1
+  fi
+fi
+
 git diff --check
 echo "catalog quality check: ok"
