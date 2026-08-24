@@ -15,6 +15,8 @@ readonly required_paths=(
   ".github/workflows/publish-cody-issue.yml"
   ".github/workflows/publish-claudio-issue.yml"
   ".github/workflows/publish-cody-review.yml"
+  ".github/workflows/publish-cody-reply.yml"
+  ".github/workflows/publish-cody-resolve.yml"
   ".github/workflows/publish-claudio-review.yml"
   ".github/workflows/publish-claudio-reply.yml"
   ".github/workflows/publish-claudio-resolve.yml"
@@ -22,6 +24,7 @@ readonly required_paths=(
   ".github/workflows/publish-claudio-pr-metadata.yml"
   ".github/scripts/publish-review.sh"
   ".github/scripts/publish-claudio-thread-action.sh"
+  ".github/scripts/publish-cody-thread-action.sh"
   ".github/scripts/publish-pr-metadata.sh"
   "core/pr-review/SKILL.md"
   "core/pr-review/references/review-contract.md"
@@ -193,6 +196,8 @@ grep -qF '`resolve-thread`' profiles/agent-workflows.md
 grep -qF '`create-issue`' profiles/agent-workflows.md
 grep -qF '`reply`: `.github/workflows/publish-claudio-reply.yml`' profiles/agent-workflows.md
 grep -qF '`resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`' profiles/agent-workflows.md
+grep -qF '`reply`: `.github/workflows/publish-cody-reply.yml`' profiles/agent-workflows.md
+grep -qF '`resolve-thread`: `.github/workflows/publish-cody-resolve.yml`' profiles/agent-workflows.md
 
 while IFS= read -r skill; do
   awk '
@@ -224,10 +229,12 @@ done < <(git ls-files '*SKILL.md')
 
 bash -n .github/scripts/publish-review.sh
 bash -n .github/scripts/publish-claudio-thread-action.sh
+bash -n .github/scripts/publish-cody-thread-action.sh
 bash -n core/profile-discovery/scripts/discover-project-profile.sh
 bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
 tests/test_publish_claudio_thread_action.sh
+tests/test_publish_cody_thread_action.sh
 tests/test_publish_pr_metadata.sh
 tests/test_discover_project_profile.sh
 tests/test_plugin_core_bundles.sh
@@ -557,19 +564,15 @@ if [[ "$actual_profile_paths" != "$allowed_profile_paths" ]]; then
   exit 1
 fi
 
-# Validate that branch commits carry the matching adapter co-author trailer.
-# This repository is executed by Claudio DR; every adapter commit must carry
-# the claudio-dr[bot] trailer, not any other adapter's bot identity.
-readonly expected_adapter="claudio-dr[bot]"
-readonly expected_trailer="Co-Authored-By: claudio-dr[bot] <claudio-dr[bot]@users.noreply.github.com>"
-
+# Validate that branch commits use one recognized adapter co-author identity.
+# The catalog is executable by both Cody DR and Claudio DR; mixing identities
+# within one branch would make its execution provenance ambiguous.
 branch_log="$(git log "$(git merge-base HEAD main)"..HEAD --format="%B" 2>/dev/null || true)"
 if [[ -n "$branch_log" ]]; then
-  wrong_trailers="$(echo "$branch_log" | grep -iE 'Co-Authored-By:.*-dr\[bot\]' | grep -ivF "$expected_adapter" || true)"
-  if [[ -n "$wrong_trailers" ]]; then
-    echo "trailer: branch commits carry a co-author trailer that does not match the configured adapter identity" >&2
-    echo "  expected: $expected_trailer" >&2
-    echo "  observed: $wrong_trailers" >&2
+  branch_adapters="$(echo "$branch_log" | sed -nE 's/^Co-Authored-By: (cody-dr|claudio-dr)\[bot\] <.*>$/\1/p' | sort -u)"
+  if [[ "$(echo "$branch_adapters" | sed '/^$/d' | wc -l | tr -d ' ')" -gt 1 ]]; then
+    echo "trailer: branch commits mix Cody DR and Claudio DR identities" >&2
+    echo "  observed: $branch_adapters" >&2
     exit 1
   fi
 fi
