@@ -25,6 +25,7 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           permission-issues: write
           permission-pull-requests: write
+          permission-projects: write
       - name: Apply and verify PR metadata as Claudio DR
         env:
           GH_TOKEN: ${{ steps.claudio-token.outputs.token }}
