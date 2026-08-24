@@ -163,7 +163,7 @@ done
 # installation surface differs from its source tree.
 jq -e '.name == "cody-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/"' \
   plugins/cody-dr/.codex-plugin/plugin.json >/dev/null
-jq -e '.name == "claudio-dr" and (.version | type == "string")' \
+jq -e '.name == "claudio-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/" and (.interface | type == "object") and (.interface.displayName | type == "string") and (.interface.capabilities | type == "array")' \
   plugins/claudio-dr/.claude-plugin/plugin.json >/dev/null
 claudio_version="$(jq -r '.version' plugins/claudio-dr/.claude-plugin/plugin.json)"
 marketplace_version="$(jq -r '.plugins[] | select(.name == "claudio-dr") | .version' .claude-plugin/marketplace.json)"

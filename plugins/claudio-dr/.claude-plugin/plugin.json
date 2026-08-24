@@ -6,5 +6,16 @@
     "name": "Danilo Ramos",
     "email": "dgaramos+claudio@gmail.com",
     "url": "https://github.com/dgaramos"
+  },
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "interface": {
+    "displayName": "Claudio DR",
+    "shortDescription": "Review PRs, handle findings, author issues, and ship changes.",
+    "longDescription": "Claudio DR provides portable workflows for explicit PR review, findings handling, issue authoring, and issue-to-PR delivery without storing publisher credentials.",
+    "developerName": "Danilo Ramos",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Use Claudio DR to review this pull request or execute this issue."
   }
 }
