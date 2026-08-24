@@ -29,5 +29,9 @@ When authorized to publish, use the publisher documented in the target profile
 per the dispatch and reply contracts in `core/pr-review/references/profile-contract.md`.
 Verify that every reply and resolution is authored by Cody DR in the intended
 thread per the post-publication verification requirements in
-`core/findings-handling/references/findings-contract.md`. Never mark a finding
-resolved based only on a reply.
+`core/findings-handling/references/findings-contract.md`. Follow its
+publisher-first policy: only an explicitly authorized authenticated personal
+account may be used when the Cody DR App operation is unavailable before
+dispatch, and the outcome must name that personal fallback. An App dispatch or
+author-verification failure is a failed publication, never a fallback. Never
+mark a finding resolved based only on a reply.

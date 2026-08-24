@@ -32,6 +32,11 @@ removing that session. Update the plugin after updating the marketplace.
 
 The same publisher integration can support replies to and resolution of existing
 review threads; the target profile documents its inputs and verification steps.
+For those thread actions, Claudio DR uses its configured App first. If the
+requested App operation is unavailable before dispatch, an explicitly authorized
+authenticated personal account may publish the prepared action and is reported
+as a personal fallback. A failed App dispatch or verification is reported as a
+failure and never retried through that account.
 For this repository, see `profiles/agent-workflows.md` for the configuration
 names and publication boundary; it contains no credential values.
 After changing an installed plugin, update its version, run `/plugin marketplace
