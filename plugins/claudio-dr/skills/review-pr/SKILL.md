@@ -27,6 +27,15 @@ but must never be switched, refreshed, logged out, or used to impersonate the
 reviewer. Wait for the publisher and verify the resulting review's author and
 event per the post-publication verification requirements in the review contract.
 
+**Publication event: always `COMMENT`.** Claudio DR never submits `REQUEST_CHANGES` and never submits `APPROVE` — regardless of finding count, profile authorization, or user request. Every publication, including a zero-findings pass, uses `COMMENT`. The publisher is configured for `COMMENT` only; any other event is a contract violation and must not be dispatched.
+
+**Inline findings only.** Every formal finding whose evidence line falls in the
+diff must appear as an inline diff comment at the exact `path` and `line` from
+the evidence. Do not place findings in the top-level review body as prose.
+Findings whose evidence is outside the diff or marked `[general]` go in the
+review body, clearly labeled as general observations. Never collapse multiple
+inline findings into a single review body paragraph.
+
 Build the contract's batched publication manifest: write the portable summary
 with walkthrough, evidence-based merge risk, actual pre-merge checks, and a
 Mermaid behavior diagram only when it clarifies the change. Place every

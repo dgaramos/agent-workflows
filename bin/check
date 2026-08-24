@@ -235,6 +235,37 @@ if grep -qF 'REQUEST_CHANGES' .github/workflows/publish-*-review.yml; then
   exit 1
 fi
 
+# Claudio DR reviews must always use COMMENT — never APPROVE, never REQUEST_CHANGES.
+# The publisher options list must contain COMMENT only.
+if ! grep -qF 'options: [COMMENT]' .github/workflows/publish-claudio-review.yml; then
+  echo "policy: publish-claudio-review.yml must offer only COMMENT as an event option" >&2
+  exit 1
+fi
+if grep -qF 'APPROVE' .github/workflows/publish-claudio-review.yml; then
+  echo "policy: publish-claudio-review.yml must not offer APPROVE" >&2
+  exit 1
+fi
+
+# The Claudio DR review adapter skill must explicitly state the COMMENT-only
+# and inline-findings constraints so the model cannot miss them.
+readonly claudio_review_skill="plugins/claudio-dr/skills/review-pr/SKILL.md"
+if ! grep -qF 'always `COMMENT`' "$claudio_review_skill"; then
+  echo "drift: $claudio_review_skill does not state the COMMENT-only publication rule" >&2
+  exit 1
+fi
+if ! grep -qF 'never submits `APPROVE`' "$claudio_review_skill"; then
+  echo "drift: $claudio_review_skill does not explicitly forbid APPROVE" >&2
+  exit 1
+fi
+if ! grep -qF 'never submits `REQUEST_CHANGES`' "$claudio_review_skill"; then
+  echo "drift: $claudio_review_skill does not explicitly forbid REQUEST_CHANGES" >&2
+  exit 1
+fi
+if ! grep -qF 'Inline findings only' "$claudio_review_skill"; then
+  echo "drift: $claudio_review_skill does not state the inline-findings-only constraint" >&2
+  exit 1
+fi
+
 # Adapter drift check: adapter review-pr SKILL.md files must reference the
 # core review contract and must not embed the category table or confidence
 # threshold directly (those live only in core/pr-review/references/review-contract.md).
