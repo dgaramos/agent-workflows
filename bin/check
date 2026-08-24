@@ -239,7 +239,10 @@ done < <(git ls-files '*SKILL.md')
 
 bash -n .github/scripts/publish-review.sh
 bash -n .github/scripts/publish-claudio-thread-action.sh
-bash -n .github/scripts/publish-cody-thread-action.sh
+shopt -s nullglob
+for script in .github/scripts/publish-cody-*.sh; do
+  bash -n "$script"
+done
 bash -n core/profile-discovery/scripts/discover-project-profile.sh
 bash -n core/issue-workflow/scripts/apply-pr-metadata.sh
 tests/test_apply_pr_metadata.sh
