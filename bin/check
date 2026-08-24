@@ -466,6 +466,28 @@ for prefix in "${adapter_prefixes[@]}"; do
 grep -qF 'without a second' "$prefix/skills/ship-change/SKILL.md"
 done
 
+# Each adapter's start-issue skill must carry an explicit platform-scoping note
+# that names the platform-specific tooling and states it is intentionally not
+# mirrored in the other adapter.
+readonly claudio_start_issue="plugins/claudio-dr/skills/start-issue/SKILL.md"
+readonly cody_start_issue="plugins/cody-dr/skills/start-issue/SKILL.md"
+if ! grep -qF 'Platform-specific detail (Claude Code only)' "$claudio_start_issue"; then
+  echo "drift: $claudio_start_issue does not document its platform-specific worktree mechanics as Claude Code only" >&2
+  exit 1
+fi
+if ! grep -qF 'intentionally not mirrored in the Cody DR adapter' "$claudio_start_issue"; then
+  echo "drift: $claudio_start_issue does not state that worktree mechanics are not mirrored in Cody DR" >&2
+  exit 1
+fi
+if ! grep -qF 'Platform-specific detail (Codex only)' "$cody_start_issue"; then
+  echo "drift: $cody_start_issue does not document its platform-specific shell tools as Codex only" >&2
+  exit 1
+fi
+if ! grep -qF 'intentionally not mirrored in the Claudio DR adapter' "$cody_start_issue"; then
+  echo "drift: $cody_start_issue does not state that Codex shell tools are not mirrored in Claudio DR" >&2
+  exit 1
+fi
+
 # Test-first planning is mandatory before implementation, and it remains
 # read-only even when execute-issue owns the later delivery authorization.
 grep -qF 'complete plan; never wait for a confirmation prompt' \
