@@ -97,15 +97,15 @@ never authorizes approval, merge, issue creation, or issue execution.
 Use the same request shape for both reviewers. The only differences are the
 adapter identity and its publisher workflow.
 
-## Fallback reviewer
+## Personal publication fallback
 
-Use a local, user-authorized reviewer only when **neither** Cody DR nor Claudio
-DR is configured for the target repository. If either App is configured, use
-that App's matching publisher; never silently replace it with a personal
-account or a different bot. The fallback may analyze the PR and, only with
-explicit authorization, publish as the authenticated user while clearly naming
-that actor in the review summary. It must never claim to be Cody DR or Claudio
-DR.
+For a requested reply or resolution, use the matching reviewer App first when
+its operation is configured and usable. Only when that operation is
+unconfigured or unavailable before dispatch may an explicitly authorized,
+authenticated personal account publish the prepared thread action. The outcome
+must name that actor as a personal fallback and must never claim it is Cody DR
+or Claudio DR. An App dispatch or author-verification failure is a failed
+publication, not a fallback condition.
 
 Neither App submits `REQUEST_CHANGES`. Findings are published as a `COMMENT`;
 whether they block merging is decided by a human reviewer.

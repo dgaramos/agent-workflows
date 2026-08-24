@@ -319,7 +319,23 @@ for skill in "${adapter_findings_skills[@]}"; do
     echo "parity: $skill does not require per-finding user decisions" >&2
     exit 1
   fi
+
+  if ! grep -qF 'publisher-first policy' "$skill"; then
+    echo "parity: $skill does not require publisher-first thread publication" >&2
+    exit 1
+  fi
+
+  if ! grep -qF 'failed publication, never a fallback' "$skill"; then
+    echo "parity: $skill does not distinguish failed App publication from fallback" >&2
+    exit 1
+  fi
 done
+
+grep -qF '## Publisher-first thread actions' core/findings-handling/references/findings-contract.md
+grep -qF 'unavailable **before dispatch**' core/findings-handling/references/findings-contract.md
+grep -qF 'Do not use a personal fallback after an App dispatch' core/findings-handling/references/findings-contract.md
+grep -qF 'do not reclassify it as an unavailable publisher.' core/findings-handling/references/findings-contract.md
+grep -qF '**Publication identity:**' core/findings-handling/references/findings-contract.md
 
 # Authoring adapters must remain thin identity bindings over the portable
 # authoring contract and verify the matching GitHub App actor after publication.

@@ -68,11 +68,25 @@ and records validation. For an approved separate issue: the reply links the
 published issue. For a not-pertinent or unverifiable finding: publish a factual
 reply only when the user selected that action; otherwise leave the thread open.
 
-When authorized to publish, use the target profile's publisher per the reply
-mode and resolution mode documented in
-`core/pr-review/references/profile-contract.md`. Verify that each reply and
-resolution is authored by the expected reviewer bot in the intended thread.
-Never mark a finding resolved based only on a reply.
+## Publisher-first thread actions
+
+When authorized to publish, use the target profile's configured publisher
+first, per the reply and resolution modes documented in
+`core/pr-review/references/profile-contract.md`. Before dispatching, confirm
+that the requested operation is available; after dispatching, verify the
+expected reviewer App actor, target thread, and operation. Never mark a
+finding resolved based only on a reply.
+
+An explicitly authorized authenticated personal account may publish the same
+reply or resolution only when the requested reviewer-App operation is
+unconfigured or unavailable **before dispatch**. The outcome must identify the
+authenticated personal actor and label the action as a personal fallback; it
+must never represent that actor as the reviewer App.
+
+Do not use a personal fallback after an App dispatch or post-publication
+verification fails. Report that failure distinctly as a failed App
+publication, including the expected and observed actor or target when known;
+do not reclassify it as an unavailable publisher.
 
 ## Outcome summary
 
@@ -89,4 +103,5 @@ Emit one summary block per handling session:
 **Commits:** <finding → commit or none>
 **Issues:** <finding → issue or none>
 **Replies prepared:** N · **Published:** <N published|not requested|not published>
+**Publication identity:** <reviewer App actor|personal fallback: @login|none>
 ```

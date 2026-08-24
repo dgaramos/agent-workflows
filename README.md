@@ -75,8 +75,11 @@ validation flow.
 An explicit issue-execution request authorizes the normal delivery path:
 branch, implementation, validation, commits, push, and a complete PR. Reviews,
 replies, thread resolution, and issue creation remain separately authorized.
-Without a configured publisher, publisher-backed actions return
-publication-ready output as `not published`.
+For finding replies and thread resolutions, a configured reviewer App is used
+and verified first. An explicitly authorized authenticated personal account may
+publish only when that App operation is unavailable before dispatch; failed App
+publication or verification never silently falls back. Otherwise,
+publisher-backed actions return publication-ready output as `not published`.
 
 Both plugins provide the same portable capabilities. Their differences are
 platform invocation, agent identity, and plugin update commands; project

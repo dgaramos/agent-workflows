@@ -45,13 +45,15 @@ A profile that does not document one of these modes signals that the operation
 is unavailable and the adapter must return the prepared content as `not
 published`. This does not imply that the reviewer App is inactive.
 
-### Fallback reviewer
+### Personal fallback
 
-A profile may allow an explicitly authorized local reviewer only when neither
-configured reviewer App is available for the target repository. When one or
-more matching Apps are configured, the local reviewer must use the configured
-App for publication and must not fall back to a personal identity. A fallback
-review must name its authenticated actor and must never represent itself as a
+For a requested operation, a profile may allow an explicitly authorized
+authenticated personal account only when the matching reviewer-App operation is
+unconfigured or unavailable before dispatch. When the operation has a usable
+configured App publisher, use and verify that App; do not fall back to a
+personal identity. A dispatched App publication or post-publication
+verification failure is a failed publication, never a fallback. A personal
+fallback must name its authenticated actor and must never represent itself as a
 configured App reviewer.
 
 ### Post-publication verification
