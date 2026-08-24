@@ -19,6 +19,7 @@ claude --plugin-dir ./plugins/claudio-dr
 The plugin also exposes global agents: `claudio-helper` for usage guidance,
 `claudio-reviewer` for an isolated review, `claudio-workflow` for an issue
 lifecycle, and `claudio-findings` for findings handling. Use
+`/claudio-dr:plan-implementation #42` for a read-only test-first plan,
 `/claudio-dr:execute-issue #42` for normal issue delivery and
 `/claudio-dr:handle-pr-findings` for review findings. From a target repository,
 they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With

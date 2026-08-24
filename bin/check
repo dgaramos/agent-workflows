@@ -37,11 +37,13 @@ readonly required_paths=(
   "core/issue-workflow/references/workflow-contract.md"
   "core/issue-workflow/references/start-issue-contract.md"
   "core/issue-workflow/references/implement-issue-contract.md"
+  "core/issue-workflow/references/plan-implementation-contract.md"
   "core/issue-workflow/references/ship-change-contract.md"
   "core/issue-workflow/scripts/apply-pr-metadata.sh"
   "core/issue-workflow/references/execute-issue-contract.md"
   "core/issue-workflow/skills/start-issue/SKILL.md"
   "core/issue-workflow/skills/implement-issue/SKILL.md"
+  "core/issue-workflow/skills/plan-implementation/SKILL.md"
   "core/issue-workflow/skills/ship-change/SKILL.md"
   "core/issue-workflow/skills/execute-issue/SKILL.md"
   "bin/sync-plugin-core-bundles.sh"
@@ -50,6 +52,7 @@ readonly required_paths=(
   "examples/generic-issue-authoring.md"
   "examples/generic-findings-handling.md"
   "examples/generic-issue-lifecycle.md"
+  "examples/generic-test-first-planning.md"
   "examples/generic-pr-shipping.md"
   "plugins/cody-dr/.codex-plugin/plugin.json"
   "plugins/cody-dr/skills/review-pr/SKILL.md"
@@ -57,6 +60,7 @@ readonly required_paths=(
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/cody-dr/skills/start-issue/SKILL.md"
   "plugins/cody-dr/skills/implement-issue/SKILL.md"
+  "plugins/cody-dr/skills/plan-implementation/SKILL.md"
   "plugins/cody-dr/skills/ship-change/SKILL.md"
   "plugins/cody-dr/skills/execute-issue/SKILL.md"
   "plugins/cody-dr/agents/cody-reviewer.md"
@@ -72,6 +76,7 @@ readonly required_paths=(
   "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/claudio-dr/skills/start-issue/SKILL.md"
   "plugins/claudio-dr/skills/implement-issue/SKILL.md"
+  "plugins/claudio-dr/skills/plan-implementation/SKILL.md"
   "plugins/claudio-dr/skills/ship-change/SKILL.md"
   "plugins/claudio-dr/skills/execute-issue/SKILL.md"
   "plugins/claudio-dr/agents/claudio-reviewer.md"
@@ -100,6 +105,7 @@ readonly public_skill_names=(
   "handle-pr-findings"
   "author-issue"
   "start-issue"
+  "plan-implementation"
   "implement-issue"
   "ship-change"
   "execute-issue"
@@ -323,7 +329,7 @@ for agent in "${adapter_reviewer_agents[@]}"; do
 done
 
 # Adapter workflow skills must reference the corresponding core skill (parity check).
-readonly workflow_skill_names=("start-issue" "implement-issue" "ship-change" "execute-issue")
+readonly workflow_skill_names=("start-issue" "plan-implementation" "implement-issue" "ship-change" "execute-issue")
 readonly adapter_prefixes=("plugins/claudio-dr" "plugins/cody-dr")
 
 for skill_name in "${workflow_skill_names[@]}"; do
@@ -353,7 +359,21 @@ grep -qF 'not authorize review, comment, reply, or thread-resolution publication
   core/issue-workflow/references/execute-issue-contract.md
 for prefix in "${adapter_prefixes[@]}"; do
   grep -qF 'do not ask for a second confirmation' "$prefix/skills/execute-issue/SKILL.md"
-  grep -qF 'without a second' "$prefix/skills/ship-change/SKILL.md"
+grep -qF 'without a second' "$prefix/skills/ship-change/SKILL.md"
+done
+
+# Test-first planning is mandatory before implementation, and it remains
+# read-only even when execute-issue owns the later delivery authorization.
+grep -qF 'complete plan; never wait for a confirmation prompt' \
+  core/issue-workflow/references/plan-implementation-contract.md
+grep -qF 'Red test, Green implementation, and Refactor' core/issue-workflow/references/plan-implementation-contract.md
+grep -qF 'TDD: Not applicable' core/issue-workflow/references/plan-implementation-contract.md
+grep -qF 'the `plan-implementation` output' \
+  core/issue-workflow/references/implement-issue-contract.md
+grep -qF 'plan-implementation · implement-issue' core/issue-workflow/references/execute-issue-contract.md
+for prefix in "${adapter_prefixes[@]}"; do
+  grep -qF 'core/issue-workflow/skills/plan-implementation/SKILL.md' \
+    "$prefix/skills/plan-implementation/SKILL.md"
 done
 
 # Core bundles belong only at each plugin root and must be generated from the

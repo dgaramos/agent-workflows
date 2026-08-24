@@ -1,6 +1,6 @@
 ---
 name: execute-issue
-description: Cody DR orchestrates the full issue-to-change lifecycle: start-issue, implement-issue, and ship-change in sequence with authorized normal delivery.
+description: Cody DR orchestrates the full issue-to-change lifecycle: start, test-first planning, implementation, and shipping with authorized normal delivery.
 ---
 
 # Cody DR execute-issue

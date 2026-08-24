@@ -2,15 +2,17 @@
 
 ## Purpose
 
-`execute-issue` composes `start-issue`, `implement-issue`, and `ship-change`
-in sequence. An explicit request to execute an issue authorizes the full
-normal delivery, including push and PR creation.
+`execute-issue` composes `start-issue`, `plan-implementation`,
+`implement-issue`, and `ship-change` in sequence. An explicit request to
+execute an issue authorizes the full normal delivery, including push and PR
+creation.
 
 ## Steps
 
 1. Run `start-issue`. Stop on any handoff.
-2. Run `implement-issue`. Stop on any handoff.
-3. Run `ship-change`. Stop only for a failed quality gate, missing permission,
+2. Run `plan-implementation` and emit its complete read-only plan.
+3. Run `implement-issue` from that plan. Stop on any handoff.
+4. Run `ship-change`. Stop only for a failed quality gate, missing permission,
    unresolved dependency, or material out-of-scope decision.
 
 Load the target profile once at step 1 and pass its context through all
@@ -29,7 +31,7 @@ Emit each phase's own output block in sequence, followed by a final summary:
 ```md
 ## Execute — <issue reference>
 
-**Phases completed:** start-issue · implement-issue · ship-change
+**Phases completed:** start-issue · plan-implementation · implement-issue · ship-change
 **Stopped at:** <phase name and reason, or none>
 **PR:** <not requested|not published|<URL>>
 ```

@@ -42,7 +42,7 @@ commands, branch names, credentials, labels, or remote references.
 | `core/pr-review/` | `review-contract.md`, `profile-contract.md`, `reporting.md` | — (consumed directly) |
 | `core/findings-handling/` | `findings-contract.md` | `handle-findings` |
 | `core/issue-authoring/` | `issue-contract.md` | `author-issue` |
-| `core/issue-workflow/` | `workflow-contract.md`, `start-issue-contract.md`, `implement-issue-contract.md`, `ship-change-contract.md`, `execute-issue-contract.md` | `start-issue`, `implement-issue`, `ship-change`, `execute-issue` |
+| `core/issue-workflow/` | `workflow-contract.md`, `start-issue-contract.md`, `plan-implementation-contract.md`, `implement-issue-contract.md`, `ship-change-contract.md`, `execute-issue-contract.md` | `start-issue`, `plan-implementation`, `implement-issue`, `ship-change`, `execute-issue` |
 
 ### Adapters
 

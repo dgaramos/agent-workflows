@@ -10,7 +10,7 @@ the single behavioral source of truth for all adapters:
 | PR review | `core/pr-review/references/` |
 | Issue authoring | `core/issue-authoring/references/` |
 | Findings handling | `core/findings-handling/references/` |
-| Issue-to-change workflow | `core/issue-workflow/references/` + `core/issue-workflow/skills/` |
+| Issue-to-change workflow and test-first planning | `core/issue-workflow/references/` + `core/issue-workflow/skills/` |
 
 ## Adapters
 
@@ -39,6 +39,7 @@ not mean an App is inactive.
 | Reviewer agent | `plugins/claudio-dr/agents/claudio-reviewer.md` |
 | Invocation | `/claudio-dr:review-pr <PR URL or ref>` |
 | Issue authoring | `/claudio-dr:author-issue <problem statement>` |
+| Implementation planning | `/claudio-dr:plan-implementation <issue>` |
 | Agent invocation | `@claudio-reviewer review <ref>` |
 | Local validation | `claude plugin validate ./plugins/claudio-dr` |
 | Local session | `claude --plugin-dir ./plugins/claudio-dr` |
@@ -53,8 +54,9 @@ not mean an App is inactive.
 | Reviewer agent | `plugins/cody-dr/agents/cody-reviewer.md` |
 | Invocation | `review-pr <PR URL or ref>` |
 | Issue authoring | `author-issue <problem statement>` |
+| Implementation planning | `plan-implementation <issue>` |
 | Agent invocation | `@cody-reviewer review <ref>` |
-| Local validation | `codex plugin validate ./plugins/cody-dr` |
+| Local validation | `bin/check` + `codex --plugin-dir ./plugins/cody-dr` |
 | Local session | `codex --plugin-dir ./plugins/cody-dr` |
 | Update flow | bump version → reinstall from marketplace root → new thread |
 

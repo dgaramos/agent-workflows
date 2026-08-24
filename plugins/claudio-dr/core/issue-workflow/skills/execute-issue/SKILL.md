@@ -1,6 +1,6 @@
 ---
 name: execute-issue
-description: Orchestrate the full issue-to-change lifecycle: start-issue, implement-issue, and ship-change in sequence, including normal delivery publication.
+description: Orchestrate the full issue-to-change lifecycle: start, test-first planning, implementation, and shipping in sequence, including normal delivery publication.
 ---
 
 # Portable execute-issue

@@ -34,7 +34,10 @@ guessing or creating a speculative change:
 
 ## 2. Implement and validate one logical unit at a time
 
-`implement-issue` addresses the acceptance criteria on the created branch.
+Before implementation, `plan-implementation` prints a read-only test-first
+plan that maps every executable criterion to Red → Green → Refactor coverage,
+or records the strongest structural validation when TDD is not applicable.
+`implement-issue` then addresses the acceptance criteria on the created branch.
 After each logical change it runs the profile-owned command, for example
 `make check`. A passing unit can be committed; the implementation phase never
 pushes or opens a pull request.
@@ -114,7 +117,7 @@ the branch, validation, or PR state:
 ```md
 ## Execute — #42
 
-**Phases completed:** start-issue · implement-issue · ship-change
+**Phases completed:** start-issue · plan-implementation · implement-issue · ship-change
 **Stopped at:** none
 **PR:** https://github.com/acme/widgets/pull/42
 ```
