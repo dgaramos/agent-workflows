@@ -270,6 +270,26 @@ if ! grep -qF 'Inline findings only' "$claudio_review_skill"; then
   exit 1
 fi
 
+# The Cody DR review adapter skill must explicitly state the COMMENT-only
+# and inline-findings constraints so the model cannot miss them.
+readonly cody_review_skill="plugins/cody-dr/skills/review-pr/SKILL.md"
+if ! grep -qF 'always `COMMENT`' "$cody_review_skill"; then
+  echo "drift: $cody_review_skill does not state the COMMENT-only publication rule" >&2
+  exit 1
+fi
+if ! grep -qF 'never submits `APPROVE`' "$cody_review_skill"; then
+  echo "drift: $cody_review_skill does not explicitly forbid APPROVE" >&2
+  exit 1
+fi
+if ! grep -qF 'never submits `REQUEST_CHANGES`' "$cody_review_skill"; then
+  echo "drift: $cody_review_skill does not explicitly forbid REQUEST_CHANGES" >&2
+  exit 1
+fi
+if ! grep -qF 'Inline findings only' "$cody_review_skill"; then
+  echo "drift: $cody_review_skill does not state the inline-findings-only constraint" >&2
+  exit 1
+fi
+
 # Adapter drift check: adapter review-pr SKILL.md files must reference the
 # core review contract and must not embed the category table or confidence
 # threshold directly (those live only in core/pr-review/references/review-contract.md).
