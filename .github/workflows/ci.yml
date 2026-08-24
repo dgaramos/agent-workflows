@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  quality:
+    name: Quality gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run bin/check
+        run: bin/check
+      - name: Validate JSON files
+        run: |
+          jq empty plugins/claudio-dr/.claude-plugin/plugin.json
+          jq empty plugins/cody-dr/.codex-plugin/plugin.json
+          jq empty .claude-plugin/marketplace.json
+      - name: Check bundle sync
+        run: bin/sync-plugin-core-bundles.sh --check
+
+  syntax:
+    name: Shell syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: bash -n on all .sh files
+        run: |
+          find .github/scripts tests bin core -name '*.sh' -print0 \
+            | xargs -0 -I{} bash -n {}
+
+  test-apply-pr-metadata:
+    name: test-apply-pr-metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: bash tests/test_apply_pr_metadata.sh
+
+  test-discover-project-profile:
+    name: test-discover-project-profile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: bash tests/test_discover_project_profile.sh
+
+  test-plugin-core-bundles:
+    name: test-plugin-core-bundles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: bash tests/test_plugin_core_bundles.sh
+
+  test-publish-claudio-thread-action:
+    name: test-publish-claudio-thread-action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: bash tests/test_publish_claudio_thread_action.sh
+
+  test-publish-cody-thread-action:
+    name: test-publish-cody-thread-action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: bash tests/test_publish_cody_thread_action.sh
+
+  test-publish-pr-metadata:
+    name: test-publish-pr-metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run test suite
+        run: bash tests/test_publish_pr_metadata.sh
