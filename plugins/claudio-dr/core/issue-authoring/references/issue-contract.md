@@ -50,6 +50,24 @@ After publishing, verify that the created issue's author matches the configured
 reviewer bot identity. If verification fails, report the failure and do not mark
 the issue as published.
 
+## Publication mechanics
+
+When publication is authorized, follow these steps exactly:
+
+1. Dispatch the profile's `create-issue` workflow, passing: `title`, `body`,
+   `labels`, `assignees`, and `milestone`. Do not omit fields that the profile
+   declares — pass them as workflow inputs.
+2. Never use a direct GitHub API call authenticated as a human user. The
+   `create-issue` mode is the only permitted publication path.
+3. The issue body must conform to the profile-declared template structure. Match
+   every section heading in the repository's `.github/ISSUE_TEMPLATE/` template;
+   do not add or remove sections.
+4. After the workflow completes, retrieve the created issue and inspect its
+   `author.login`. If it does not match the configured reviewer bot identity
+   (e.g. `claudio-dr[bot]`), mark the issue as `not published` and report the
+   mismatch. Do not fall back to user authorship — a bot-identity failure is a
+   hard stop, not a degraded-mode trigger.
+
 ## Draft summary
 
 Emit one summary block per authoring session:
