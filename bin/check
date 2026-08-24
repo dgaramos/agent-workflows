@@ -333,7 +333,8 @@ done
 
 grep -qF '## Publisher-first thread actions' core/findings-handling/references/findings-contract.md
 grep -qF 'unavailable **before dispatch**' core/findings-handling/references/findings-contract.md
-grep -qF 'failed App publication' core/findings-handling/references/findings-contract.md
+grep -qF 'Do not use a personal fallback after an App dispatch' core/findings-handling/references/findings-contract.md
+grep -qF 'do not reclassify it as an unavailable publisher.' core/findings-handling/references/findings-contract.md
 grep -qF '**Publication identity:**' core/findings-handling/references/findings-contract.md
 
 # Authoring adapters must remain thin identity bindings over the portable
