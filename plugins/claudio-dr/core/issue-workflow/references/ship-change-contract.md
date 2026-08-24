@@ -11,10 +11,15 @@ Do not ship without confirmed passing quality gates.
    if it fails.
 2. Prepare the PR:
    - Title: derived from the issue title.
-   - Body: implementation summary and acceptance criteria checklist. When the
-     profile declares a PR template, load it, retain every heading, and fill
-     every section with the change-specific answer or an explicit `Not
-     applicable`; do not replace it with a generic summary.
+   - Body: when `.github/pull_request_template.md` exists in the repository,
+     read that file, fill every section with the change-specific answer or an
+     explicit `Not applicable`, and pass the completed text to
+     `gh pr create --body "$(cat .github/pull_request_template.md)"` (with
+     the filled content, not the raw template). retain every heading; do not
+     replace the template with a free-form summary. Opening a PR with a
+     free-form body when a template exists is a contract violation. When no
+     template file is present, use the implementation summary and acceptance
+     criteria checklist as the body.
    - Metadata: labels, milestone, assignees, reviewers, and Projects from the profile.
 3. Push the branch and create the fully populated PR. The issue-execution
    request already authorizes these normal delivery actions; do not ask again.
