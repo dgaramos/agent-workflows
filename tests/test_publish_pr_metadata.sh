@@ -38,5 +38,32 @@ if grep -q -- 'api user' "$log"; then
   echo "metadata publishing must not query the user endpoint" >&2
   exit 1
 fi
-grep -q -- '--repo octo/example --pr 12 --base main --label enhancement --label core --assignee octo --milestone 3 --project-owner octo --project-number 7 --project-status In Progress' "$log"
+# Core metadata and Project V2 are now separate calls so that a Project failure
+# does not prevent labels/milestone/assignee from being applied.
+grep -q -- '--repo octo/example --pr 12 --base main --label enhancement --label core --assignee octo --milestone 3' "$log"
+grep -q -- '--repo octo/example --pr 12 --base main --project-owner octo --project-number 7 --project-status In Progress' "$log"
+
+# Verify that a failing Project V2 step does NOT cause the script to exit non-zero.
+rm -f "$log"
+cat >"$temp/core/issue-workflow/scripts/apply-pr-metadata.sh" <<'EOF'
+#!/usr/bin/env bash
+if printf '%s\n' "$*" | grep -q -- '--project-owner'; then
+  printf '%s\n' "$*" >>"$TEST_LOG"
+  exit 1
+fi
+printf '%s\n' "$*" >>"$TEST_LOG"
+EOF
+chmod +x "$temp/core/issue-workflow/scripts/apply-pr-metadata.sh"
+
+if ! TEST_LOG="$log" PATH="$temp/bin:$PATH" GITHUB_REPOSITORY=octo/example \
+  PR_NUMBER=12 BASE_BRANCH=main LABELS_JSON='["enhancement"]' \
+  ASSIGNEES_JSON='["octo"]' MILESTONE_NUMBER=3 PROJECT_OWNER=octo \
+  PROJECT_NUMBER=7 PROJECT_STATUS='In Progress' EXPECTED_AUTHOR='cody-dr[bot]' \
+  PUBLISHER_APP_SLUG=cody-dr \
+  bash "$root/.github/scripts/publish-pr-metadata.sh" 2>/dev/null; then
+  echo "a failing Project V2 step must not abort the script" >&2
+  exit 1
+fi
+grep -q -- '--repo octo/example --pr 12 --base main --label enhancement --assignee octo --milestone 3' "$log"
+
 echo "publish-pr-metadata tests passed"
