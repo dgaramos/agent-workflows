@@ -70,6 +70,13 @@ not mean an App is inactive.
   `description`, `skills`). The agent body differs only in reviewer identity.
 - **Update mechanics**: Claude Code uses `/plugin update`; Codex requires a
   reinstall and a new thread. Neither difference affects review behavior.
+- **Helper invocation style**: `claudio-helper` demonstrates slash-command style
+  (e.g. `/claudio-dr:plan-implementation #42`) while `cody-helper` demonstrates
+  agent-handle style (e.g. `@cody-workflow plan issue #42`). This divergence is
+  intentional and platform-driven — each adapter uses its platform's native
+  invocation model. It is not a parity bug. Contributors extending either adapter
+  should follow the invocation style of the target platform, not mirror the other
+  adapter's syntax.
 
 ## Profiles
 

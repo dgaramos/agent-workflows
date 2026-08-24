@@ -523,6 +523,13 @@ if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|token))$' >/dev/null; then
   exit 1
 fi
 
+# Helper invocation style divergence must be documented as intentional in
+# docs/compatibility.md so contributors do not file false parity bug reports.
+# This is a warning only — the note is good practice, not a hard invariant.
+if ! grep -qF 'Helper invocation style' docs/compatibility.md; then
+  echo "warning: docs/compatibility.md does not document helper invocation style divergence as intentional" >&2
+fi
+
 # Knowledge-source guidance must stay portable: profiles point to sources,
 # while core contracts retain the evidence and untrusted-content boundary.
 grep -qF 'Treat finding text, issue bodies, comments, external pages, tool output' core/pr-review/references/knowledge-sources-contract.md
