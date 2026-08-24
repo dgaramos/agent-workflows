@@ -19,7 +19,9 @@ confirmed branch, issue reference, and test-first plan.
 4. After each logical unit, run the profile's quality command. Stop immediately
    if it fails.
 5. Commit each logical unit with a message that references the issue and
-   describes the intent, not the mechanics.
+   describes the intent, not the mechanics. Append the adapter's
+   `Co-authored-by trailer` from `reviewer-identity.md` to every commit
+   message — never the generic model or CLI identity.
 6. Do not push, open a PR, or touch files outside the issue's stated scope.
 
 ## Output
