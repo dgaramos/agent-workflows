@@ -18,11 +18,14 @@ Do not ship without confirmed passing quality gates.
    - Metadata: labels, milestone, assignees, reviewers, and Projects from the profile.
 3. Push the branch and create the fully populated PR. The issue-execution
    request already authorizes these normal delivery actions; do not ask again.
-4. After creating the PR, run
-   `core/issue-workflow/scripts/apply-pr-metadata.sh` with values from the
-   profile. The helper applies and verifies the base branch, labels, milestone,
-   assignees, reviewers, and Project item state. Its arguments, including any
-   Project owner, number, and status, are profile-owned.
+4. After creating the PR, dispatch the profile's `apply-pr-metadata` publisher
+   mode with the profile-owned metadata values. Wait for it to complete and
+   verify its configured App identity plus the base branch, labels, milestone,
+   assignees, reviewers, and Project item state. The publisher may use
+   `core/issue-workflow/scripts/apply-pr-metadata.sh` internally; an adapter
+   must never run that mutation helper through its authenticated personal `gh`
+   session. If the mode is unavailable or verification fails, report metadata
+   as not published and stop with a handoff.
 5. If a required field cannot be applied or verified, stop and emit a handoff
    with the PR URL, field, and failed command or permission. Do not claim a PR
    was shipped with complete metadata when the helper fails.
@@ -37,6 +40,7 @@ Do not ship without confirmed passing quality gates.
 **PR:** <not requested|not published|<URL>>
 **Metadata applied:** <labels, milestone, assignees, reviewers, Projects or none>
 **Metadata verified:** <field → observed value, or failed field>
+**Metadata publisher:** <verified App actor|not published: unavailable|failed: reason>
 ```
 
 Do not publish review, comment, reply, or thread-resolution content as part of

@@ -12,7 +12,7 @@ confirmation after an explicit issue-execution request.
 
 Discover the target profile first with
 `core/profile-discovery/references/profile-discovery-contract.md`.
-After creation, invoke `core/issue-workflow/scripts/apply-pr-metadata.sh` with
-the loaded profile values. It applies and verifies labels, milestone,
-assignees, reviewers, Project state, and the base branch; emit a handoff on
-failure.
+After creation, dispatch the loaded profile's `apply-pr-metadata` publisher
+mode and wait for Claudio DR's verified result. Do not use a personal `gh`
+session to invoke the local metadata helper; emit a handoff when the mode is
+unavailable or verification fails.
