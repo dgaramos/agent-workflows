@@ -13,6 +13,5 @@ confirmation after an explicit issue-execution request.
 Discover the target profile first with
 `core/profile-discovery/references/profile-discovery-contract.md`.
 After creation, dispatch the loaded profile's `apply-pr-metadata` publisher
- mode and wait for Claudio DR's verified result. If it is unavailable or fails,
- use a personal fallback only with explicit user authorization and report that
- account; never represent it as Claudio DR.
+ mode and wait for Claudio DR's verified result. Emit a handoff if it is
+ unavailable or fails; do not use a personal fallback.

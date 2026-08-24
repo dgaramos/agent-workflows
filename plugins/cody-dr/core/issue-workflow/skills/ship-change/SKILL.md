@@ -23,6 +23,5 @@ publisher workflow via `gh workflow run`, passing every profile-declared
 metadata field as a workflow input. This step is mandatory when the profile
 declares any metadata fields; skip only when the profile declares none. Wait
 for the run to complete and verify the bot identity and all declared fields.
-If the publisher is unavailable or fails, use a personal `gh` fallback only
-with explicit user authorization; verify all fields and name that account in
-the result. Never represent the fallback as the reviewer App.
+If the publisher is unavailable or fails, emit a handoff; do not use a
+personal `gh` fallback for metadata publication.

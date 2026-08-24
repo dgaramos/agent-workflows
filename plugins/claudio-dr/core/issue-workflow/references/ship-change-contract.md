@@ -42,9 +42,8 @@ Do not ship without confirmed passing quality gates.
    assignees, and Project item state. The workflow uses an installation token
    internally and may invoke `core/issue-workflow/scripts/apply-pr-metadata.sh`
    as an implementation detail. If that publisher is unavailable or fails,
-   an explicitly user-authorized authenticated personal account may run the
-   helper as a fallback. Verify every field and report that account explicitly
-   as the metadata publisher; never represent it as the reviewer App.
+   report metadata as not published and stop with a handoff; do not substitute
+   personal-account publication.
 5. If a required field cannot be applied or verified, stop and emit a handoff
    with the PR URL, field, and failed command or permission. Do not claim a PR
    was shipped with complete metadata when the helper fails.
