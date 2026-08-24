@@ -52,6 +52,7 @@ Use a workflow agent or invoke an installed skill directly:
 ```text
 @cody-reviewer review <PR URL or ref>
 @cody-workflow execute issue #42
+@cody-workflow plan issue #42
 @cody-helper explain how to use Cody DR in this repository
 ```
 
@@ -66,6 +67,7 @@ validation flow.
 | `handle-pr-findings` / `handle-findings` | Triage, fix, defer, or reject findings against the current head |
 | `author-issue` | Draft and optionally publish a structured GitHub issue |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
+| `plan-implementation` | Print a read-only, test-first implementation plan before edits |
 | `implement-issue` | Make minimal in-scope changes with quality-gate validation |
 | `ship-change` | Run final quality gate, prepare PR with profile metadata, then push and open it |
 | `execute-issue` | Orchestrate the full start → implement → ship lifecycle |
@@ -80,6 +82,10 @@ Both plugins provide the same portable capabilities. Their differences are
 platform invocation, agent identity, and plugin update commands; project
 architecture, quality commands, metadata, and publishers come from an optional
 profile in the target repository.
+
+`execute-issue` always plans before it edits. Plans map each executable change
+to Red → Green → Refactor coverage; non-executable work states why TDD is not
+applicable and names its strongest structural validation.
 
 ## Profiles
 

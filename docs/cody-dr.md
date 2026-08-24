@@ -22,9 +22,10 @@ architecture or quality rules beyond the portable core.
 
 The plugin also exposes global agents: `cody-helper` for usage guidance,
 `cody-reviewer` for an isolated review, `cody-workflow` for an issue lifecycle,
-and `cody-findings` for findings handling. Use `@cody-workflow execute issue
-#42` for normal issue delivery, `@cody-findings` to handle review findings,
-and `@cody-helper` to select the right capability. From a target repository,
+and `cody-findings` for findings handling. Use `@cody-workflow plan issue #42`
+for a read-only test-first plan, `@cody-workflow execute issue #42` for normal
+issue delivery, `@cody-findings` to handle review findings, and `@cody-helper`
+to select the right capability. From a target repository,
 they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With
 no profile they use generic portable rules; they stop rather than guess when
 more than one profile exists.

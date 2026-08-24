@@ -13,3 +13,7 @@ boundary, the handoff format, and the implement-issue steps and output.
 Require a confirmed working branch and issue context from `start-issue`. Stop
 and emit a handoff block if the quality command fails or any acceptance
 criterion cannot be addressed within the stated scope.
+
+Require the read-only `plan-implementation` output before editing. Follow its
+Red → Green → Refactor steps for every executable behavior change and run the
+named structural validation only when TDD is explicitly not applicable.

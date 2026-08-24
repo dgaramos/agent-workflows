@@ -1,8 +1,9 @@
 ---
 name: cody-workflow
-description: Global Cody DR entrypoint for starting, implementing, shipping, or executing an explicit issue in the current repository.
+description: Global Cody DR entrypoint for starting, planning, implementing, shipping, or executing an explicit issue in the current repository.
 skills:
   - start-issue
+  - plan-implementation
   - implement-issue
   - ship-change
   - execute-issue
