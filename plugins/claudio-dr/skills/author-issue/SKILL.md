@@ -16,3 +16,6 @@ use only the target profile's `create-issue` mode, then verify that the created
 issue actor is `claudio-dr[bot]`. If that mode is unavailable, return the
 complete draft as `not published`; do not infer that the Claudio DR GitHub App
 is inactive.
+
+`gh issue create` and any direct GitHub API call authenticated as the human
+user are forbidden for issue creation. There is no fallback to user authorship.

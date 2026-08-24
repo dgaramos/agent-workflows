@@ -343,6 +343,24 @@ done
 grep -qF 'cody-dr[bot]' plugins/cody-dr/skills/author-issue/SKILL.md
 grep -qF 'claudio-dr[bot]' plugins/claudio-dr/skills/author-issue/SKILL.md
 
+# Issue creation must never fall back to user-authenticated authorship.
+# The core contract and both adapter skills must carry an explicit prohibition.
+readonly issue_contract="core/issue-authoring/references/issue-contract.md"
+if ! grep -qF 'gh issue create' "$issue_contract"; then
+  echo "drift: $issue_contract does not explicitly forbid gh issue create" >&2
+  exit 1
+fi
+if ! grep -qF 'no fallback to user authorship' \
+    plugins/claudio-dr/skills/author-issue/SKILL.md; then
+  echo "drift: claudio-dr author-issue SKILL.md does not state the no-fallback rule" >&2
+  exit 1
+fi
+if ! grep -qF 'no fallback to user authorship' \
+    plugins/cody-dr/skills/author-issue/SKILL.md; then
+  echo "drift: cody-dr author-issue SKILL.md does not state the no-fallback rule" >&2
+  exit 1
+fi
+
 # Adapter reviewer agents must bind to the review-pr skill (parity check).
 readonly adapter_reviewer_agents=(
   "plugins/claudio-dr/agents/claudio-reviewer.md"
