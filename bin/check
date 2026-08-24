@@ -177,9 +177,11 @@ readonly claudio_identity="plugins/claudio-dr/references/reviewer-identity.md"
 grep -qF '| Display name | Cody DR |' "$cody_identity"
 grep -qF '| Publisher | Cody DR GitHub App |' "$cody_identity"
 grep -qF '| Verified GitHub actor | `cody-dr[bot]` |' "$cody_identity"
+grep -qF '| Co-authored-by trailer | `Co-Authored-By: cody-dr[bot] <cody-dr[bot]@users.noreply.github.com>` |' "$cody_identity"
 grep -qF '| Display name | Claudio DR |' "$claudio_identity"
 grep -qF '| Publisher | Claudio DR GitHub App |' "$claudio_identity"
 grep -qF '| Verified GitHub actor | `claudio-dr[bot]` |' "$claudio_identity"
+grep -qF '| Co-authored-by trailer | `Co-Authored-By: claudio-dr[bot] <claudio-dr[bot]@users.noreply.github.com>` |' "$claudio_identity"
 
 grep -qF 'cody-dr[bot]' profiles/agent-workflows.md
 grep -qF 'claudio-dr[bot]' profiles/agent-workflows.md
@@ -400,6 +402,8 @@ grep -qF 'complete plan; never wait for a confirmation prompt' \
 grep -qF 'Red test, Green implementation, and Refactor' core/issue-workflow/references/plan-implementation-contract.md
 grep -qF 'TDD: Not applicable' core/issue-workflow/references/plan-implementation-contract.md
 grep -qF 'the `plan-implementation` output' \
+  core/issue-workflow/references/implement-issue-contract.md
+grep -qF "Co-authored-by trailer" \
   core/issue-workflow/references/implement-issue-contract.md
 grep -qF 'plan-implementation · implement-issue' core/issue-workflow/references/execute-issue-contract.md
 for prefix in "${adapter_prefixes[@]}"; do
