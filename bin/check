@@ -412,11 +412,13 @@ done
 
 grep -qF 'Metadata verified:' core/issue-workflow/references/ship-change-contract.md
 grep -qF 'apply-pr-metadata.sh' core/issue-workflow/references/ship-change-contract.md
+grep -qF 'apply-pr-metadata` publisher' core/issue-workflow/references/ship-change-contract.md
+grep -qF 'personal `gh`' core/issue-workflow/references/ship-change-contract.md
 grep -qF 'retain every heading' core/issue-workflow/references/ship-change-contract.md
 grep -qF 'PR description' profiles/agent-workflows.md
 grep -qF 'pull_request_template.md' profiles/agent-workflows.md
-grep -qF 'apply-pr-metadata.sh' plugins/cody-dr/skills/ship-change/SKILL.md
-grep -qF 'apply-pr-metadata.sh' plugins/claudio-dr/skills/ship-change/SKILL.md
+grep -qF 'apply-pr-metadata` publisher' plugins/cody-dr/skills/ship-change/SKILL.md
+grep -qF 'apply-pr-metadata` publisher' plugins/claudio-dr/skills/ship-change/SKILL.md
 
 # An explicit issue-execution request completes the normal delivery path without
 # a second push/PR confirmation; review publication remains separately gated.

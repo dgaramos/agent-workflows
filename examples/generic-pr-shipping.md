@@ -1,8 +1,10 @@
 # Generic PR metadata shipping
 
-A target profile supplies the values that are intentionally absent from the
-portable helper. An explicit issue-execution request authorizes `gh pr create`;
-ship-change runs:
+A target profile supplies the values and `apply-pr-metadata` publisher that are
+intentionally absent from the portable core. An explicit issue-execution request
+authorizes `gh pr create`; ship-change dispatches that publisher and waits for
+its verified App result. Inside the publisher, the installation-token workflow
+may run:
 
 ```bash
 core/issue-workflow/scripts/apply-pr-metadata.sh \
@@ -14,4 +16,5 @@ core/issue-workflow/scripts/apply-pr-metadata.sh \
 
 The helper applies each field, then reads the PR and Project back. It fails on
 any missing or mismatched required value; callers report that failure rather
-than handing off a partially configured PR.
+than handing off a partially configured PR. An adapter never runs it through a
+personal `gh` session; an unavailable publisher leaves metadata not published.

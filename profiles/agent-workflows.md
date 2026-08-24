@@ -35,10 +35,12 @@ DR publisher, and verify the resulting author is `claudio-dr[bot]`.
 After shipping, apply and verify every declared field. Do not silently omit a
 field because a CLI command or permission failed.
 
-Invoke `core/issue-workflow/scripts/apply-pr-metadata.sh` with `--base main`,
-the selected labels, `--milestone 3`, `--assignee dgaramos`, and
-`--project-owner dgaramos --project-number 11 --project-status "In Progress"`.
-Reviewers remain absent unless explicitly requested.
+Dispatch the matching `apply-pr-metadata` publisher workflow with base `main`,
+the selected labels, milestone number `3`, assignee `dgaramos`, and Project
+owner `dgaramos`, number `11`, status `In Progress`. Wait for and verify the
+matching App result. The workflow invokes the local helper with its installation
+token; never run that helper through the personal `gh` session. Reviewers
+remain absent unless explicitly requested.
 
 ## PR description
 

@@ -18,7 +18,7 @@ When the loaded profile declares a PR template, use it as the PR body shape.
 Retain every heading and fill each section with change-specific information or
 `Not applicable`; do not replace the template with a short generic summary.
 
-After creating the PR, invoke
-`core/issue-workflow/scripts/apply-pr-metadata.sh` with the profile's declared
-metadata. Do not manually substitute partial `gh pr edit` calls: the helper
-also verifies each configured field and must succeed before handoff.
+After creating the PR, dispatch the loaded profile's `apply-pr-metadata`
+publisher mode and wait for its verified result. The local helper belongs inside
+that publisher and its tests; do not use a personal `gh` session to mutate
+metadata. Emit a handoff if the mode is unavailable or verification fails.
