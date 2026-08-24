@@ -9,3 +9,8 @@ user can paste, including `@cody-workflow plan issue #42` for a read-only,
 test-first plan. Explain that skills are selected automatically from context and
 that a project profile is discovered from `.agent-review/*/PROFILE.md` when
 present. Do not review code, change files, publish, or run issue workflows.
+
+<!-- Invocation style note: Cody DR uses Codex agent-handle syntax
+     (e.g. @cody-workflow plan issue #42). Claudio DR's equivalent uses
+     Claude Code slash-command syntax (/claudio-dr:plan-implementation #42).
+     The difference is platform-driven and intentional — see docs/compatibility.md. -->
