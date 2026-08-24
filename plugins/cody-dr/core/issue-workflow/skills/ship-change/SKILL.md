@@ -19,6 +19,11 @@ Retain every heading and fill each section with change-specific information or
 `Not applicable`; do not replace the template with a short generic summary.
 
 After creating the PR, dispatch the loaded profile's `apply-pr-metadata`
-publisher mode and wait for its verified result. The local helper belongs inside
-that publisher and its tests; do not use a personal `gh` session to mutate
-metadata. Emit a handoff if the mode is unavailable or verification fails.
+publisher workflow via `gh workflow run`, passing every profile-declared
+metadata field as a workflow input. This step is mandatory when the profile
+declares any metadata fields; skip only when the profile declares none. Wait
+for the run to complete and verify the bot identity and all declared fields.
+Calling `apply-pr-metadata.sh` directly through a personal `gh` session is a
+contract violation — the workflow uses an installation token so actions appear
+as the bot, not the authenticated user. Emit a handoff if the mode is
+unavailable or verification fails.
