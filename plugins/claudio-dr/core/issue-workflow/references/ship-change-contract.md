@@ -19,13 +19,34 @@ Do not ship without confirmed passing quality gates.
 3. Push the branch and create the fully populated PR. The issue-execution
    request already authorizes these normal delivery actions; do not ask again.
 4. After creating the PR, dispatch the profile's `apply-pr-metadata` publisher
-   mode with the profile-owned metadata values. Wait for it to complete and
-   verify its configured App identity plus the base branch, labels, milestone,
-   assignees, reviewers, and Project item state. The publisher may use
-   `core/issue-workflow/scripts/apply-pr-metadata.sh` internally; an adapter
-   must never run that mutation helper through its authenticated personal `gh`
-   session. If the mode is unavailable or verification fails, report metadata
-   as not published and stop with a handoff.
+   workflow via `gh workflow run`. When the profile is loaded and declares any
+   metadata fields (labels, milestone, assignee, project, status), this step
+   is mandatory; skip it only when the profile declares no metadata fields at
+   all. The dispatch command takes the form:
+
+   ```sh
+   gh workflow run <workflow-file> \
+     --field pr_number=<PR number> \
+     --field base_branch=<base branch> \
+     --field labels_json='<JSON array>' \
+     --field assignees_json='<JSON array>' \
+     --field milestone_number=<number> \
+     --field project_owner=<owner> \
+     --field project_number=<number> \
+     --field project_status=<status>
+   ```
+
+   Pass every profile-declared metadata field as a workflow input; omit only
+   fields the profile does not declare. Wait for the run to complete and verify
+   its configured App identity plus the base branch, labels, milestone,
+   assignees, and Project item state. The workflow uses an installation token
+   internally and may invoke `core/issue-workflow/scripts/apply-pr-metadata.sh`
+   as an implementation detail. Calling that helper directly through a personal
+   `gh` session is a **contract violation**: metadata actions must appear as
+   the bot identity (`claudio-dr[bot]` or `cody-dr[bot]`), not as the
+   authenticated user. Never invoke that helper through a personal `gh` session;
+   if the mode is unavailable or verification fails, report metadata as not
+   published and stop with a handoff.
 5. If a required field cannot be applied or verified, stop and emit a handoff
    with the PR URL, field, and failed command or permission. Do not claim a PR
    was shipped with complete metadata when the helper fails.
