@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Labels recognized by this catalog. Update when a new label is added to the
+# repository so bin/check can validate that profile-referenced labels are known.
+readonly known_labels=(
+  "bug"
+  "enhancement"
+  "documentation"
+  "core"
+  "claude"
+  "codex"
+  "profile"
+  "test"
+  "docs"
+  "refactor"
+  "ci"
+  "duplicate"
+  "good first issue"
+  "help wanted"
+  "invalid"
+  "question"
+  "wontfix"
+  "accessibility"
+)
+
 readonly required_paths=(
   "README.md"
   "CHANGELOG.md"
@@ -581,14 +604,20 @@ fi
 # Validate that branch commits use one recognized adapter co-author identity.
 # The catalog is executable by both Cody DR and Claudio DR; mixing identities
 # within one branch would make its execution provenance ambiguous.
-branch_log="$(git log "$(git merge-base HEAD main)"..HEAD --format="%B" 2>/dev/null || true)"
-if [[ -n "$branch_log" ]]; then
-  branch_adapters="$(echo "$branch_log" | sed -nE 's/^Co-Authored-By: (cody-dr|claudio-dr)\[bot\] <.*>$/\1/p' | sort -u)"
-  if [[ "$(echo "$branch_adapters" | sed '/^$/d' | wc -l | tr -d ' ')" -gt 1 ]]; then
-    echo "trailer: branch commits mix Cody DR and Claudio DR identities" >&2
-    echo "  observed: $branch_adapters" >&2
-    exit 1
+# In shallow clones (e.g. CI with fetch-depth != 0) git merge-base may fail;
+# emit a warning and skip the check rather than producing false positives.
+if merge_base="$(git merge-base HEAD main 2>/dev/null)"; then
+  branch_log="$(git log "${merge_base}..HEAD" --format="%B")"
+  if [[ -n "$branch_log" ]]; then
+    branch_adapters="$(echo "$branch_log" | sed -nE 's/^Co-Authored-By: (cody-dr|claudio-dr)\[bot\] <.*>$/\1/p' | sort -u)"
+    if [[ "$(echo "$branch_adapters" | sed '/^$/d' | wc -l | tr -d ' ')" -gt 1 ]]; then
+      echo "trailer: branch commits mix Cody DR and Claudio DR identities" >&2
+      echo "  observed: $branch_adapters" >&2
+      exit 1
+    fi
   fi
+else
+  echo "warning: cannot resolve merge-base with main; trailer identity check skipped (shallow clone?)" >&2
 fi
 
 git diff --check
