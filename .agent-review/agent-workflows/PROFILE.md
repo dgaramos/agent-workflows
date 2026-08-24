@@ -17,3 +17,8 @@ unavailable or fails, an explicitly user-authorized authenticated personal
 account may apply the same metadata as a fallback. Verify every field and
 report that account as `personal fallback`; never represent it as Cody DR or
 Claudio DR.
+
+`Agent Workflows` #11 is a user-owned Project (`user.projectV2`), not an
+organization Project. Do not request organization-Projects permission for this
+operation; use the explicitly authorized personal fallback only for the
+user-owned Project step when the App cannot perform it.
