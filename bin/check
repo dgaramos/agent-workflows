@@ -305,6 +305,19 @@ for skill in "${adapter_review_skills[@]}"; do
   fi
 done
 
+# Every project-aware adapter skill must instruct the model to discover the target
+# profile autonomously. Without this instruction the model requires an explicit
+# profile argument and behaves asymmetrically across callers.
+readonly profile_discovery_ref="core/profile-discovery/references/profile-discovery-contract.md"
+for prefix in "${public_adapter_prefixes[@]}"; do
+  while IFS= read -r skill; do
+    if ! grep -qF "$profile_discovery_ref" "$skill"; then
+      echo "drift: $skill does not reference $profile_discovery_ref" >&2
+      exit 1
+    fi
+  done < <(find "$prefix/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | sort)
+done
+
 # Adapter handle-pr-findings SKILL.md files must reference the core findings contract.
 readonly adapter_findings_skills=(
   "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
