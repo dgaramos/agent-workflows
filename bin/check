@@ -562,7 +562,7 @@ readonly expected_trailer="Co-Authored-By: claudio-dr[bot] <claudio-dr[bot]@user
 
 branch_log="$(git log "$(git merge-base HEAD main)"..HEAD --format="%B" 2>/dev/null || true)"
 if [[ -n "$branch_log" ]]; then
-  wrong_trailers="$(echo "$branch_log" | grep -iE 'Co-Authored-By:.*-dr\[bot\]' | grep -iv "$expected_adapter" || true)"
+  wrong_trailers="$(echo "$branch_log" | grep -iE 'Co-Authored-By:.*-dr\[bot\]' | grep -ivF "$expected_adapter" || true)"
   if [[ -n "$wrong_trailers" ]]; then
     echo "trailer: branch commits carry a co-author trailer that does not match the configured adapter identity" >&2
     echo "  expected: $expected_trailer" >&2
