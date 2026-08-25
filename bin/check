@@ -115,6 +115,7 @@ readonly required_paths=(
   "plugins/claudio-dr/agents/claudio-helper.md"
   "plugins/claudio-dr/references/reviewer-identity.md"
   "docs/claudio-dr.md"
+  "docs/contributing-guide.md"
   "core/.gitkeep"
   "plugins/codex/.gitkeep"
   "plugins/claude/.gitkeep"
