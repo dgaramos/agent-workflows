@@ -36,50 +36,20 @@ jobs:
           find .github/scripts tests bin core -name '*.sh' -print0 \
             | xargs -0 -I{} bash -n {}
 
-  test-apply-pr-metadata:
-    name: test-apply-pr-metadata
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run test suite
+      - name: test_apply_pr_metadata
         run: bash tests/test_apply_pr_metadata.sh
-
-  test-discover-project-profile:
-    name: test-discover-project-profile
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run test suite
+      - name: test_discover_project_profile
         run: bash tests/test_discover_project_profile.sh
-
-  test-plugin-core-bundles:
-    name: test-plugin-core-bundles
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run test suite
+      - name: test_plugin_core_bundles
         run: bash tests/test_plugin_core_bundles.sh
-
-  test-publish-claudio-thread-action:
-    name: test-publish-claudio-thread-action
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run test suite
+      - name: test_publish_claudio_thread_action
         run: bash tests/test_publish_claudio_thread_action.sh
-
-  test-publish-cody-thread-action:
-    name: test-publish-cody-thread-action
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run test suite
+      - name: test_publish_cody_thread_action
         run: bash tests/test_publish_cody_thread_action.sh
-
-  test-publish-pr-metadata:
-    name: test-publish-pr-metadata
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run test suite
+      - name: test_publish_pr_metadata
         run: bash tests/test_publish_pr_metadata.sh
