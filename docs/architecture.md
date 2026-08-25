@@ -5,28 +5,13 @@
 The catalog is organized in three independent layers. Each layer has a single
 responsibility and a strict boundary — no layer reaches into the one above it.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                          PROFILES                               │
-│  Project-specific: architecture, commands, metadata, publishers │
-│  profiles/agent-workflows.md   profiles/example-project.md     │
-└────────────────────────┬────────────────────────────────────────┘
-                         │ loads
-┌────────────────────────▼────────────────────────────────────────┐
-│                          ADAPTERS                               │
-│  Platform invocation + reviewer identity, no portable content   │
-│  plugins/claudio-dr/   (Claude Code)                            │
-│  plugins/cody-dr/      (Codex)                                  │
-└────────────────────────┬────────────────────────────────────────┘
-                         │ references
-┌────────────────────────▼────────────────────────────────────────┐
-│                           CORE                                  │
-│  Portable, model-neutral contracts — single source of truth     │
-│  core/pr-review/          Review, re-review, reporting          │
-│  core/findings-handling/  Triage, fix, defer, reject            │
-│  core/issue-authoring/    Draft and publish issues              │
-│  core/issue-workflow/     start → implement → ship lifecycle    │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/agent-workflows.md · profiles/example-project.md"]
+    A["ADAPTERS\nPlatform invocation + reviewer identity — no portable content\nplugins/claudio-dr/ (Claude Code) · plugins/cody-dr/ (Codex)"]
+    C["CORE\nPortable, model-neutral contracts — single source of truth\ncore/pr-review/ · core/findings-handling/\ncore/issue-authoring/ · core/issue-workflow/"]
+    P -->|"loads"| A
+    A -->|"references"| C
 ```
 
 ## Layers in detail
@@ -61,18 +46,31 @@ marketplace runtimes install one plugin directory, not the catalog's sibling
 `core/` directory. The catalog `core/` remains the only editable source; CI
 rejects a bundled file that differs from it.
 
-```
-plugins/claudio-dr/
-  .claude-plugin/plugin.json    Plugin manifest for Claude Code
-  agents/claudio-reviewer.md    Reviewer agent — binds to review-pr skill
-  skills/
-    review-pr/SKILL.md          → references core/pr-review/references/review-contract.md
-    handle-pr-findings/SKILL.md → references core findings-handling contracts
-    author-issue/               (planned)
-    start-issue/SKILL.md        → references core/issue-workflow/skills/start-issue/SKILL.md
-    implement-issue/SKILL.md    → references core/issue-workflow/skills/implement-issue/SKILL.md
-    ship-change/SKILL.md        → references core/issue-workflow/skills/ship-change/SKILL.md
-    execute-issue/SKILL.md      → references core/issue-workflow/skills/execute-issue/SKILL.md
+```mermaid
+flowchart TD
+    M[".claude-plugin/plugin.json\nPlugin manifest for Claude Code"]
+    AG["agents/claudio-reviewer.md\nReviewer agent — binds to review-pr skill"]
+    SK["skills/"]
+    RPR["review-pr/SKILL.md"]
+    HPF["handle-pr-findings/SKILL.md"]
+    SI["start-issue/SKILL.md"]
+    II["implement-issue/SKILL.md"]
+    SC["ship-change/SKILL.md"]
+    EI["execute-issue/SKILL.md"]
+    CRP["core/pr-review/references/review-contract.md"]
+    CFH["core findings-handling contracts"]
+    CSI["core/issue-workflow/skills/start-issue/SKILL.md"]
+    CII["core/issue-workflow/skills/implement-issue/SKILL.md"]
+    CSC["core/issue-workflow/skills/ship-change/SKILL.md"]
+    CEI["core/issue-workflow/skills/execute-issue/SKILL.md"]
+
+    M & AG & SK --> RPR & HPF & SI & II & SC & EI
+    RPR -->|"references"| CRP
+    HPF -->|"references"| CFH
+    SI -->|"references"| CSI
+    II -->|"references"| CII
+    SC -->|"references"| CSC
+    EI -->|"references"| CEI
 ```
 
 `plugins/cody-dr/` mirrors this structure for Codex. Intentional platform
@@ -89,42 +87,33 @@ Consumer profiles are target-owned: they live in the consumer repository, not
 in this catalog. The catalog keeps only its self-profile and a neutral example
 that demonstrates the required shape without naming a target.
 
-```
-profiles/example-project.md
-  ├── Project identity (placeholder repository and branch)
-  ├── Required context (files to read before reviewing)
-  ├── Project boundaries (local ownership rules)
-  ├── Review checklist (project-specific additions to core)
-  ├── Lifecycle skill mapping (local entry points → portable skills)
-  ├── PR metadata (placeholder base branch and merge policy)
-  └── Publisher dispatch contract (supported modes, no credential values)
+```mermaid
+flowchart TD
+    EP["profiles/example-project.md"]
+    PI["Project identity\nplaceholder repository and branch"]
+    RC["Required context\nfiles to read before reviewing"]
+    PB["Project boundaries\nlocal ownership rules"]
+    RCH["Review checklist\nproject-specific additions to core"]
+    LSM["Lifecycle skill mapping\nlocal entry points → portable skills"]
+    PRM["PR metadata\nbase branch and merge policy"]
+    PDC["Publisher dispatch contract\nsupported modes — no credential values"]
+
+    EP --> PI & RC & PB & RCH & LSM & PRM & PDC
 ```
 
 ## Data flow
 
-```
-User invokes skill
-      │
-      ▼
-Adapter SKILL.md
-  sets identity ("Claudio DR")
-  references core contract path
-      │
-      ▼
-Core contract
-  defines behavior (evidence, triage, publication boundary)
-      │
-      ▼
-Profile (if loaded)
-  adds project rules (architecture, quality command, publisher)
-      │
-      ▼
-Output
-  formatted finding / draft / summary
-      │
-      ▼  (only with explicit user authorization + profile publisher)
-Publisher
-  generates installation token → posts as reviewer bot → verifies authorship
+```mermaid
+flowchart TD
+    U["User invokes skill"]
+    AD["Adapter SKILL.md\nsets identity · references core contract path"]
+    CO["Core contract\ndefines behavior: evidence, triage, publication boundary"]
+    PR["Profile (if loaded)\nadds project rules: architecture, quality command, publisher"]
+    OUT["Output\nformatted finding / draft / summary"]
+    PUB["Publisher\ngenerates installation token\nposts as reviewer bot · verifies authorship"]
+
+    U --> AD --> CO --> PR --> OUT
+    OUT -->|"only with explicit user authorization\n+ profile publisher"| PUB
 ```
 
 ## Publication model

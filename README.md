@@ -37,29 +37,13 @@ Design principles:
 The catalog has three independent layers. Each layer has a single
 responsibility. No layer reaches into the one above it.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                          PROFILES                               │
-│  Project-specific: architecture, commands, metadata, publishers │
-│  profiles/agent-workflows.md   profiles/example-project.md     │
-└────────────────────────┬────────────────────────────────────────┘
-                         │ loaded by
-┌────────────────────────▼────────────────────────────────────────┐
-│                          ADAPTERS                               │
-│  Platform invocation + reviewer identity, no portable content   │
-│  plugins/claudio-dr/   (Claude Code)                            │
-│  plugins/cody-dr/      (Codex)                                  │
-└────────────────────────┬────────────────────────────────────────┘
-                         │ references
-┌────────────────────────▼────────────────────────────────────────┐
-│                           CORE                                  │
-│  Portable, model-neutral contracts — single source of truth     │
-│  core/pr-review/          Review, re-review, reporting          │
-│  core/findings-handling/  Triage, fix, defer, reject            │
-│  core/issue-authoring/    Draft and publish issues              │
-│  core/issue-workflow/     start → plan → implement → ship       │
-│  core/profile-discovery/  Profile location and loading rules    │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/agent-workflows.md · profiles/example-project.md"]
+    A["ADAPTERS\nPlatform invocation + reviewer identity — no portable content\nplugins/claudio-dr/ (Claude Code) · plugins/cody-dr/ (Codex)"]
+    C["CORE\nPortable, model-neutral contracts — single source of truth\ncore/pr-review/ · core/findings-handling/\ncore/issue-authoring/ · core/issue-workflow/\ncore/profile-discovery/"]
+    P -->|"loaded by"| A
+    A -->|"references"| C
 ```
 
 Read [docs/architecture.md](docs/architecture.md) for the full layer diagram
@@ -69,29 +53,17 @@ and data flow.
 
 A typical issue-to-PR cycle with Claudio DR looks like this:
 
-1. **Author the issue** — Claudio DR drafts a structured GitHub issue from a
-   brief description, filling in context, acceptance criteria, and metadata.
-   Publication requires explicit authorization.
+```mermaid
+flowchart TD
+    I["author-issue\nDraft structured GitHub issue\nPublication requires explicit authorization"]
+    S["start-issue\nLoad profile · check dependencies\nCreate working branch"]
+    PL["plan-implementation\nRead-only test-first plan\nprinted before any file is touched"]
+    IM["implement-issue\nMinimal in-scope changes\nQuality gate after each unit"]
+    SH["ship-change\nFinal quality gate · push branch\nOpen fully-populated PR"]
+    RV["review-pr\nPost findings as COMMENT\nReply / resolve threads\n(separately authorized)"]
 
-2. **Start the issue** — Claudio DR reads the project profile (from
-   `.agent-review/*/PROFILE.md` in the target repo), checks dependencies, and
-   creates the working branch with the correct naming convention.
-
-3. **Plan before editing** — A read-only test-first plan is printed before any
-   file is touched. Each executable change maps to Red → Green → Refactor
-   coverage; non-executable work names its strongest structural validation.
-
-4. **Implement** — Claudio DR makes minimal in-scope changes and runs the
-   project's quality command (`bin/check`, `pytest`, or whatever the profile
-   declares) after each logical unit.
-
-5. **Ship** — After a final quality gate pass, Claudio DR pushes the branch and
-   opens a fully populated pull request using the profile's PR template,
-   labels, milestone, and metadata publisher workflow.
-
-6. **Review** — Separately authorized, Claudio DR or Cody DR reviews the PR,
-   posts findings as a `COMMENT` (never `REQUEST_CHANGES`), and optionally
-   replies to or resolves threads.
+    I --> S --> PL --> IM --> SH --> RV
+```
 
 The same lifecycle runs identically on Codex with Cody DR — same contracts,
 same quality gate, same output format, different platform invocation.
