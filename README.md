@@ -84,8 +84,21 @@ same quality gate, same output format, different platform invocation.
 ## Installation
 
 This repo ships a `.envrc` that adds `bin/` to your `PATH` automatically via
-[direnv](https://direnv.net/). After running `direnv allow` once inside the
-repo, the `agents` command is available without any prefix:
+[direnv](https://direnv.net/). If you don't have direnv yet:
+
+```bash
+# macOS
+brew install direnv
+
+# Debian / Ubuntu
+apt install direnv
+
+# Then hook it into your shell — add to ~/.zshrc or ~/.bashrc:
+eval "$(direnv hook zsh)"   # or bash
+```
+
+After that, run `direnv allow` once inside the repo and the `agents` command
+is available without any prefix:
 
 ```bash
 direnv allow   # one-time, after cloning
