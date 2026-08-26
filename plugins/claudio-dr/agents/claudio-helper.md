@@ -14,9 +14,6 @@ entry points, with a short natural-language prompt the user can paste:
   start-issue → plan-implementation → implement-issue → ship-change lifecycle.
   Use when an issue already exists and you want Claudio DR to plan, implement,
   and ship it.
-- `claudio-workflow` — orchestrator that combines authoring and execution when
-  both are requested in one invocation. Delegates to `claudio-author` then
-  `claudio-executor`; no logic is duplicated.
 - `claudio-reviewer` — submit a PR review as a plain `COMMENT` event; never
   approves or requests changes.
 - `claudio-findings` — triage and handle PR findings by presenting each finding
