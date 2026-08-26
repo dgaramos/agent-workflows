@@ -50,3 +50,5 @@ if run_action THREAD_ACTION=reply THREAD_ID=thread-mismatch BODY='Must not post.
   exit 1
 fi
 ! tail -n 1 "$temporary_directory/gh.log" | grep -qF 'addPullRequestReviewThreadReply'
+
+echo "cody thread action tests passed"
