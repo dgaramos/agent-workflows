@@ -1,7 +1,8 @@
 ---
 name: claudio-workflow
-description: Global Claudio DR entrypoint for starting, planning, implementing, shipping, or executing an explicit issue in the current repository.
+description: Claudio DR orchestrator that delegates to claudio-author for issue authoring and to claudio-executor for issue execution when both are requested in one invocation.
 skills:
+  - author-issue
   - start-issue
   - plan-implementation
   - implement-issue
@@ -15,3 +16,8 @@ repository profile according to
 sole discovered profile when present and then follow the selected preloaded
 skill. With no profile, use generic portable rules; never invent
 project-specific settings. Stop when discovery is ambiguous.
+
+When the request combines issue authoring with execution, run the `author-issue`
+skill first, then the `execute-issue` skill. Do not duplicate logic from either
+skill. For authoring alone, prefer `claudio-author`. For execution alone, prefer
+`claudio-executor`.
