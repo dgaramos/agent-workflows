@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# bin/update — pull the latest catalog and re-run bin/install for every active install
+#
+# Modes:
+#   --global              git pull, then re-run bin/install --global
+#   --repo [--profile N]  git pull, then re-run bin/install --repo [--profile N]
+#   --all                 git pull, then re-run both --global and --repo (if .claude/ exists)
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat >&2 <<EOF
+Usage: bin/update --global
+       bin/update --repo [--profile <name>]
+       bin/update --all
+
+  --global          Pull the catalog and update the global install (~/.claude/ and Codex config).
+  --repo            Pull the catalog and update the repo-local install (.claude/ in CWD).
+                    Combine with --profile <name> to re-apply a named profile.
+  --all             Pull the catalog and update both global and repo-local installs.
+                    --repo is skipped when .claude/ does not exist in the current directory.
+EOF
+  exit 1
+}
+
+pull_catalog() {
+  echo "Pulling latest catalog from origin..."
+  git -C "${REPO_DIR}" pull --ff-only
+  echo ""
+}
+
+if [[ $# -eq 0 ]]; then
+  usage
+fi
+
+MODE=""
+PROFILE_NAME=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --global) MODE="global"; shift ;;
+    --repo)   MODE="repo";   shift ;;
+    --all)    MODE="all";    shift ;;
+    --profile)
+      if [[ $# -lt 2 || -z "$2" ]]; then
+        echo "--profile requires a name argument" >&2
+        exit 1
+      fi
+      PROFILE_NAME="$2"
+      shift 2
+      ;;
+    -h|--help) usage ;;
+    *) echo "Unknown argument: $1" >&2; usage ;;
+  esac
+done
+
+[[ -n "${MODE}" ]] || usage
+
+if [[ "${PROFILE_NAME}" != "" && "${MODE}" == "global" ]]; then
+  echo "--profile is not valid with --global" >&2
+  exit 1
+fi
+
+pull_catalog
+
+case "${MODE}" in
+  global)
+    bash "${REPO_DIR}/bin/install" --global
+    ;;
+  repo)
+    if [[ -n "${PROFILE_NAME}" ]]; then
+      bash "${REPO_DIR}/bin/install" --repo --profile "${PROFILE_NAME}"
+    else
+      bash "${REPO_DIR}/bin/install" --repo
+    fi
+    ;;
+  all)
+    bash "${REPO_DIR}/bin/install" --global
+    echo ""
+    if [[ -d ".claude" ]]; then
+      if [[ -n "${PROFILE_NAME}" ]]; then
+        bash "${REPO_DIR}/bin/install" --repo --profile "${PROFILE_NAME}"
+      else
+        bash "${REPO_DIR}/bin/install" --repo
+      fi
+    else
+      echo "No .claude/ found in $(pwd) — skipping repo update."
+    fi
+    ;;
+esac
