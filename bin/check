@@ -97,7 +97,6 @@ readonly required_paths=(
   "plugins/cody-dr/skills/ship-change/SKILL.md"
   "plugins/cody-dr/skills/execute-issue/SKILL.md"
   "plugins/cody-dr/agents/cody-reviewer.md"
-  "plugins/cody-dr/agents/cody-workflow.md"
   "plugins/cody-dr/agents/cody-findings.md"
   "plugins/cody-dr/agents/cody-helper.md"
   "plugins/cody-dr/references/reviewer-identity.md"
