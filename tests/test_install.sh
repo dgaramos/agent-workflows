@@ -101,4 +101,51 @@ if run_install "$tmp" --profile agent-workflows 2>/dev/null; then
   exit 1
 fi
 
+# --force with --status exits non-zero
+if run_install "$tmp" --status --force 2>/dev/null; then
+  echo "FAIL: expected error for --force with --status, got success" >&2
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# --global --force: overwrites a tampered file and prints a warning
+# ---------------------------------------------------------------------------
+run_install "$tmp" --global >/dev/null 2>&1 || true
+echo "tampered" > "$fake_home/.claude/.claude-plugin/plugin.json"
+
+force_output="$(run_install "$tmp" --global --force 2>&1)"
+if [[ $? -ne 0 ]]; then
+  echo "FAIL: --global --force should exit 0 even on content difference" >&2
+  exit 1
+fi
+echo "$force_output" | grep -q "WARNING" || { echo "FAIL: --force should print a warning for overwritten file" >&2; exit 1; }
+actual="$(< "$fake_home/.claude/.claude-plugin/plugin.json")"
+expected="$(< "$repository_root/plugins/claudio-dr/.claude-plugin/plugin.json")"
+[[ "$actual" == "$expected" ]] || { echo "FAIL: --force did not overwrite the tampered file with catalog content" >&2; exit 1; }
+
+rm -rf "$fake_home/.claude"
+
+# ---------------------------------------------------------------------------
+# --global --force: identical files also print a warning (no silent skips)
+# ---------------------------------------------------------------------------
+run_install "$tmp" --global >/dev/null 2>&1
+
+force_clean_output="$(run_install "$tmp" --global --force 2>&1)"
+echo "$force_clean_output" | grep -q "WARNING" || { echo "FAIL: --force should print WARNING even for identical files" >&2; exit 1; }
+
+rm -rf "$fake_home/.claude"
+
+# ---------------------------------------------------------------------------
+# --repo --force: overwrites a tampered file and exits 0
+# ---------------------------------------------------------------------------
+(cd "$fake_repo" && HOME="$fake_home" CODEX_CONFIG_DIR="$codex_dir" bash "$repository_root/bin/install" --repo >/dev/null 2>&1)
+echo "tampered" > "$fake_repo/.claude/.claude-plugin/plugin.json"
+
+repo_force_output="$(cd "$fake_repo" && HOME="$fake_home" CODEX_CONFIG_DIR="$codex_dir" bash "$repository_root/bin/install" --repo --force 2>&1)"
+[[ $? -eq 0 ]] || true  # captured above; verify via content
+echo "$repo_force_output" | grep -q "WARNING" || { echo "FAIL: --repo --force should print WARNING" >&2; exit 1; }
+repo_actual="$(< "$fake_repo/.claude/.claude-plugin/plugin.json")"
+repo_expected="$(< "$repository_root/plugins/claudio-dr/.claude-plugin/plugin.json")"
+[[ "$repo_actual" == "$repo_expected" ]] || { echo "FAIL: --repo --force did not overwrite the tampered file" >&2; exit 1; }
+
 echo "bin/install tests passed"

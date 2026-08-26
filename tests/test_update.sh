@@ -100,4 +100,29 @@ if run_update --global --profile agent-workflows 2>/dev/null; then
   exit 1
 fi
 
+# ---------------------------------------------------------------------------
+# --global --force: forwards --force to bin/install and overwrites conflicts
+# ---------------------------------------------------------------------------
+rm -rf "$fake_home/.claude" "$codex_dir"
+run_update --global >/dev/null 2>&1
+
+echo "tampered" > "$fake_home/.claude/.claude-plugin/plugin.json"
+force_output="$(run_update --global --force 2>&1)"
+echo "$force_output" | grep -q "WARNING" || { echo "FAIL: --global --force should print WARNING for overwritten file" >&2; exit 1; }
+actual="$(< "$fake_home/.claude/.claude-plugin/plugin.json")"
+expected="$(< "$repository_root/plugins/claudio-dr/.claude-plugin/plugin.json")"
+[[ "$actual" == "$expected" ]] || { echo "FAIL: --global --force did not overwrite the tampered file" >&2; exit 1; }
+
+# ---------------------------------------------------------------------------
+# --repo --force: forwards --force to bin/install
+# ---------------------------------------------------------------------------
+rm -rf "$fake_repo/.claude"
+(cd "$fake_repo" && run_update --repo >/dev/null 2>&1)
+echo "tampered" > "$fake_repo/.claude/.claude-plugin/plugin.json"
+repo_force_output="$(cd "$fake_repo" && run_update --repo --force 2>&1)"
+echo "$repo_force_output" | grep -q "WARNING" || { echo "FAIL: --repo --force should print WARNING" >&2; exit 1; }
+repo_actual="$(< "$fake_repo/.claude/.claude-plugin/plugin.json")"
+repo_expected="$(< "$repository_root/plugins/claudio-dr/.claude-plugin/plugin.json")"
+[[ "$repo_actual" == "$repo_expected" ]] || { echo "FAIL: --repo --force did not overwrite the tampered file" >&2; exit 1; }
+
 echo "bin/update tests passed"
