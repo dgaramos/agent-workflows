@@ -99,21 +99,26 @@ install_file() {
     # Replace existing symlink without complaint.
     rm "${dest}"
   elif [[ -e "${dest}" ]]; then
+    if cmp -s "${src}" "${dest}"; then
+      if [[ "${FORCE:-0}" == "1" ]]; then
+        # Force but identical — skip silently, nothing to overwrite.
+        echo "  unchanged  ${label}  (force, already current)"
+      else
+        echo "  unchanged  ${label}"
+      fi
+      return 0
+    fi
     local dest_ver
     dest_ver="$(installed_version "$(dirname "${dest}")/plugin.json" 2>/dev/null || echo "unknown")"
     if [[ "${FORCE:-0}" == "1" ]]; then
-      # Force mode: overwrite unconditionally, print a warning.
+      # Force mode: content differs, overwrite and warn.
       echo "  WARNING   overwriting ${label}  (local: v${dest_ver} → catalog: v${src_ver})"
-    elif ! cmp -s "${src}" "${dest}"; then
+    else
       # Real file exists and differs — conflict without --force.
       echo "  CONFLICT  ${label}" >&2
       echo "    source  : ${src}  (v${src_ver})" >&2
       echo "    existing: ${dest}  (v${dest_ver})" >&2
       return 1
-    else
-      # Files are identical — nothing to do.
-      echo "  unchanged  ${label}"
-      return 0
     fi
   fi
 

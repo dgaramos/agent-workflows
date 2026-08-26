@@ -126,12 +126,15 @@ expected="$(< "$repository_root/plugins/claudio-dr/.claude-plugin/plugin.json")"
 rm -rf "$fake_home/.claude"
 
 # ---------------------------------------------------------------------------
-# --global --force: identical files also print a warning (no silent skips)
+# --global --force: identical files are skipped silently (no WARNING, no error)
 # ---------------------------------------------------------------------------
 run_install "$tmp" --global >/dev/null 2>&1
 
 force_clean_output="$(run_install "$tmp" --global --force 2>&1)"
-echo "$force_clean_output" | grep -q "WARNING" || { echo "FAIL: --force should print WARNING even for identical files" >&2; exit 1; }
+echo "$force_clean_output" | grep -q "already current" || { echo "FAIL: --force on identical files should print 'already current'" >&2; exit 1; }
+if echo "$force_clean_output" | grep -q "^  WARNING"; then
+  echo "FAIL: --force should not print WARNING for identical files" >&2; exit 1
+fi
 
 rm -rf "$fake_home/.claude"
 
