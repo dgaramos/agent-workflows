@@ -44,3 +44,11 @@ grep -qF 'addPullRequestReviewThreadReply' "$temporary_directory/gh.log"
 
 run_action THREAD_ACTION=resolve
 grep -qF 'resolveReviewThread' "$temporary_directory/gh.log"
+
+if run_action THREAD_ACTION=reply THREAD_ID=thread-mismatch BODY='Must not post.'; then
+  echo "reply unexpectedly accepted a thread outside the target PR" >&2
+  exit 1
+fi
+! tail -n 1 "$temporary_directory/gh.log" | grep -qF 'addPullRequestReviewThreadReply'
+
+echo "claudio thread action tests passed"
