@@ -1,11 +1,58 @@
 # Portable issue authoring contract
 
+## Mode detection
+
+Before drafting, classify the input into one of four modes. The agent may
+override classification with an explicit prefix (e.g. `bug: …`, `feature: …`);
+otherwise auto-detect from the input content:
+
+| Mode | Detection signal |
+|---|---|
+| `bug` | stacktrace, error message, "broken", "doesn't work", wrong behavior |
+| `feature` | new capability, user need, "it would be nice if", "add support for" |
+| `chore` | tech debt, refactor, dependency update, cleanup, "remove", "migrate" |
+| `spike` | open-ended uncertainty, research question, "how should we", "explore" |
+
+### Bug mode
+
+Before drafting, investigate the codebase:
+
+1. Read every file referenced in the stacktrace or error message.
+2. Grep for the error site and any relevant call sites.
+3. Check `git log` for recent changes in the affected area.
+4. Document: likely cause, reproduction steps, and impact.
+
+Include these findings in the draft as an annotated stack and a root cause
+hypothesis. Do not ask questions — investigate first.
+
+### Feature mode
+
+Run a short discovery pass before drafting:
+
+- When the input is vague (no clear problem, no affected users, no alternatives
+  mentioned): ask at most 3 focused questions covering problem, affected users,
+  and alternatives considered. Wait for answers before drafting.
+- When the input is already detailed (problem is clear, scope is defined): skip
+  questions and draft immediately.
+
+### Chore and spike modes
+
+Before drafting, assess scope and risk:
+
+- For `chore`: identify affected files, estimate change surface, and flag any
+  breaking-change risk.
+- For `spike`: define the question to answer and the done criterion explicitly
+  in the draft.
+
+No questions are required; draft after the assessment.
+
 ## Draft-first behavior
 
-Always produce a complete draft before asking anything. Ask only for decisions
-that are materially missing and cannot be inferred from the problem statement or
-the loaded profile. Do not ask for labels, assignees, milestones, or Projects —
-those are profile-owned. Do not publish until the user explicitly authorizes it.
+Always produce a complete draft before asking anything except for the feature
+mode vague-input case above. Ask only for decisions that are materially missing
+and cannot be inferred from the problem statement or the loaded profile. Do not
+ask for labels, assignees, milestones, or Projects — those are profile-owned.
+Do not publish until the user explicitly authorizes it.
 
 ## Issue structure
 
