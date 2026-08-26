@@ -9,6 +9,11 @@
 # On conflict between an existing file and the source, the script prints a
 # warning naming both versions and exits non-zero without overwriting.
 # Re-running after a clean state is safe; existing symlinks are replaced.
+#
+# Use --force to skip conflict checking and overwrite all files from the
+# catalog source. A warning is printed for every overwritten file showing
+# both versions. This is the canonical way to resolve conflicts; use:
+#   agents update --global --force
 
 set -euo pipefail
 
@@ -16,8 +21,8 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 usage() {
   cat >&2 <<EOF
-Usage: bin/install --global
-       bin/install --repo [--profile <name>]
+Usage: bin/install --global [--force]
+       bin/install --repo [--profile <name>] [--force]
        bin/install --status
 
   --global          Install claudio-dr plugin to ~/.claude/ and cody-dr plugin
@@ -27,6 +32,10 @@ Usage: bin/install --global
                     overrides from profiles/<name>.md.
   --status          Show what is currently installed globally and in the current
                     repo's .claude/ directory.
+  --force           Skip conflict checking and overwrite all files from the
+                    catalog source, printing a warning for each overwritten
+                    file. Use 'agents update --global --force' to resolve
+                    conflicts during an update without manual cp commands.
 EOF
   exit 1
 }
@@ -72,7 +81,7 @@ installed_version() {
 
 # ---------------------------------------------------------------------------
 # Copy helper — copy a single file, refusing to overwrite a non-symlink target
-# whose content differs from the source.
+# whose content differs from the source (unless FORCE=1).
 # ---------------------------------------------------------------------------
 
 install_file() {
@@ -80,6 +89,7 @@ install_file() {
   local dest="$2"
   local label="$3"
   local src_ver="$4"
+  # FORCE is a global set by mode_global / mode_repo from the --force flag.
 
   local dest_dir
   dest_dir="$(dirname "${dest}")"
@@ -89,18 +99,22 @@ install_file() {
     # Replace existing symlink without complaint.
     rm "${dest}"
   elif [[ -e "${dest}" ]]; then
-    # Real file exists — check for conflict.
-    if ! cmp -s "${src}" "${dest}"; then
-      local dest_ver
-      dest_ver="$(installed_version "$(dirname "${dest}")/plugin.json" 2>/dev/null || echo "unknown")"
+    local dest_ver
+    dest_ver="$(installed_version "$(dirname "${dest}")/plugin.json" 2>/dev/null || echo "unknown")"
+    if [[ "${FORCE:-0}" == "1" ]]; then
+      # Force mode: overwrite unconditionally, print a warning.
+      echo "  WARNING   overwriting ${label}  (local: v${dest_ver} → catalog: v${src_ver})"
+    elif ! cmp -s "${src}" "${dest}"; then
+      # Real file exists and differs — conflict without --force.
       echo "  CONFLICT  ${label}" >&2
       echo "    source  : ${src}  (v${src_ver})" >&2
       echo "    existing: ${dest}  (v${dest_ver})" >&2
       return 1
+    else
+      # Files are identical — nothing to do.
+      echo "  unchanged  ${label}"
+      return 0
     fi
-    # Files are identical — nothing to do.
-    echo "  unchanged  ${label}"
-    return 0
   fi
 
   cp "${src}" "${dest}"
@@ -144,6 +158,11 @@ mode_global() {
   local agents_dest="${HOME}/.local/bin/agents"
 
   local conflicts=0
+
+  if [[ "${FORCE:-0}" == "1" ]]; then
+    echo "WARNING: --force is set; all conflicting files will be overwritten without error."
+    echo ""
+  fi
 
   echo "Installing claudio-dr v${claudio_ver}"
   echo "  from: ${claudio_src}"
@@ -195,6 +214,11 @@ mode_repo() {
   claudio_ver="$(claudio_version)"
 
   local conflicts=0
+
+  if [[ "${FORCE:-0}" == "1" ]]; then
+    echo "WARNING: --force is set; all conflicting files will be overwritten without error."
+    echo ""
+  fi
 
   echo "Installing claudio-dr v${claudio_ver} (repo-local)"
   echo "  from: ${claudio_src}"
@@ -276,6 +300,7 @@ fi
 
 MODE=""
 PROFILE_NAME=""
+FORCE=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -299,6 +324,10 @@ while [[ $# -gt 0 ]]; do
       MODE="status"
       shift
       ;;
+    --force)
+      FORCE=1
+      shift
+      ;;
     -h|--help)
       usage
       ;;
@@ -317,6 +346,13 @@ if [[ "${PROFILE_NAME}" != "" && "${MODE}" != "repo" ]]; then
   echo "--profile is only valid with --repo" >&2
   exit 1
 fi
+
+if [[ "${FORCE}" == "1" && "${MODE}" == "status" ]]; then
+  echo "--force is not valid with --status" >&2
+  exit 1
+fi
+
+export FORCE
 
 case "${MODE}" in
   global) mode_global ;;

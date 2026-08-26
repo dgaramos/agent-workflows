@@ -5,6 +5,10 @@
 #   --global              git pull, then re-run bin/install --global
 #   --repo [--profile N]  git pull, then re-run bin/install --repo [--profile N]
 #   --all                 git pull, then re-run both --global and --repo (if .claude/ exists)
+#
+# Use --force to skip conflict checking during the install step. This is the
+# canonical way to resolve conflicts:
+#   agents update --global --force
 
 set -euo pipefail
 
@@ -12,15 +16,18 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 usage() {
   cat >&2 <<EOF
-Usage: bin/update --global
-       bin/update --repo [--profile <name>]
-       bin/update --all
+Usage: bin/update --global [--force]
+       bin/update --repo [--profile <name>] [--force]
+       bin/update --all [--force]
 
   --global          Pull the catalog and update the global install (~/.claude/ and Codex config).
   --repo            Pull the catalog and update the repo-local install (.claude/ in CWD).
                     Combine with --profile <name> to re-apply a named profile.
   --all             Pull the catalog and update both global and repo-local installs.
                     --repo is skipped when .claude/ does not exist in the current directory.
+  --force           Forward --force to bin/install, skipping conflict checking and
+                    overwriting all files from the catalog source. Use this as the
+                    canonical resolution path for conflicts: agents update --global --force
 EOF
   exit 1
 }
@@ -37,12 +44,14 @@ fi
 
 MODE=""
 PROFILE_NAME=""
+FORCE_FLAG=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --global) MODE="global"; shift ;;
     --repo)   MODE="repo";   shift ;;
     --all)    MODE="all";    shift ;;
+    --force)  FORCE_FLAG="--force"; shift ;;
     --profile)
       if [[ $# -lt 2 || -z "$2" ]]; then
         echo "--profile requires a name argument" >&2
@@ -67,23 +76,23 @@ pull_catalog
 
 case "${MODE}" in
   global)
-    bash "${REPO_DIR}/bin/install" --global
+    bash "${REPO_DIR}/bin/install" --global ${FORCE_FLAG}
     ;;
   repo)
     if [[ -n "${PROFILE_NAME}" ]]; then
-      bash "${REPO_DIR}/bin/install" --repo --profile "${PROFILE_NAME}"
+      bash "${REPO_DIR}/bin/install" --repo --profile "${PROFILE_NAME}" ${FORCE_FLAG}
     else
-      bash "${REPO_DIR}/bin/install" --repo
+      bash "${REPO_DIR}/bin/install" --repo ${FORCE_FLAG}
     fi
     ;;
   all)
-    bash "${REPO_DIR}/bin/install" --global
+    bash "${REPO_DIR}/bin/install" --global ${FORCE_FLAG}
     echo ""
     if [[ -d ".claude" ]]; then
       if [[ -n "${PROFILE_NAME}" ]]; then
-        bash "${REPO_DIR}/bin/install" --repo --profile "${PROFILE_NAME}"
+        bash "${REPO_DIR}/bin/install" --repo --profile "${PROFILE_NAME}" ${FORCE_FLAG}
       else
-        bash "${REPO_DIR}/bin/install" --repo
+        bash "${REPO_DIR}/bin/install" --repo ${FORCE_FLAG}
       fi
     else
       echo "No .claude/ found in $(pwd) — skipping repo update."
