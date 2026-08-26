@@ -83,31 +83,31 @@ same quality gate, same output format, different platform invocation.
 
 ## Installation
 
-This repo ships a `.envrc` that adds `bin/` to your `PATH` automatically via
-[direnv](https://direnv.net/). If you don't have direnv yet:
+### Bootstrap (first-time setup)
+
+Clone the repo and run the installer directly from the catalog:
 
 ```bash
-# macOS
-brew install direnv
-
-# Debian / Ubuntu
-apt install direnv
-
-# Then hook it into your shell — add to ~/.zshrc or ~/.bashrc:
-eval "$(direnv hook zsh)"   # or bash
+git clone https://github.com/dgaramos/agent-workflows.git ~/agent-workflows
+~/agent-workflows/bin/install --global
 ```
 
-After that, run `direnv allow` once inside the repo and the `agents` command
-is available without any prefix:
+`bin/install --global` installs:
+
+- claudio-dr plugin to `~/.claude/`
+- cody-dr plugin to `~/.codex/`
+- `agents` CLI to `~/.local/bin/agents`
+
+After this, the `agents` command is available system-wide — no direnv or
+catalog directory in `PATH` required. Ensure `~/.local/bin` is in your `PATH`
+(it usually is on macOS and most Linux distributions).
+
+### Using the agents entrypoint
+
+Once installed, use `agents` for all operations from any directory:
 
 ```bash
-direnv allow   # one-time, after cloning
-```
-
-Then use the `agents` entrypoint for all install and update operations:
-
-```bash
-agents install --global              # install claudio-dr and cody-dr globally
+agents install --global              # install claudio-dr, cody-dr, and agents CLI globally
 agents install --repo                # install claudio-dr into the current repo
 agents install --repo --profile <name>  # with a project-specific profile
 agents status                        # show installed versions and locations
@@ -118,6 +118,12 @@ agents update --all                  # pull and update both installs
 
 The install scripts detect conflicts and never silently overwrite an existing
 file whose content differs from the source.
+
+### direnv (optional, for catalog development)
+
+This repo ships a `.envrc` that adds `bin/` to your `PATH` automatically via
+[direnv](https://direnv.net/), which is useful when working on the catalog
+itself. If you have direnv installed, run `direnv allow` once after cloning.
 
 ### Claude Code (Claudio DR)
 

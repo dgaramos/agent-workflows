@@ -141,6 +141,9 @@ mode_global() {
   local codex_config="${CODEX_CONFIG_DIR:-${HOME}/.codex}"
   local cody_dest="${codex_config}/plugins/cache/cody-dr/${cody_ver}"
 
+  local agents_src="${REPO_DIR}/bin/agents"
+  local agents_dest="${HOME}/.local/bin/agents"
+
   local conflicts=0
 
   echo "Installing claudio-dr v${claudio_ver}"
@@ -155,6 +158,16 @@ mode_global() {
   echo "  to  : ${cody_dest}"
   echo ""
   install_plugin_dir "${cody_src}" "${cody_dest}" "${cody_ver}" || conflicts=$((conflicts + 1))
+
+  echo ""
+  echo "Installing agents CLI"
+  echo "  from: ${agents_src}"
+  echo "  to  : ${agents_dest}"
+  echo ""
+  install_file "${agents_src}" "${agents_dest}" "agents" "${claudio_ver}" || conflicts=$((conflicts + 1))
+  if [[ -f "${agents_dest}" ]]; then
+    chmod +x "${agents_dest}"
+  fi
 
   echo ""
   if [[ "${conflicts}" -gt 0 ]]; then
@@ -234,9 +247,18 @@ mode_status() {
   echo "  claudio-dr  v${catalog_claudio_ver}"
   echo "  cody-dr     v${catalog_cody_ver}"
   echo ""
+  local agents_dest="${HOME}/.local/bin/agents"
+  local agents_status
+  if [[ -f "${agents_dest}" ]]; then
+    agents_status="installed"
+  else
+    agents_status="not installed"
+  fi
+
   echo "Global:"
   echo "  claudio-dr  $(installed_version "${global_claudio_manifest}")  (${HOME}/.claude/)"
   echo "  cody-dr     $(installed_version "${global_cody_manifest}")  (${codex_config}/plugins/cache/cody-dr/${catalog_cody_ver}/)"
+  echo "  agents      ${agents_status}  (${agents_dest})"
   echo ""
   echo "Repo (${repo_root}):"
   echo "  claudio-dr  $(installed_version "${local_claudio_manifest}")  (.claude/)"
