@@ -175,7 +175,7 @@ mode_global() {
     exit 1
   fi
   echo "Global install complete."
-  echo "Run 'git pull' in ${REPO_DIR} and re-run bin/install --global to update."
+  echo "To update in the future, run: agents update --global"
 }
 
 # ---------------------------------------------------------------------------
