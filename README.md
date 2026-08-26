@@ -83,33 +83,28 @@ same quality gate, same output format, different platform invocation.
 
 ## Installation
 
-Use `bin/install` to install the plugins from this catalog onto a machine or
-into a specific repository. The script detects conflicts and never silently
-overwrites an existing file whose content differs from the source.
+This repo ships a `.envrc` that adds `bin/` to your `PATH` automatically via
+[direnv](https://direnv.net/). After running `direnv allow` once inside the
+repo, the `agents` command is available without any prefix:
 
 ```bash
-# Install claudio-dr to ~/.claude/ and cody-dr to ~/.codex/ (or $CODEX_CONFIG_DIR)
-bin/install --global
-
-# Install claudio-dr into .claude/ inside the current repo
-bin/install --repo
-
-# Install with a project-specific profile
-bin/install --repo --profile <name>
-
-# Show what is currently installed and where it came from
-bin/install --status
+direnv allow   # one-time, after cloning
 ```
 
-To update an existing install after pulling new catalog changes, use
-`bin/update`. It pulls the catalog with `git pull --ff-only` and then
-re-runs the appropriate `bin/install` mode:
+Then use the `agents` entrypoint for all install and update operations:
 
 ```bash
-bin/update --global                      # update global install
-bin/update --repo [--profile <name>]     # update repo-local install
-bin/update --all                         # update both (skips repo if no .claude/)
+agents install --global              # install claudio-dr and cody-dr globally
+agents install --repo                # install claudio-dr into the current repo
+agents install --repo --profile <name>  # with a project-specific profile
+agents status                        # show installed versions and locations
+agents update --global               # pull catalog and update global install
+agents update --repo [--profile <name>]  # pull and update repo-local install
+agents update --all                  # pull and update both installs
 ```
+
+The install scripts detect conflicts and never silently overwrite an existing
+file whose content differs from the source.
 
 ### Claude Code (Claudio DR)
 
@@ -171,9 +166,11 @@ plugins/cody-dr/         Codex adapter — identity and platform mechanics only
 profiles/                Project profiles — architecture, commands, metadata, publishers
 examples/                One generic example per core skill area
 docs/                    Compatibility, installation, development docs
+bin/agents               Unified CLI entrypoint (install / update / status)
 bin/check                Catalog quality gate — run before every handoff
 bin/install              Install plugins globally or into a repo; detects conflicts
 bin/update               Pull the catalog and re-run bin/install for active installs
+.envrc                   Adds bin/ to PATH via direnv so `agents` works without prefix
 ```
 
 ## Status and roadmap
