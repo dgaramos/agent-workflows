@@ -55,3 +55,5 @@ jobs:
         run: bash tests/test_publish_pr_metadata.sh
       - name: test_install
         run: bash tests/test_install.sh
+      - name: test_update
+        run: bash tests/test_update.sh
