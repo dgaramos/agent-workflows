@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# bin/agents — unified entrypoint for agent-workflows tooling
+#
+# Usage:
+#   agents install --global
+#   agents install --repo [--profile <name>]
+#   agents status
+#   agents update --global
+#   agents update --repo [--profile <name>]
+#   agents update --all
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat >&2 <<EOF
+Usage: agents <command> [options]
+
+Commands:
+  install --global              Install claudio-dr and cody-dr globally
+  install --repo [--profile N]  Install claudio-dr into the current repo
+  status                        Show installed versions and locations
+  update --global               Pull catalog and update global install
+  update --repo [--profile N]   Pull catalog and update repo-local install
+  update --all                  Pull catalog and update both installs
+EOF
+  exit 1
+}
+
+if [[ $# -eq 0 ]]; then
+  usage
+fi
+
+command="$1"; shift
+
+case "$command" in
+  install) exec bash "${REPO_DIR}/bin/install" "$@" ;;
+  update)  exec bash "${REPO_DIR}/bin/update"  "$@" ;;
+  status)  exec bash "${REPO_DIR}/bin/install" --status "$@" ;;
+  help|-h|--help) usage ;;
+  *) echo "Unknown command: ${command}" >&2; usage ;;
+esac

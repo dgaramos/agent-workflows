@@ -13,6 +13,42 @@ capability parity, manifests, generic examples, tracked sensitive-looking
 files, and whitespace. GitHub Actions runs the same command for pull requests
 and pushes to `main`.
 
+## Installing adapters with bin/install
+
+`bin/install` manages the deployment of agent-workflows skills and plugins to
+global and per-repo locations.
+
+```bash
+# Set up claudio-dr in ~/.claude/, cody-dr in ~/.codex/, and agents CLI in ~/.local/bin/:
+bin/install --global
+
+# Apply claudio-dr to a specific repository, with a named profile:
+cd /path/to/your-repo
+bin/install --repo --profile craft-control
+
+# Check what is currently installed globally and in the current repo:
+bin/install --status
+```
+
+The `--global` mode also copies `bin/agents` to `~/.local/bin/agents` (creating
+the directory if needed) and marks it executable, so the `agents` command is
+available system-wide without requiring direnv or the catalog directory to be in
+`PATH`. `bin/update --global` and `bin/update --all` both delegate to
+`bin/install --global`, so `~/.local/bin/agents` stays in sync whenever you
+update.
+
+`bin/install --status` reports whether `~/.local/bin/agents` is present
+alongside the claudio-dr and cody-dr version information.
+
+The script reads plugin versions from the manifest files
+(`plugins/claudio-dr/.claude-plugin/plugin.json` and
+`plugins/cody-dr/.codex-plugin/plugin.json`) and includes them in its output
+so you can verify which version is active and where it came from.
+
+On a conflict — an existing non-symlink file whose content differs from the
+source — the script prints the conflicting paths and both versions, then exits
+non-zero without overwriting. Resolve the conflict manually and re-run.
+
 ## Testing installed adapters
 
 Validate the Claude distributable plugin before testing it locally:

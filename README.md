@@ -83,6 +83,48 @@ same quality gate, same output format, different platform invocation.
 
 ## Installation
 
+### Bootstrap (first-time setup)
+
+Clone the repo and run the installer directly from the catalog:
+
+```bash
+git clone https://github.com/dgaramos/agent-workflows.git ~/agent-workflows
+~/agent-workflows/bin/install --global
+```
+
+`bin/install --global` installs:
+
+- claudio-dr plugin to `~/.claude/`
+- cody-dr plugin to `~/.codex/`
+- `agents` CLI to `~/.local/bin/agents`
+
+After this, the `agents` command is available system-wide — no direnv or
+catalog directory in `PATH` required. Ensure `~/.local/bin` is in your `PATH`
+(it usually is on macOS and most Linux distributions).
+
+### Using the agents entrypoint
+
+Once installed, use `agents` for all operations from any directory:
+
+```bash
+agents install --global              # install claudio-dr, cody-dr, and agents CLI globally
+agents install --repo                # install claudio-dr into the current repo
+agents install --repo --profile <name>  # with a project-specific profile
+agents status                        # show installed versions and locations
+agents update --global               # pull catalog and update global install
+agents update --repo [--profile <name>]  # pull and update repo-local install
+agents update --all                  # pull and update both installs
+```
+
+The install scripts detect conflicts and never silently overwrite an existing
+file whose content differs from the source.
+
+### direnv (optional, for catalog development)
+
+This repo ships a `.envrc` that adds `bin/` to your `PATH` automatically via
+[direnv](https://direnv.net/), which is useful when working on the catalog
+itself. If you have direnv installed, run `direnv allow` once after cloning.
+
 ### Claude Code (Claudio DR)
 
 ```text
@@ -143,7 +185,11 @@ plugins/cody-dr/         Codex adapter — identity and platform mechanics only
 profiles/                Project profiles — architecture, commands, metadata, publishers
 examples/                One generic example per core skill area
 docs/                    Compatibility, installation, development docs
+bin/agents               Unified CLI entrypoint (install / update / status)
 bin/check                Catalog quality gate — run before every handoff
+bin/install              Install plugins globally or into a repo; detects conflicts
+bin/update               Pull the catalog and re-run bin/install for active installs
+.envrc                   Adds bin/ to PATH via direnv so `agents` works without prefix
 ```
 
 ## Status and roadmap
@@ -160,6 +206,7 @@ What is in place:
 - Publisher workflows for review, reply, thread resolution, PR metadata, and
   issue creation (both apps)
 - Quality gate (`bin/check`) with path, frontmatter, parity, and drift checks
+- Installation tooling (`bin/install`, `bin/update`) for global and per-repo deploys
 
 What is next:
 
