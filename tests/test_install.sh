@@ -36,6 +36,7 @@ agents_bin="$fake_home/.local/bin/agents"
 [[ -f "$cody_manifest" ]]    || { echo "FAIL: cody-dr plugin.json not installed" >&2; exit 1; }
 [[ -f "$agents_bin" ]]       || { echo "FAIL: agents CLI not installed at $agents_bin" >&2; exit 1; }
 [[ -x "$agents_bin" ]]       || { echo "FAIL: agents CLI is not executable" >&2; exit 1; }
+grep -q "$repository_root" "$agents_bin" || { echo "FAIL: agents wrapper does not reference catalog path" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
 # --global: re-run on unchanged files is clean (no conflict)

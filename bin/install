@@ -141,7 +141,6 @@ mode_global() {
   local codex_config="${CODEX_CONFIG_DIR:-${HOME}/.codex}"
   local cody_dest="${codex_config}/plugins/cache/cody-dr/${cody_ver}"
 
-  local agents_src="${REPO_DIR}/bin/agents"
   local agents_dest="${HOME}/.local/bin/agents"
 
   local conflicts=0
@@ -161,13 +160,16 @@ mode_global() {
 
   echo ""
   echo "Installing agents CLI"
-  echo "  from: ${agents_src}"
   echo "  to  : ${agents_dest}"
   echo ""
-  install_file "${agents_src}" "${agents_dest}" "agents" "${claudio_ver}" || conflicts=$((conflicts + 1))
-  if [[ -f "${agents_dest}" ]]; then
-    chmod +x "${agents_dest}"
-  fi
+  mkdir -p "$(dirname "${agents_dest}")"
+  # Generate a wrapper with the catalog path baked in so it works from any directory.
+  cat > "${agents_dest}" <<WRAPPER
+#!/usr/bin/env bash
+exec bash "${REPO_DIR}/bin/agents" "\$@"
+WRAPPER
+  chmod +x "${agents_dest}"
+  echo "  installed  agents  (catalog: ${REPO_DIR})"
 
   echo ""
   if [[ "${conflicts}" -gt 0 ]]; then
