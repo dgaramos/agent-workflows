@@ -75,6 +75,7 @@ readonly required_paths=(
   "core/issue-workflow/skills/plan-implementation/SKILL.md"
   "core/issue-workflow/skills/ship-change/SKILL.md"
   "core/issue-workflow/skills/execute-issue/SKILL.md"
+  "bin/install"
   "bin/sync-plugin-core-bundles.sh"
   "examples/generic-pr-review.md"
   "examples/generic-profile-discovery.md"

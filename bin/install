@@ -1,0 +1,299 @@
+#!/usr/bin/env bash
+# bin/install — install agent-workflows skills and plugins globally or per-repo
+#
+# Modes:
+#   --global              install claudio-dr to ~/.claude/ and cody-dr to global Codex config
+#   --repo [--profile N]  install to .claude/ in CWD; optionally apply named profile overrides
+#   --status              report what is currently installed globally and per-repo in CWD
+#
+# On conflict between an existing file and the source, the script prints a
+# warning naming both versions and exits non-zero without overwriting.
+# Re-running after a clean state is safe; existing symlinks are replaced.
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat >&2 <<EOF
+Usage: bin/install --global
+       bin/install --repo [--profile <name>]
+       bin/install --status
+
+  --global          Install claudio-dr plugin to ~/.claude/ and cody-dr plugin
+                    to the global Codex config directory.
+  --repo            Install claudio-dr plugin to .claude/ in the current repo.
+                    Combine with --profile <name> to apply profile-specific
+                    overrides from profiles/<name>.md.
+  --status          Show what is currently installed globally and in the current
+                    repo's .claude/ directory.
+EOF
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Version helpers
+# ---------------------------------------------------------------------------
+
+claudio_version() {
+  local manifest="${REPO_DIR}/plugins/claudio-dr/.claude-plugin/plugin.json"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.version' "${manifest}"
+  else
+    grep '"version"' "${manifest}" | head -1 | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/'
+  fi
+}
+
+cody_version() {
+  local manifest="${REPO_DIR}/plugins/cody-dr/.codex-plugin/plugin.json"
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.version' "${manifest}"
+  else
+    grep '"version"' "${manifest}" | head -1 | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/'
+  fi
+}
+
+# Return the version string embedded in an already-installed plugin.json, or
+# "unknown" when the file is absent or unparseable.
+installed_version() {
+  local manifest="$1"
+  if [[ ! -f "${manifest}" ]]; then
+    echo "not installed"
+    return
+  fi
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.version // "unknown"' "${manifest}" 2>/dev/null || echo "unknown"
+  else
+    grep '"version"' "${manifest}" | head -1 \
+      | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' \
+      || echo "unknown"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# Copy helper — copy a single file, refusing to overwrite a non-symlink target
+# whose content differs from the source.
+# ---------------------------------------------------------------------------
+
+install_file() {
+  local src="$1"
+  local dest="$2"
+  local label="$3"
+  local src_ver="$4"
+
+  local dest_dir
+  dest_dir="$(dirname "${dest}")"
+  mkdir -p "${dest_dir}"
+
+  if [[ -L "${dest}" ]]; then
+    # Replace existing symlink without complaint.
+    rm "${dest}"
+  elif [[ -e "${dest}" ]]; then
+    # Real file exists — check for conflict.
+    if ! cmp -s "${src}" "${dest}"; then
+      local dest_ver
+      dest_ver="$(installed_version "$(dirname "${dest}")/plugin.json" 2>/dev/null || echo "unknown")"
+      echo "  CONFLICT  ${label}" >&2
+      echo "    source  : ${src}  (v${src_ver})" >&2
+      echo "    existing: ${dest}  (v${dest_ver})" >&2
+      return 1
+    fi
+    # Files are identical — nothing to do.
+    echo "  unchanged  ${label}"
+    return 0
+  fi
+
+  cp "${src}" "${dest}"
+  echo "  installed  ${label}  (v${src_ver})"
+}
+
+# Copy an entire plugin directory tree, calling install_file for each file.
+# Returns 1 if any conflict was detected.
+install_plugin_dir() {
+  local src_dir="$1"
+  local dest_dir="$2"
+  local ver="$3"
+  local conflicts=0
+
+  while IFS= read -r -d '' src_file; do
+    local rel="${src_file#"${src_dir}/"}"
+    local dest_file="${dest_dir}/${rel}"
+    install_file "${src_file}" "${dest_file}" "${rel}" "${ver}" || conflicts=$((conflicts + 1))
+  done < <(find "${src_dir}" -type f -print0)
+
+  return "${conflicts}"
+}
+
+# ---------------------------------------------------------------------------
+# --global
+# ---------------------------------------------------------------------------
+
+mode_global() {
+  local claudio_src="${REPO_DIR}/plugins/claudio-dr"
+  local claudio_dest="${HOME}/.claude"
+  local claudio_ver
+  claudio_ver="$(claudio_version)"
+
+  local cody_src="${REPO_DIR}/plugins/cody-dr"
+  # Prefer CODEX_CONFIG_DIR when set; fall back to ~/.codex.
+  local cody_dest="${CODEX_CONFIG_DIR:-${HOME}/.codex}"
+  local cody_ver
+  cody_ver="$(cody_version)"
+
+  local conflicts=0
+
+  echo "Installing claudio-dr v${claudio_ver}"
+  echo "  from: ${claudio_src}"
+  echo "  to  : ${claudio_dest}"
+  echo ""
+  install_plugin_dir "${claudio_src}" "${claudio_dest}" "${claudio_ver}" || conflicts=$((conflicts + 1))
+
+  echo ""
+  echo "Installing cody-dr v${cody_ver}"
+  echo "  from: ${cody_src}"
+  echo "  to  : ${cody_dest}"
+  echo ""
+  install_plugin_dir "${cody_src}" "${cody_dest}" "${cody_ver}" || conflicts=$((conflicts + 1))
+
+  echo ""
+  if [[ "${conflicts}" -gt 0 ]]; then
+    echo "Completed with ${conflicts} conflict(s). Resolve the conflicts above and re-run." >&2
+    exit 1
+  fi
+  echo "Global install complete."
+  echo "Run 'git pull' in ${REPO_DIR} and re-run bin/install --global to update."
+}
+
+# ---------------------------------------------------------------------------
+# --repo [--profile <name>]
+# ---------------------------------------------------------------------------
+
+mode_repo() {
+  local profile_name="$1"
+  local repo_root
+  repo_root="$(pwd)"
+  local dest_dir="${repo_root}/.claude"
+
+  local claudio_src="${REPO_DIR}/plugins/claudio-dr"
+  local claudio_ver
+  claudio_ver="$(claudio_version)"
+
+  local conflicts=0
+
+  echo "Installing claudio-dr v${claudio_ver} (repo-local)"
+  echo "  from: ${claudio_src}"
+  echo "  to  : ${dest_dir}"
+  echo ""
+  install_plugin_dir "${claudio_src}" "${dest_dir}" "${claudio_ver}" || conflicts=$((conflicts + 1))
+
+  if [[ -n "${profile_name}" ]]; then
+    local profile_file="${REPO_DIR}/profiles/${profile_name}.md"
+    if [[ ! -f "${profile_file}" ]]; then
+      echo "Profile '${profile_name}' not found at ${profile_file}" >&2
+      exit 1
+    fi
+    local profile_dest="${dest_dir}/profiles/${profile_name}.md"
+    echo ""
+    echo "Applying profile '${profile_name}'"
+    echo "  from: ${profile_file}"
+    echo "  to  : ${profile_dest}"
+    install_file "${profile_file}" "${profile_dest}" "profiles/${profile_name}.md" "${claudio_ver}" \
+      || conflicts=$((conflicts + 1))
+  fi
+
+  echo ""
+  if [[ "${conflicts}" -gt 0 ]]; then
+    echo "Completed with ${conflicts} conflict(s). Resolve the conflicts above and re-run." >&2
+    exit 1
+  fi
+  echo "Repo install complete: ${dest_dir}"
+}
+
+# ---------------------------------------------------------------------------
+# --status
+# ---------------------------------------------------------------------------
+
+mode_status() {
+  local repo_root
+  repo_root="$(pwd)"
+
+  local global_claudio_manifest="${HOME}/.claude/.claude-plugin/plugin.json"
+  local global_cody_manifest="${CODEX_CONFIG_DIR:-${HOME}/.codex}/.codex-plugin/plugin.json"
+  local local_claudio_manifest="${repo_root}/.claude/.claude-plugin/plugin.json"
+
+  local catalog_claudio_ver
+  catalog_claudio_ver="$(claudio_version)"
+  local catalog_cody_ver
+  catalog_cody_ver="$(cody_version)"
+
+  echo "agent-workflows install status"
+  echo ""
+  echo "Catalog: ${REPO_DIR}"
+  echo "  claudio-dr  v${catalog_claudio_ver}"
+  echo "  cody-dr     v${catalog_cody_ver}"
+  echo ""
+  echo "Global:"
+  echo "  claudio-dr  $(installed_version "${global_claudio_manifest}")  (${HOME}/.claude/)"
+  echo "  cody-dr     $(installed_version "${global_cody_manifest}")  (${CODEX_CONFIG_DIR:-${HOME}/.codex}/)"
+  echo ""
+  echo "Repo (${repo_root}):"
+  echo "  claudio-dr  $(installed_version "${local_claudio_manifest}")  (.claude/)"
+}
+
+# ---------------------------------------------------------------------------
+# Argument parsing
+# ---------------------------------------------------------------------------
+
+if [[ $# -eq 0 ]]; then
+  usage
+fi
+
+MODE=""
+PROFILE_NAME=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --global)
+      MODE="global"
+      shift
+      ;;
+    --repo)
+      MODE="repo"
+      shift
+      ;;
+    --profile)
+      if [[ $# -lt 2 || -z "$2" ]]; then
+        echo "--profile requires a name argument" >&2
+        exit 1
+      fi
+      PROFILE_NAME="$2"
+      shift 2
+      ;;
+    --status)
+      MODE="status"
+      shift
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage
+      ;;
+  esac
+done
+
+if [[ -z "${MODE}" ]]; then
+  usage
+fi
+
+if [[ "${PROFILE_NAME}" != "" && "${MODE}" != "repo" ]]; then
+  echo "--profile is only valid with --repo" >&2
+  exit 1
+fi
+
+case "${MODE}" in
+  global) mode_global ;;
+  repo)   mode_repo "${PROFILE_NAME}" ;;
+  status) mode_status ;;
+esac
