@@ -12,4 +12,6 @@ planning requirements, and output format.
 
 Inspect only. Always print the complete plan before ending; do not edit files,
 create a branch, commit, push, create a pull request, publish content, or ask
-for confirmation before emitting the plan.
+for confirmation before emitting the plan. After emitting the complete plan,
+halt and wait for explicit user confirmation before any file change occurs;
+never begin implementation until the user approves.

@@ -23,6 +23,11 @@ creates branches, commits, pushes, opens pull requests, or publishes content.
    check, manifest validation, or contract test).
 5. Name the quality commands and the order in which they run. Always emit the
    complete plan; never wait for a confirmation prompt before printing it.
+6. After emitting the plan, halt and wait for explicit user confirmation before
+   any file in the repository is created, modified, or deleted. Do not begin
+   the `implement-issue` phase until the user explicitly approves the plan.
+   If the user redirects, adjusts, or cancels, incorporate the feedback and
+   re-emit the revised plan before requesting confirmation again.
 
 ## Output
 
