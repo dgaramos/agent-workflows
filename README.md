@@ -83,6 +83,34 @@ same quality gate, same output format, different platform invocation.
 
 ## Installation
 
+Use `bin/install` to install the plugins from this catalog onto a machine or
+into a specific repository. The script detects conflicts and never silently
+overwrites an existing file whose content differs from the source.
+
+```bash
+# Install claudio-dr to ~/.claude/ and cody-dr to ~/.codex/ (or $CODEX_CONFIG_DIR)
+bin/install --global
+
+# Install claudio-dr into .claude/ inside the current repo
+bin/install --repo
+
+# Install with a project-specific profile
+bin/install --repo --profile <name>
+
+# Show what is currently installed and where it came from
+bin/install --status
+```
+
+To update an existing install after pulling new catalog changes, use
+`bin/update`. It pulls the catalog with `git pull --ff-only` and then
+re-runs the appropriate `bin/install` mode:
+
+```bash
+bin/update --global                      # update global install
+bin/update --repo [--profile <name>]     # update repo-local install
+bin/update --all                         # update both (skips repo if no .claude/)
+```
+
 ### Claude Code (Claudio DR)
 
 ```text
@@ -144,6 +172,8 @@ profiles/                Project profiles — architecture, commands, metadata, 
 examples/                One generic example per core skill area
 docs/                    Compatibility, installation, development docs
 bin/check                Catalog quality gate — run before every handoff
+bin/install              Install plugins globally or into a repo; detects conflicts
+bin/update               Pull the catalog and re-run bin/install for active installs
 ```
 
 ## Status and roadmap
@@ -160,6 +190,7 @@ What is in place:
 - Publisher workflows for review, reply, thread resolution, PR metadata, and
   issue creation (both apps)
 - Quality gate (`bin/check`) with path, frontmatter, parity, and drift checks
+- Installation tooling (`bin/install`, `bin/update`) for global and per-repo deploys
 
 What is next:
 
