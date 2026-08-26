@@ -25,7 +25,10 @@ mkdir -p "$fake_home" "$fake_repo"
 run_install "$tmp" --global
 
 claudio_manifest="$fake_home/.claude/.claude-plugin/plugin.json"
-cody_manifest="$codex_dir/.codex-plugin/plugin.json"
+cody_ver="$(jq -r '.version' "$repository_root/plugins/cody-dr/.codex-plugin/plugin.json" 2>/dev/null \
+  || grep '"version"' "$repository_root/plugins/cody-dr/.codex-plugin/plugin.json" | head -1 \
+  | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')"
+cody_manifest="$codex_dir/plugins/cache/cody-dr/${cody_ver}/.codex-plugin/plugin.json"
 
 [[ -f "$claudio_manifest" ]] || { echo "FAIL: claudio-dr plugin.json not installed" >&2; exit 1; }
 [[ -f "$cody_manifest" ]]    || { echo "FAIL: cody-dr plugin.json not installed" >&2; exit 1; }

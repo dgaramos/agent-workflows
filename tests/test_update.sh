@@ -37,9 +37,13 @@ run_update() {
 # ---------------------------------------------------------------------------
 run_update --global >/dev/null
 
+cody_ver="$(jq -r '.version' "$repository_root/plugins/cody-dr/.codex-plugin/plugin.json" 2>/dev/null \
+  || grep '"version"' "$repository_root/plugins/cody-dr/.codex-plugin/plugin.json" | head -1 \
+  | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')"
+
 grep -qF "pull --ff-only" "$tmp/git.log" || { echo "FAIL: git pull not called" >&2; exit 1; }
 [[ -f "$fake_home/.claude/.claude-plugin/plugin.json" ]] || { echo "FAIL: claudio-dr not installed" >&2; exit 1; }
-[[ -f "$codex_dir/.codex-plugin/plugin.json" ]]          || { echo "FAIL: cody-dr not installed" >&2; exit 1; }
+[[ -f "$codex_dir/plugins/cache/cody-dr/${cody_ver}/.codex-plugin/plugin.json" ]] || { echo "FAIL: cody-dr not installed" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
 # --repo: pulls catalog then installs repo-local
