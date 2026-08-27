@@ -16,3 +16,7 @@ the same step.
 
 Use `core/profile-discovery/references/profile-discovery-contract.md` to find
 that profile from the current repository before starting.
+
+Follow `core/issue-workflow/references/contribution-guidance-contract.md` to
+inspect `CONTRIBUTING.md` before branch creation. A missing file is not a
+blocker; surface any material conflict with the profile and request direction.

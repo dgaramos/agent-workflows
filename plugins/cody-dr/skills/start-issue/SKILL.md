@@ -16,3 +16,7 @@ above is scoped to the Codex platform. It is intentionally not mirrored in the C
 
 Discover the target profile first with
 `core/profile-discovery/references/profile-discovery-contract.md`.
+
+Follow `core/issue-workflow/references/contribution-guidance-contract.md` to
+inspect `CONTRIBUTING.md` before branch creation. A missing file is not a
+blocker; surface any material conflict with the profile and request direction.

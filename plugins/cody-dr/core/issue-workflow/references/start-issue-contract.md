@@ -11,9 +11,15 @@ issue from unrelated context.
    criteria, dependencies, and labels.
 2. Confirm all blocking dependencies are resolved before proceeding. If any
    dependency is open, report it and stop.
-3. Resolve the working branch name from the profile's branch naming convention.
-   Default to `<issue-number>-<slug>` when the profile does not specify.
-4. Create the working branch from the profile's base branch. Report the branch
+3. Inspect `CONTRIBUTING.md` following
+   [contribution-guidance-contract](contribution-guidance-contract.md). Record
+   applicable branch-naming guidance or note its absence. A missing file is
+   not a blocker. Surface any material conflict with the profile before
+   proceeding.
+4. Resolve the working branch name from the profile's branch naming convention,
+   incorporating any non-conflicting `CONTRIBUTING.md` branch rules. Default
+   to `<issue-number>-<slug>` when neither source specifies.
+5. Create the working branch from the profile's base branch. Report the branch
    name and base.
 
 ## Output
