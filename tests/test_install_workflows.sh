@@ -160,4 +160,65 @@ for wf in \
     && { echo "FAIL: $name must not request permission-organization-projects" >&2; exit 1; } || true
 done
 
+# ---------------------------------------------------------------------------
+# Criterion 5 — issue workflows GET and validate author before PATCH
+# ---------------------------------------------------------------------------
+
+for wf in \
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-issue.yml" \
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-issue.yml"; do
+  name="$(basename "$wf")"
+  grep -q "method GET" "$wf" \
+    || { echo "FAIL: $name must perform a GET to validate issue author before PATCH" >&2; exit 1; }
+  # GET must appear before PATCH in file order
+  get_line="$(grep -n "method GET" "$wf" | head -1 | cut -d: -f1)"
+  patch_line="$(grep -n "method PATCH" "$wf" | head -1 | cut -d: -f1)"
+  [[ -n "$get_line" && -n "$patch_line" && "$get_line" -lt "$patch_line" ]] \
+    || { echo "FAIL: $name GET must appear before PATCH for pre-mutation author validation" >&2; exit 1; }
+done
+
+# ---------------------------------------------------------------------------
+# Criterion 6 — all checkout steps set persist-credentials: false
+# ---------------------------------------------------------------------------
+
+checkout_workflows=(
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-pr-metadata.yml"
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-review.yml"
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-reply.yml"
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-resolve.yml"
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-pr-metadata.yml"
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-review.yml"
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-reply.yml"
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-resolve.yml"
+)
+
+for wf in "${checkout_workflows[@]}"; do
+  name="$(basename "$wf")"
+  grep -qF "persist-credentials: false" "$wf" \
+    || { echo "FAIL: $name must set persist-credentials: false on all checkout steps" >&2; exit 1; }
+done
+
+# ---------------------------------------------------------------------------
+# Criterion 7 — all checkout steps pin to refs/heads/main
+# ---------------------------------------------------------------------------
+
+for wf in "${checkout_workflows[@]}"; do
+  name="$(basename "$wf")"
+  grep -qF "ref: refs/heads/main" "$wf" \
+    || { echo "FAIL: $name must pin checkout to ref: refs/heads/main" >&2; exit 1; }
+done
+
+# ---------------------------------------------------------------------------
+# Criterion 8 — inline_comments_json description is a quoted YAML string
+# ---------------------------------------------------------------------------
+
+for wf in \
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-review.yml" \
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-review.yml"; do
+  name="$(basename "$wf")"
+  grep -qE "inline_comments_json:.*description:[[:space:]]*\"" "$wf" \
+    || grep -qE "description:[[:space:]]*\"[^\"]*\"" "$wf" \
+    || { echo "FAIL: $name inline_comments_json description must be a quoted YAML string" >&2; exit 1; }
+done
+
 echo "bin/install workflow tests passed"
