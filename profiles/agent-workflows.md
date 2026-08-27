@@ -27,10 +27,12 @@ standalone manifest validator: run `bin/check`, then load
 `codex --plugin-dir ./plugins/cody-dr` for runtime validation. Record any
 runtime service-limit failure separately from manifest or catalog validation.
 
-## Claudio DR self-review
+## Independent PR review
 
-Use Claudio DR's `review-pr` skill (or the `claudio-reviewer` agent) against an
-explicit pull request URL. In the review request, name this profile explicitly:
+Use Claudio DR's `review-pr` skill (or the `claudio-reviewer` agent) as an
+independent reviewer against an explicit pull request URL, including a PR
+authored by another contributor. In the review request, name this profile
+explicitly:
 
 ```text
 Review <PR URL> with Claudio DR using the agent-workflows profile at

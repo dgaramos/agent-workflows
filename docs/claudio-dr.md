@@ -12,6 +12,9 @@ Start a new Claude Code session after installation. Use the
 `/claudio-dr:review-pr <PR URL or ref>` skill for an explicit review, or
 `/claudio-dr:execute-issue #42` for normal issue delivery.
 
+`review-pr` is independent of issue execution: it can review a PR authored by
+any contributor and does not modify the reviewed branch.
+
 The plugin also exposes global agents: `claudio-helper` for usage guidance,
 `claudio-reviewer` for an isolated review, `claudio-author` to author a single
 issue, `claudio-executor` for an issue lifecycle, `claudio-designer` for UX/UI

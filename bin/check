@@ -487,6 +487,17 @@ for agent in "${adapter_reviewer_agents[@]}"; do
     echo "parity: $agent embeds the finding class table (belongs in core)" >&2
     exit 1
   fi
+
+  for required_text in \
+    'independent reviewer' \
+    'Discover the target profile' \
+    'not execute issues' \
+    'modify the reviewed branch'; do
+    if ! grep -qF "$required_text" "$agent"; then
+      echo "parity: $agent is missing independent-reviewer guardrail: $required_text" >&2
+      exit 1
+    fi
+  done
 done
 
 # Author and executor agents are adapter entrypoints. Keep their portable
