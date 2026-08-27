@@ -22,5 +22,10 @@ Before drafting, run the mode-detection step from the issue-contract:
    questions, or scope assessment) as defined in the contract.
 3. Then produce the complete structured draft.
 
+When the caller supplies a Design Brief from `design-discovery`, treat its
+evidence, direction, constraints, and handoff as issue context. Preserve its
+open questions and assumptions; do not silently present them as settled
+requirements or re-run design discovery unless the caller asks.
+
 Do not publish the issue or request external state changes until the user
 explicitly authorizes it.

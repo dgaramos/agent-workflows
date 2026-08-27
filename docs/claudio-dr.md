@@ -13,9 +13,11 @@ Start a new Claude Code session after installation. Use the
 `/claudio-dr:execute-issue #42` for normal issue delivery.
 
 The plugin also exposes global agents: `claudio-helper` for usage guidance,
-`claudio-reviewer` for an isolated review, `claudio-workflow` for an issue
-lifecycle, and `claudio-findings` for findings handling. Use
-`/claudio-dr:plan-implementation #42` for a read-only test-first plan,
+`claudio-reviewer` for an isolated review, `claudio-author` to author a single
+issue, `claudio-executor` for an issue lifecycle, `claudio-designer` for UX/UI
+design discovery, and `claudio-findings` for findings handling. Use
+`/claudio-dr:design-discovery assess this checkout flow` to prepare a Design
+Brief, `/claudio-dr:plan-implementation #42` for a read-only test-first plan,
 `/claudio-dr:execute-issue #42` for normal issue delivery, and
 `/claudio-dr:handle-pr-findings` for review findings. From a target repository,
 they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With

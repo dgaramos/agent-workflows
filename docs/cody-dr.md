@@ -23,7 +23,9 @@ architecture or quality rules beyond the portable core.
 The plugin also exposes global agents: `cody-helper` for usage guidance,
 `cody-reviewer` for an isolated review, `cody-author` to author a single issue,
 `cody-executor` for an issue lifecycle, and `cody-findings` for findings
-handling. Use `@cody-author draft issue` to create a standalone issue,
+handling. `cody-designer` performs UX/UI design discovery and returns a Design
+Brief without publishing or changing the project. Use `@cody-author draft issue` to create a standalone issue,
+`@cody-designer assess this checkout flow` to prepare UX/UI direction,
 `@cody-executor plan issue #42` for a read-only test-first plan,
 `@cody-executor execute issue #42` for normal issue delivery,
 `@cody-findings` to handle review findings, and `@cody-helper` to select the

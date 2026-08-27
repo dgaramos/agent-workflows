@@ -61,6 +61,8 @@ readonly required_paths=(
   "core/profile-discovery/scripts/discover-project-profile.sh"
   "core/issue-authoring/SKILL.md"
   "core/issue-authoring/references/issue-contract.md"
+  "core/design-discovery/SKILL.md"
+  "core/design-discovery/references/design-discovery-contract.md"
   "core/findings-handling/SKILL.md"
   "core/findings-handling/references/findings-contract.md"
   "core/issue-workflow/references/workflow-contract.md"
@@ -82,6 +84,7 @@ readonly required_paths=(
   "examples/generic-pr-review.md"
   "examples/generic-profile-discovery.md"
   "examples/generic-issue-authoring.md"
+  "examples/generic-design-discovery.md"
   "examples/generic-findings-handling.md"
   "examples/generic-issue-lifecycle.md"
   "examples/generic-test-first-planning.md"
@@ -90,6 +93,7 @@ readonly required_paths=(
   "plugins/cody-dr/.codex-plugin/plugin.json"
   "plugins/cody-dr/skills/review-pr/SKILL.md"
   "plugins/cody-dr/skills/author-issue/SKILL.md"
+  "plugins/cody-dr/skills/design-discovery/SKILL.md"
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/cody-dr/skills/start-issue/SKILL.md"
   "plugins/cody-dr/skills/implement-issue/SKILL.md"
@@ -101,12 +105,14 @@ readonly required_paths=(
   "plugins/cody-dr/agents/cody-helper.md"
   "plugins/cody-dr/agents/cody-author.md"
   "plugins/cody-dr/agents/cody-executor.md"
+  "plugins/cody-dr/agents/cody-designer.md"
   "plugins/cody-dr/references/reviewer-identity.md"
   "docs/cody-dr.md"
   ".claude-plugin/marketplace.json"
   "plugins/claudio-dr/.claude-plugin/plugin.json"
   "plugins/claudio-dr/skills/review-pr/SKILL.md"
   "plugins/claudio-dr/skills/author-issue/SKILL.md"
+  "plugins/claudio-dr/skills/design-discovery/SKILL.md"
   "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/claudio-dr/skills/start-issue/SKILL.md"
   "plugins/claudio-dr/skills/implement-issue/SKILL.md"
@@ -118,6 +124,7 @@ readonly required_paths=(
   "plugins/claudio-dr/agents/claudio-helper.md"
   "plugins/claudio-dr/agents/claudio-author.md"
   "plugins/claudio-dr/agents/claudio-executor.md"
+  "plugins/claudio-dr/agents/claudio-designer.md"
   "plugins/claudio-dr/references/reviewer-identity.md"
   "docs/claudio-dr.md"
   "docs/contributing-guide.md"
@@ -143,6 +150,7 @@ readonly public_skill_names=(
   "review-pr"
   "handle-pr-findings"
   "author-issue"
+  "design-discovery"
   "start-issue"
   "plan-implementation"
   "implement-issue"
@@ -185,6 +193,7 @@ readonly required_generic_examples=(
   "examples/generic-pr-review.md"
   "examples/generic-findings-handling.md"
   "examples/generic-issue-authoring.md"
+  "examples/generic-design-discovery.md"
   "examples/generic-issue-lifecycle.md"
 )
 
@@ -485,6 +494,7 @@ done
 readonly claudio_cody_agent_pairs=(
   "plugins/claudio-dr/agents/claudio-author.md:plugins/cody-dr/agents/cody-author.md"
   "plugins/claudio-dr/agents/claudio-executor.md:plugins/cody-dr/agents/cody-executor.md"
+  "plugins/claudio-dr/agents/claudio-designer.md:plugins/cody-dr/agents/cody-designer.md"
 )
 
 for pair in "${claudio_cody_agent_pairs[@]}"; do
@@ -510,6 +520,19 @@ for skill_name in "${workflow_skill_names[@]}"; do
     fi
   done
 done
+
+# Design discovery is a shared portable capability; adapters may establish
+# identity but must both load the canonical core skill.
+for prefix in "${adapter_prefixes[@]}"; do
+  skill="$prefix/skills/design-discovery/SKILL.md"
+  if ! grep -qF 'core/design-discovery/SKILL.md' "$skill"; then
+    echo "parity: $skill does not reference core/design-discovery/SKILL.md" >&2
+    exit 1
+  fi
+done
+grep -qF '## Design Brief' core/design-discovery/references/design-discovery-contract.md
+grep -qF '**Publication:** not published' core/design-discovery/references/design-discovery-contract.md
+grep -qF '`author-issue` may' core/design-discovery/references/design-discovery-contract.md
 
 grep -qF 'Metadata verified:' core/issue-workflow/references/ship-change-contract.md
 grep -qF 'apply-pr-metadata.sh' core/issue-workflow/references/ship-change-contract.md

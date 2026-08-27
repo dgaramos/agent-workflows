@@ -35,6 +35,13 @@ Run a short discovery pass before drafting:
 - When the input is already detailed (problem is clear, scope is defined): skip
   questions and draft immediately.
 
+When the input includes a Design Brief from `design-discovery`, use its handoff
+as the discovery result. Incorporate the evidence, UX direction, constraints,
+accessibility considerations, success criteria, assumptions, and open questions
+into the existing issue structure where relevant. Do not add a new mandatory
+issue section, publish the design artifact, or treat the brief as authorization
+to create the issue.
+
 ### Chore and spike modes
 
 Before drafting, assess scope and risk:

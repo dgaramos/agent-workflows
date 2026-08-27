@@ -27,6 +27,7 @@ commands, branch names, credentials, labels, or remote references.
 | `core/pr-review/` | `review-contract.md`, `profile-contract.md`, `reporting.md` | — (consumed directly) |
 | `core/findings-handling/` | `findings-contract.md` | `handle-findings` |
 | `core/issue-authoring/` | `issue-contract.md` | `author-issue` |
+| `core/design-discovery/` | `design-discovery-contract.md` | `design-discovery` |
 | `core/issue-workflow/` | `workflow-contract.md`, `start-issue-contract.md`, `plan-implementation-contract.md`, `implement-issue-contract.md`, `ship-change-contract.md`, `execute-issue-contract.md` | `start-issue`, `plan-implementation`, `implement-issue`, `ship-change`, `execute-issue` |
 
 ### Adapters
@@ -148,7 +149,7 @@ For a repository-neutral walkthrough of `start-issue`, `implement-issue`, and
 - **Public surface**: every README-announced skill must exist in both adapters,
   manifests must be valid and version-aligned, and consumer profiles must stay
   out of the catalog.
-- **Examples**: review, findings, issue authoring, and lifecycle contracts each
+- **Examples**: review, findings, issue authoring, design discovery, and lifecycle contracts each
   have a generic, repository-neutral example.
 - **Core bundles**: each plugin's generated `core/` distribution bundle must
   exactly match the canonical `core/`; ad-hoc copies inside adapter skills are
