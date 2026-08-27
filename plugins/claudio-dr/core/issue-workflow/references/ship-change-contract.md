@@ -31,24 +31,35 @@ Do not ship without confirmed passing quality gates.
    workflow via `gh workflow run`. When the profile is loaded and declares any
    metadata fields (labels, milestone, assignee, project, status), this step
    is mandatory; skip it only when the profile declares no metadata fields at
-   all. The dispatch command takes the form:
+   all.
+
+   Before dispatching, read each metadata value from the issue as resolved
+   during `start-issue` and from the profile. Confirm that every required field
+   is non-empty: `labels_json` must be a non-empty JSON array, `assignees_json`
+   must be a non-empty JSON array, `milestone_number` must be a non-empty
+   string, `project_owner` must be a non-empty string, `project_number` must be
+   a non-empty string, and `project_status` must be a non-empty string. Do not
+   dispatch with any required field empty; stop and report any unresolved field
+   before proceeding.
+
+   The dispatch command takes the form:
 
    ```sh
    gh workflow run <workflow-file> \
      --field pr_number=<PR number> \
      --field base_branch=<base branch> \
-     --field labels_json='<JSON array>' \
-     --field assignees_json='<JSON array>' \
-     --field milestone_number=<number> \
-     --field project_owner=<owner> \
-     --field project_number=<number> \
-     --field project_status=<status>
+     --field labels_json='<JSON array of label names>' \
+     --field assignees_json='<JSON array of login strings>' \
+     --field milestone_number=<milestone number from the issue> \
+     --field project_owner=<project owner login or org> \
+     --field project_number=<project board number> \
+     --field project_status=<target status string>
    ```
 
-   Pass every profile-declared metadata field as a workflow input; omit only
-   fields the profile does not declare. Wait for the run to complete and verify
-   its configured App identity plus the base branch, labels, milestone,
-   assignees, and Project item state. The workflow uses an installation token
+   Pass every profile-declared metadata field as a populated workflow input;
+   omit only fields the profile explicitly does not declare. Wait for the run to
+   complete and verify its configured App identity plus the base branch, labels,
+   milestone, assignees, and Project item state. The workflow uses an installation token
    internally and may invoke `core/issue-workflow/scripts/apply-pr-metadata.sh`
    as an implementation detail. If that publisher is unavailable or fails,
    an explicitly user-authorized authenticated personal account may run the
