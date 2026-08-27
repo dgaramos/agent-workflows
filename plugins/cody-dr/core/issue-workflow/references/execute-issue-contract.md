@@ -2,21 +2,14 @@
 
 ## Purpose
 
-`execute-issue` composes `start-issue`, `plan-implementation`,
-`implement-issue`, and `ship-change` in sequence. An explicit request to
-execute an issue authorizes the full normal delivery, including push and PR
-creation.
+`execute-issue` is the implementation-only phase, run after approved planning
+and branch preparation.
 
 ## Steps
 
-1. Run `start-issue`. Stop on any handoff.
-2. Run `plan-implementation` and emit its complete read-only plan. After the
-   plan is printed, halt and wait for explicit user confirmation before
-   proceeding. No file may be touched before confirmation is received. If the
-   user redirects or adjusts, re-emit a revised plan and wait again.
-3. Run `implement-issue` from the confirmed plan. Stop on any handoff.
-4. Run `ship-change`. Stop only for a failed quality gate, missing permission,
-   unresolved dependency, or material out-of-scope decision.
+1. Require approved `plan-issue` and `start-issue` handoffs.
+2. Implement and commit the approved plan with validation after each unit.
+3. Stop and wait for explicit approval before `ship-issue`; do not push or open a PR.
 
 Load the target profile once at step 1 and pass its context through all
 phases. Do not reload or override the profile mid-execution.
@@ -34,7 +27,6 @@ Emit each phase's own output block in sequence, followed by a final summary:
 ```md
 ## Execute — <issue reference>
 
-**Phases completed:** start-issue · plan-implementation · implement-issue · ship-change
-**Stopped at:** <phase name and reason, or none>
-**PR:** <not requested|not published|<URL>>
+**Phases completed:** execute-issue
+**Next:** ship-issue (awaiting explicit approval)
 ```

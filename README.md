@@ -81,6 +81,8 @@ contributor.
 | `design-discovery` | Produce an evidence-grounded UX/UI Design Brief and implementation handoff |
 | `design-and-author` | Chain design discovery into issue authoring in a single invocation |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
+| `plan-issue` | Surface a read-only plan and wait for explicit approval |
+| `ship-issue` | Validate and publish only after explicit approval |
 | `plan-implementation` | Print a read-only, test-first implementation plan before edits |
 | `implement-issue` | Make minimal in-scope changes with quality-gate validation |
 | `ship-change` | Run final quality gate, prepare PR with profile metadata, push and open |
