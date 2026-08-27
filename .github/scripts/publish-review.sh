@@ -53,7 +53,12 @@ while IFS= read -r reply; do
   gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/comments" -f body="$reply_body" -F in_reply_to="$comment_id" > created-reply.json
   [[ "$(jq -r '.user.login' created-reply.json)" == "$EXPECTED_AUTHOR" ]] || { echo "unexpected reply author" >&2; exit 1; }
 done < <(jq -c '.[]' <<<"$replies_json")
+resolved_count=0
 while IFS= read -r thread_id; do
-  gh api graphql -f query='mutation($thread: ID!) { resolveReviewThread(input: {threadId: $thread}) { thread { isResolved } } }' -f thread="$thread_id" --jq '.data.resolveReviewThread.thread.isResolved' | grep -qx true
+  if resolve_out="$(gh api graphql -f query='mutation($thread: ID!) { resolveReviewThread(input: {threadId: $thread}) { thread { isResolved } } }' -f thread="$thread_id" --jq '.data.resolveReviewThread.thread.isResolved' 2>&1)" && [[ "$resolve_out" == "true" ]]; then
+    resolved_count=$((resolved_count + 1))
+  else
+    echo "warning: could not resolve thread ${thread_id} (skipped): ${resolve_out}" >&2
+  fi
 done < <(jq -r '.[]' <<<"$resolve_thread_ids_json")
-printf 'Publication report: review=%s inline=%s replies=%s resolutions=%s\n' "$publish_review" "$(jq length <<<"$inline_comments_json")" "$(jq length <<<"$replies_json")" "$(jq length <<<"$resolve_thread_ids_json")"
+printf 'Publication report: review=%s inline=%s replies=%s resolutions=%s/%s\n' "$publish_review" "$(jq length <<<"$inline_comments_json")" "$(jq length <<<"$replies_json")" "$resolved_count" "$(jq length <<<"$resolve_thread_ids_json")"
