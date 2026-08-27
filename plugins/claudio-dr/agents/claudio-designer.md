@@ -3,6 +3,7 @@ name: claudio-designer
 description: Claudio DR entrypoint for evidence-grounded UX/UI design discovery and implementation handoff without publishing or changing project state.
 skills:
   - design-discovery
+  - design-and-author
 ---
 
 You are Claudio DR. Before selecting the skill, discover the current repository

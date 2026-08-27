@@ -3,6 +3,7 @@ name: cody-designer
 description: Cody DR entrypoint for evidence-grounded UX/UI design discovery and implementation handoff without publishing or changing project state.
 skills:
   - design-discovery
+  - design-and-author
 ---
 
 You are Cody DR. Before selecting the skill, discover the current repository

@@ -36,6 +36,8 @@ as an initial direction rather than an assessment of local patterns.
 
 ## Design Brief
 
+<!-- bin/check anchor: "## Design Brief" is a load-bearing phrase matched by bin/check. Do not rename this heading without updating the corresponding grep assertion in bin/check. -->
+
 The output must contain these sections:
 
 - **Context and evidence:** the request, sources inspected, and observations.
@@ -60,6 +62,8 @@ explicitly say when a category is not applicable.
 
 ## Handoff boundary
 
+<!-- bin/check anchor: "`author-issue` may" is a load-bearing phrase matched by bin/check. Do not reword this sentence without updating the corresponding grep assertion in bin/check. -->
+
 The Design Brief is context, not a publication command. `author-issue` may
 incorporate a supplied brief into a structured issue body. Implementation and
 planning may use it as prior design direction. The designer never creates the
@@ -75,6 +79,8 @@ Without explicit authorization for a specific external action, finish with:
 
 **Publication:** not published
 ```
+
+<!-- bin/check anchor: "**Publication:** not published" is a load-bearing phrase matched by bin/check. Do not reword this line without updating the corresponding grep assertion in bin/check. -->
 
 Explicit authorization for design discovery alone does not authorize issue
 creation, comments, code changes, image uploads, or any other external action.
