@@ -17,17 +17,22 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 usage() {
   cat >&2 <<EOF
 Usage: bin/update --global [--force]
+       bin/update --global --workflows [--force]
        bin/update --repo [--profile <name>] [--force]
        bin/update --all [--force]
 
-  --global          Pull the catalog and update the global install (~/.claude/ and Codex config).
-  --repo            Pull the catalog and update the repo-local install (.claude/ in CWD).
-                    Combine with --profile <name> to re-apply a named profile.
-  --all             Pull the catalog and update both global and repo-local installs.
-                    --repo is skipped when .claude/ does not exist in the current directory.
-  --force           Forward --force to bin/install, skipping conflict checking and
-                    overwriting all files from the catalog source. Use this as the
-                    canonical resolution path for conflicts: agents update --global --force
+  --global             Pull the catalog and update the global install (~/.claude/ and Codex config).
+  --global --workflows Pull the catalog and update managed workflows in .github/workflows/ of the
+                       current repo. Workflows whose embedded version does not match the catalog
+                       version are updated and reported as 'updated'. Current workflows are reported
+                       as 'unchanged'. Use --force to overwrite all regardless of version.
+  --repo               Pull the catalog and update the repo-local install (.claude/ in CWD).
+                       Combine with --profile <name> to re-apply a named profile.
+  --all                Pull the catalog and update both global and repo-local installs.
+                       --repo is skipped when .claude/ does not exist in the current directory.
+  --force              Forward --force to bin/install, skipping conflict checking and
+                       overwriting all files from the catalog source. Use this as the
+                       canonical resolution path for conflicts: agents update --global --force
 EOF
   exit 1
 }
@@ -45,13 +50,15 @@ fi
 MODE=""
 PROFILE_NAME=""
 FORCE_FLAG=""
+WORKFLOWS=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --global) MODE="global"; shift ;;
-    --repo)   MODE="repo";   shift ;;
-    --all)    MODE="all";    shift ;;
-    --force)  FORCE_FLAG="--force"; shift ;;
+    --global)    MODE="global";    shift ;;
+    --repo)      MODE="repo";      shift ;;
+    --all)       MODE="all";       shift ;;
+    --workflows) WORKFLOWS=1;      shift ;;
+    --force)     FORCE_FLAG="--force"; shift ;;
     --profile)
       if [[ $# -lt 2 || -z "$2" ]]; then
         echo "--profile requires a name argument" >&2
@@ -72,7 +79,18 @@ if [[ "${PROFILE_NAME}" != "" && "${MODE}" == "global" ]]; then
   exit 1
 fi
 
+if [[ "${WORKFLOWS}" == "1" && "${MODE}" != "global" ]]; then
+  echo "--workflows is only valid with --global" >&2
+  exit 1
+fi
+
 pull_catalog
+
+if [[ "${WORKFLOWS}" == "1" ]]; then
+  # Update managed workflows in the current repo from the catalog.
+  bash "${REPO_DIR}/bin/install" --workflows ${FORCE_FLAG}
+  exit $?
+fi
 
 case "${MODE}" in
   global)
