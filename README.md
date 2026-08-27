@@ -154,9 +154,10 @@ codex plugin add cody-dr@agent-workflows
 Invoke a workflow agent or skill:
 
 ```text
-@cody-workflow execute issue #42
+@cody-executor execute issue #42
 @cody-reviewer review <PR URL>
-@cody-workflow plan issue #42
+@cody-executor plan issue #42
+@cody-author draft issue
 @cody-helper explain how to use Cody DR in this repository
 ```
 

@@ -55,7 +55,7 @@ not mean an App is inactive.
 | Invocation | `review-pr <PR URL or ref>` |
 | Issue authoring | `author-issue <problem statement>` |
 | Implementation planning | `plan-implementation <issue>` |
-| Agent invocation | `@cody-reviewer review <ref>` |
+| Agent invocation | `@cody-reviewer review <ref>`, `@cody-author draft issue`, or `@cody-executor execute issue #42` |
 | Local validation | `bin/check` + `codex --plugin-dir ./plugins/cody-dr` |
 | Local session | `codex --plugin-dir ./plugins/cody-dr` |
 | Update flow | bump version → reinstall from marketplace root → new thread |
@@ -123,7 +123,7 @@ quality gates.
 
 As a rule of thumb, a local agent longer than roughly ten lines is probably
 carrying behavior that belongs in `PROFILE.md`. Prefer the global plugin agents
-(`cody-reviewer`, `cody-workflow`, `cody-findings`, and their Claudio
+(`cody-reviewer`, `cody-author`, `cody-executor`, `cody-findings`, and their Claudio
 counterparts) for new projects; they discover the profile automatically.
 
 ### Example split
