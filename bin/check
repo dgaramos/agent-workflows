@@ -99,6 +99,8 @@ readonly required_paths=(
   "plugins/cody-dr/agents/cody-reviewer.md"
   "plugins/cody-dr/agents/cody-findings.md"
   "plugins/cody-dr/agents/cody-helper.md"
+  "plugins/cody-dr/agents/cody-author.md"
+  "plugins/cody-dr/agents/cody-executor.md"
   "plugins/cody-dr/references/reviewer-identity.md"
   "docs/cody-dr.md"
   ".claude-plugin/marketplace.json"
@@ -474,6 +476,22 @@ for agent in "${adapter_reviewer_agents[@]}"; do
 
   if grep -qE '^\| (blocking|important|nit) \|' "$agent"; then
     echo "parity: $agent embeds the finding class table (belongs in core)" >&2
+    exit 1
+  fi
+done
+
+# Author and executor agents are adapter entrypoints. Keep their portable
+# behavior exactly aligned; identity substitution is the only expected change.
+readonly claudio_cody_agent_pairs=(
+  "plugins/claudio-dr/agents/claudio-author.md:plugins/cody-dr/agents/cody-author.md"
+  "plugins/claudio-dr/agents/claudio-executor.md:plugins/cody-dr/agents/cody-executor.md"
+)
+
+for pair in "${claudio_cody_agent_pairs[@]}"; do
+  claudio_agent="${pair%%:*}"
+  cody_agent="${pair#*:}"
+  if ! diff -u <(sed -e 's/Claudio/Cody/g' -e 's/claudio/cody/g' "$claudio_agent") "$cody_agent"; then
+    echo "parity: $cody_agent does not mirror $claudio_agent" >&2
     exit 1
   fi
 done
