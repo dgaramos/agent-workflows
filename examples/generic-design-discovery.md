@@ -45,3 +45,27 @@ after an invalid-code response.
 The output ends with `Publication: not published`. It does not create an issue
 or upload the wireframe. The issue author can include the handoff as context
 when an issue is explicitly authored.
+
+## Profile design rules example
+
+When a project declares design-specific rules in its profile, the designer
+loads those rules before producing the brief. A maintainer can copy and adapt
+the following fields:
+
+```md
+## Design rules
+
+- **Component library:** <e.g. Material UI 5, Tailwind CSS, custom design system>
+- **Accessibility standard:** <e.g. WCAG 2.1 AA — all interactive elements must meet this baseline>
+- **Breakpoints:** <e.g. mobile ≤ 480 px, tablet 481–1024 px, desktop > 1024 px>
+- **Motion policy:** <e.g. respect prefers-reduced-motion; avoid autoplay animations>
+- **Color tokens:** <e.g. reference tokens from design-system/tokens.json; never hardcode hex values>
+- **Keyboard and focus policy:** <e.g. all interactive elements must be reachable via Tab; visible focus indicators required>
+- **Open questions to escalate:** <e.g. brand approval required for new color roles>
+```
+
+These fields are consumed by the designer when the profile is discovered. They
+strengthen the brief's **Constraints and unknowns** and **Accessibility and
+responsiveness** sections without requiring manual re-entry on every invocation.
+Fields not declared in the profile are treated as unknown; the designer states
+the assumption and lists the open question rather than inventing values.

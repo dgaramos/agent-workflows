@@ -88,6 +88,27 @@ verification fails. Report that failure distinctly as a failed App
 publication, including the expected and observed actor or target when known;
 do not reclassify it as an unavailable publisher.
 
+## UI-significant diffs
+
+<!-- bin/check anchor: "UI-significant" and "Design Brief" are load-bearing phrases guarded by bin/check. Do not reword without updating the corresponding grep assertions in bin/check. -->
+
+When a PR diff is UI-significant — it touches component markup, layout,
+interaction handlers, styling tokens, or screen-level templates — trigger design
+discovery before classifying the affected findings. A diff is UI-significant
+when at least one changed file matches a UI-related extension or path pattern
+(`.html`, `.css`, `.scss`, `.vue`, `.jsx`, `.tsx`, component directories,
+or an equivalent pattern named in the target profile).
+
+1. Run `design-discovery` on the UI-significant portion of the diff, following
+   the portable `core/design-discovery/SKILL.md` contract.
+2. Include the resulting Design Brief as context in the classification and
+   rationale for every finding that touches the UI-significant change.
+3. Surface the Design Brief section in the finding's evidence block so that
+   a reviewer can assess UX impact alongside code correctness.
+
+When the diff is not UI-significant, skip this step and state `Design discovery:
+not applicable` in the outcome summary.
+
 ## Outcome summary
 
 Emit one summary block per handling session:

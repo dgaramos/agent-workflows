@@ -79,6 +79,7 @@ contributor.
 | `handle-pr-findings` | Triage, fix, defer, or reject findings against the current head |
 | `author-issue` | Draft and optionally publish a structured GitHub issue |
 | `design-discovery` | Produce an evidence-grounded UX/UI Design Brief and implementation handoff |
+| `design-and-author` | Chain design discovery into issue authoring in a single invocation |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
 | `plan-implementation` | Print a read-only, test-first implementation plan before edits |
 | `implement-issue` | Make minimal in-scope changes with quality-gate validation |
@@ -144,6 +145,7 @@ Invoke a skill or use a workflow agent:
 /claudio-dr:review-pr <PR URL> using a profile from the target repository
 /claudio-dr:author-issue <structured request>
 /claudio-dr:design-discovery <UX/UI request or reference>
+/claudio-dr:design-and-author <UX/UI request or reference>
 ```
 
 See [docs/claudio-dr.md](docs/claudio-dr.md) for the full installation,
@@ -164,6 +166,7 @@ Invoke a workflow agent or skill:
 @cody-executor plan issue #42
 @cody-author draft issue
 @cody-designer assess this checkout flow
+@cody-designer design-and-author <UX/UI request or reference>
 @cody-helper explain how to use Cody DR in this repository
 ```
 

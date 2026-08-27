@@ -63,6 +63,7 @@ readonly required_paths=(
   "core/issue-authoring/references/issue-contract.md"
   "core/design-discovery/SKILL.md"
   "core/design-discovery/references/design-discovery-contract.md"
+  "core/design-discovery/skills/design-and-author/SKILL.md"
   "core/findings-handling/SKILL.md"
   "core/findings-handling/references/findings-contract.md"
   "core/issue-workflow/references/workflow-contract.md"
@@ -96,6 +97,7 @@ readonly required_paths=(
   "plugins/cody-dr/skills/review-pr/SKILL.md"
   "plugins/cody-dr/skills/author-issue/SKILL.md"
   "plugins/cody-dr/skills/design-discovery/SKILL.md"
+  "plugins/cody-dr/skills/design-and-author/SKILL.md"
   "plugins/cody-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/cody-dr/skills/start-issue/SKILL.md"
   "plugins/cody-dr/skills/implement-issue/SKILL.md"
@@ -115,6 +117,7 @@ readonly required_paths=(
   "plugins/claudio-dr/skills/review-pr/SKILL.md"
   "plugins/claudio-dr/skills/author-issue/SKILL.md"
   "plugins/claudio-dr/skills/design-discovery/SKILL.md"
+  "plugins/claudio-dr/skills/design-and-author/SKILL.md"
   "plugins/claudio-dr/skills/handle-pr-findings/SKILL.md"
   "plugins/claudio-dr/skills/start-issue/SKILL.md"
   "plugins/claudio-dr/skills/implement-issue/SKILL.md"
@@ -153,6 +156,7 @@ readonly public_skill_names=(
   "handle-pr-findings"
   "author-issue"
   "design-discovery"
+  "design-and-author"
   "start-issue"
   "plan-implementation"
   "implement-issue"
@@ -433,6 +437,12 @@ grep -qF 'Do not use a personal fallback after an App dispatch' core/findings-ha
 grep -qF 'do not reclassify it as an unavailable publisher.' core/findings-handling/references/findings-contract.md
 grep -qF '**Publication identity:**' core/findings-handling/references/findings-contract.md
 
+# UI-significance hook in findings-contract.md (core/findings-handling/references/findings-contract.md).
+# "UI-significant" and "Design Brief" are load-bearing phrases: the hook section
+# must name the trigger condition and the output it surfaces.
+grep -qF 'UI-significant' core/findings-handling/references/findings-contract.md   # guards: UI-significance trigger condition
+grep -qF 'Design Brief' core/findings-handling/references/findings-contract.md     # guards: hook output reference
+
 # Authoring adapters must remain thin identity bindings over the portable
 # authoring contract and verify the matching GitHub App actor after publication.
 readonly adapter_author_issue_skills=(
@@ -543,9 +553,23 @@ for prefix in "${adapter_prefixes[@]}"; do
     exit 1
   fi
 done
-grep -qF '## Design Brief' core/design-discovery/references/design-discovery-contract.md
-grep -qF '**Publication:** not published' core/design-discovery/references/design-discovery-contract.md
-grep -qF '`author-issue` may' core/design-discovery/references/design-discovery-contract.md
+
+# design-and-author is the chained design-discovery → author-issue skill;
+# both adapters must reference the canonical core skill path.
+for prefix in "${adapter_prefixes[@]}"; do
+  skill="$prefix/skills/design-and-author/SKILL.md"
+  if ! grep -qF 'core/design-discovery/skills/design-and-author/SKILL.md' "$skill"; then
+    echo "parity: $skill does not reference core/design-discovery/skills/design-and-author/SKILL.md" >&2
+    exit 1
+  fi
+done
+
+# Guarded phrases in core/design-discovery/references/design-discovery-contract.md.
+# These strings are load-bearing — bin/check detects accidental rewording.
+# Each is annotated in the contract file with a matching <!-- bin/check anchor --> comment.
+grep -qF '## Design Brief' core/design-discovery/references/design-discovery-contract.md      # guards: "## Design Brief" section heading
+grep -qF '**Publication:** not published' core/design-discovery/references/design-discovery-contract.md  # guards: publication-boundary close
+grep -qF '`author-issue` may' core/design-discovery/references/design-discovery-contract.md             # guards: handoff-boundary sentence
 
 grep -qF 'Metadata verified:' core/issue-workflow/references/ship-change-contract.md
 grep -qF 'apply-pr-metadata.sh' core/issue-workflow/references/ship-change-contract.md
