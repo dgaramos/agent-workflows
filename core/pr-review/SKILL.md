@@ -9,6 +9,11 @@ Review only an explicit PR, branch, commit range, or local diff. Do not infer a
 review from unrelated worktree changes and do not publish anything unless the
 user explicitly authorizes it.
 
+The reviewer is independent of the contributor and executor: it may review an
+explicit target authored by any person or agent. Change authorship is neither
+scope nor evidence. Review does not execute an issue, modify the reviewed
+branch, or assume the contributor's role.
+
 Load [review-contract](references/review-contract.md) before reporting. It
 defines scope, evidence, confidence, findings, re-review, publication boundary,
 and summary format. Load [profile-contract](references/profile-contract.md) to

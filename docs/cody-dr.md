@@ -13,11 +13,12 @@ an isolated review pass on an explicit PR URL, branch, commit range, or local
 diff:
 
 ```text
-@cody-reviewer review PR #42
+@cody-reviewer review https://github.com/acme/widgets/pull/42
 ```
 
 You can also invoke the `review-pr` skill directly without the agent for a
-lightweight pass. Add a project profile when the target repository has
+lightweight pass. The reviewer is independent: it can review a PR from any
+contributor and never executes the issue or modifies the reviewed branch. Add a project profile when the target repository has
 architecture or quality rules beyond the portable core.
 
 The plugin also exposes global agents: `cody-helper` for usage guidance,

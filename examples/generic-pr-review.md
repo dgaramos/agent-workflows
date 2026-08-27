@@ -1,12 +1,15 @@
 # Generic PR review example
 
-Input: `review PR #42 with the default profile`
+Input: `review https://github.com/acme/widgets/pull/42, authored by another contributor, with the default profile`
 
 The reviewer loads `core/pr-review/references/review-contract.md` and the target
 profile before reviewing. It resolves the PR, reports the base/head, inspects
 the changed code and relevant callers, records checks consulted, and emits the
 review summary using the contract's summary template with the configured
 reviewer name.
+
+The contributor's identity is not review evidence or a prerequisite. The
+reviewer does not execute the issue or modify the reviewed branch.
 
 When the profile declares a local contract or linked delivery context, the
 reviewer loads the knowledge-sources contract and records source-backed facts

@@ -60,13 +60,16 @@ flowchart TD
     PL["plan-implementation\nRead-only test-first plan\nprinted before any file is touched"]
     IM["implement-issue\nMinimal in-scope changes\nQuality gate after each unit"]
     SH["ship-change\nFinal quality gate · push branch\nOpen fully-populated PR"]
-    RV["review-pr\nPost findings as COMMENT\nReply / resolve threads\n(separately authorized)"]
+    RV["review-pr\nIndependent review of explicit PR/ref\nPublication separately authorized"]
 
-    I --> S --> PL --> IM --> SH --> RV
+    I --> S --> PL --> IM --> SH
+    R["explicit PR/ref\nany contributor"] --> RV
 ```
 
 The same lifecycle runs identically on Codex with Cody DR — same contracts,
-same quality gate, same output format, different platform invocation.
+same quality gate, same output format, different platform invocation. PR review
+is a separate, explicit-reference workflow and can review a PR from any
+contributor.
 
 ## Available skills
 
