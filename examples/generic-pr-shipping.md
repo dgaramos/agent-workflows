@@ -24,3 +24,16 @@ personal fallback after the App publisher cannot complete that Project step.
 The outcome identifies the personal actor; it never labels that action as App
 publication. Do not request organization-Projects permission for a user-owned
 Project.
+
+## Lifecycle handoff reporting
+
+When a lifecycle phase inspects a repository `CONTRIBUTING.md`, its handoff
+makes the result visible to the next phase. For example:
+
+```md
+**Contribution guidance:** applied: branch naming, Conventional Commits, bin/check
+```
+
+The same field appears in the Start, Implementation, and Ship output templates.
+If no file exists it reports `not found`; a material conflict reports `conflict:`
+with the reason and stops for direction.

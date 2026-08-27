@@ -658,6 +658,19 @@ for skill_name in "${contribution_lifecycle_skills[@]}"; do
   done
 done
 
+# Every lifecycle phase that inspects contribution guidance must make its
+# outcome visible in the portable handoff template.
+readonly contribution_guidance_output='**Contribution guidance:** <applied: <items> | not found | conflict: <description>>'
+for contract in \
+  core/issue-workflow/references/start-issue-contract.md \
+  core/issue-workflow/references/implement-issue-contract.md \
+  core/issue-workflow/references/ship-change-contract.md; do
+  if ! grep -qF "$contribution_guidance_output" "$contract"; then
+    echo "contribution-guidance: $contract does not report guidance in its output template" >&2
+    exit 1
+  fi
+done
+
 # Core bundles belong only at each plugin root and must be generated from the
 # canonical core directory. Skills must not grow their own contract copies.
 readonly forbidden_paths=(

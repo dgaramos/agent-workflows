@@ -31,6 +31,7 @@ issue from unrelated context.
 **Branch:** `<branch-name>` from `<base>`
 **Profile:** <profile name or none>
 **Dependencies:** <all resolved|blocked by: #N, …>
+**Contribution guidance:** <applied: <items> | not found | conflict: <description>>
 **Next:** implement-issue
 ```
 
