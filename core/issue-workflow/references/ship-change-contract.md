@@ -80,6 +80,7 @@ Do not ship without confirmed passing quality gates.
 **Metadata applied:** <labels, milestone, assignees, reviewers, Projects or none>
 **Metadata verified:** <field → observed value, or failed field>
 **Metadata publisher:** <verified App actor|personal fallback: @login|not published: reason>
+**Contribution guidance:** <applied: <items> | not found | conflict: <description>>
 ```
 
 Do not publish review, comment, reply, or thread-resolution content as part of
