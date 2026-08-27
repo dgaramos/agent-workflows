@@ -4,6 +4,29 @@ Use this profile when reviewing this repository. Read `AGENTS.md`, `README.md`,
 `CONTRIBUTING.md`, the issue, changed plugin manifests, both adapter skills, and
 their review contracts. Run `bin/check` before handoff.
 
+## Adapter release discipline
+
+Any change below `plugins/cody-dr/` or `plugins/claudio-dr/` is an installable
+adapter change. In the same pull request, bump the affected plugin's patch
+version in both its manifest and its matching marketplace entry; do not bump an
+unaffected adapter just to keep the numbers equal. Verify those two values
+match before handoff.
+
+Treat adapter capability parity as bidirectional: every user-facing skill,
+agent, workflow entrypoint, and portable-contract capability added to Claudio
+DR must have an equivalent Cody DR counterpart, and vice versa. Keep the
+portable behavior in `core/`; adapters may differ only for documented identity
+or platform mechanics. If an equivalent is intentionally unavailable, document
+the reason and the user-visible limitation in `docs/compatibility.md` and add a
+check that prevents the divergence from becoming accidental.
+
+For Claudio DR changes, run `claude plugin validate ./plugins/claudio-dr` as
+well as `bin/check`, then load the plugin with `claude --plugin-dir
+./plugins/claudio-dr` when a runtime validation is required. Codex has no
+standalone manifest validator: run `bin/check`, then load
+`codex --plugin-dir ./plugins/cody-dr` for runtime validation. Record any
+runtime service-limit failure separately from manifest or catalog validation.
+
 ## Claudio DR self-review
 
 Use Claudio DR's `review-pr` skill (or the `claudio-reviewer` agent) against an

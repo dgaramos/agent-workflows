@@ -68,10 +68,11 @@ codex --plugin-dir ./plugins/cody-dr
 claude --plugin-dir ./plugins/claudio-dr
 ```
 
-After a Cody DR change, bump its manifest version, reinstall it from the
-marketplace root, and start a new Codex thread. After a Claudio DR change,
-bump its version, run `/plugin marketplace update`, then
-`/plugin update claudio-dr@agent-workflows`.
+After a Cody DR or Claudio DR change, bump only the affected plugin's patch
+version in both its manifest and matching marketplace entry; `bin/check`
+verifies that the values match. Reinstall Cody DR from the marketplace root and
+start a new Codex thread. For Claudio DR, run `/plugin marketplace update`,
+then `/plugin update claudio-dr@agent-workflows`.
 
 Do not treat a locally installed plugin as proof that an installation workflow
 works; document and validate the fresh-install path as part of each adapter.

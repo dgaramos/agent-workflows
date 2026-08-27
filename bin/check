@@ -209,7 +209,7 @@ done
 # surface differs from its source tree.
 jq -e '.name == "cody-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/"' \
   plugins/cody-dr/.codex-plugin/plugin.json >/dev/null
-jq -e '.name == "claudio-dr" and (.version | type == "string") and .skills == "./skills/" and .agents == "./agents/" and (.interface | type == "object") and (.interface.displayName | type == "string") and (.interface.capabilities | type == "array")' \
+jq -e '.name == "claudio-dr" and (.version | type == "string") and .skills == "./skills/" and (has("agents") | not) and (has("interface") | not)' \
   plugins/claudio-dr/.claude-plugin/plugin.json >/dev/null
 claudio_version="$(jq -r '.version' plugins/claudio-dr/.claude-plugin/plugin.json)"
 cody_version="$(jq -r '.version' plugins/cody-dr/.codex-plugin/plugin.json)"
@@ -594,6 +594,32 @@ grep -qF 'plan-implementation · implement-issue' core/issue-workflow/references
 for prefix in "${adapter_prefixes[@]}"; do
   grep -qF 'core/issue-workflow/skills/plan-implementation/SKILL.md' \
     "$prefix/skills/plan-implementation/SKILL.md"
+done
+
+# Claudio DR needs explicit adapter-level guardrails to keep the portable TDD
+# contract from being interpreted as a shallow checklist.
+readonly claudio_plan_skill="plugins/claudio-dr/skills/plan-implementation/SKILL.md"
+readonly claudio_implement_skill="plugins/claudio-dr/skills/implement-issue/SKILL.md"
+for required_text in \
+  'Before printing, self-audit every criterion' \
+  '**Validation order:** line in every criterion' \
+  '**Risks and assumptions:** section is mandatory' \
+  'Anti-patterns to reject'; do
+  if ! grep -qF "$required_text" "$claudio_plan_skill"; then
+    echo "claudio TDD discipline: plan skill is missing: $required_text" >&2
+    exit 1
+  fi
+done
+for required_text in \
+  'three discrete, recorded stages' \
+  'real failing Red test before implementation code' \
+  'failure path and at least one' \
+  'relevant edge case' \
+  'Anti-patterns to reject'; do
+  if ! grep -qF "$required_text" "$claudio_implement_skill"; then
+    echo "claudio TDD discipline: implement skill is missing: $required_text" >&2
+    exit 1
+  fi
 done
 
 # Core bundles belong only at each plugin root and must be generated from the
