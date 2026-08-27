@@ -88,12 +88,11 @@ echo "$status_output" | grep -q "cody-dr"    || { echo "FAIL: status output miss
 echo "$status_output" | grep -q "agents"     || { echo "FAIL: status output missing agents" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
-# bad args: no mode exits non-zero
+# no args: reports workflow check (no longer a usage error)
 # ---------------------------------------------------------------------------
-if run_install "$tmp" 2>/dev/null; then
-  echo "FAIL: expected usage error with no args, got success" >&2
-  exit 1
-fi
+noargs_output="$(cd "$fake_repo" && run_install "$fake_repo")"
+echo "$noargs_output" | grep -qE "absent|present|drifted|Workflow status" \
+  || { echo "FAIL: no-args should report workflow status" >&2; exit 1; }
 
 # --profile without --repo exits non-zero
 if run_install "$tmp" --profile agent-workflows 2>/dev/null; then

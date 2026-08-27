@@ -2,9 +2,11 @@
 # bin/install — install agent-workflows skills and plugins globally or per-repo
 #
 # Modes:
+#   (no args)             check workflow presence and drift in CWD .github/workflows/
 #   --global              install claudio-dr to ~/.claude/ and cody-dr to global Codex config
 #   --repo [--profile N]  install to .claude/ in CWD; optionally apply named profile overrides
 #   --status              report what is currently installed globally and per-repo in CWD
+#   --workflows           install managed workflows to CWD .github/workflows/
 #
 # On conflict between an existing file and the source, the script prints a
 # warning naming both versions and exits non-zero without overwriting.
@@ -21,10 +23,15 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 usage() {
   cat >&2 <<EOF
-Usage: bin/install --global [--force]
+Usage: bin/install [--force]
+       bin/install --global [--force]
        bin/install --repo [--profile <name>] [--force]
        bin/install --status
+       bin/install --workflows [--force]
 
+  (no mode)         Check workflow presence and drift in .github/workflows/ of
+                    the current repo. Reports each managed workflow as 'present',
+                    'absent', or 'drifted'. No files are written.
   --global          Install claudio-dr plugin to ~/.claude/ and cody-dr plugin
                     to the global Codex config directory.
   --repo            Install claudio-dr plugin to .claude/ in the current repo.
@@ -32,6 +39,9 @@ Usage: bin/install --global [--force]
                     overrides from profiles/<name>.md.
   --status          Show what is currently installed globally and in the current
                     repo's .claude/ directory.
+  --workflows       Install managed workflows from the catalog into .github/workflows/
+                    of the current repo. Skips workflows already at the current version.
+                    Reports each action as 'installed' or 'unchanged'.
   --force           Skip conflict checking and overwrite all files from the
                     catalog source, printing a warning for each overwritten
                     file. Use 'agents update --global --force' to resolve
@@ -127,6 +137,8 @@ install_file() {
 }
 
 # Copy an entire plugin directory tree, calling install_file for each file.
+# Skips the workflows/ subdirectory — those templates are installed separately
+# via --workflows and are not part of the global/repo skill install.
 # Returns 1 if any conflict was detected.
 install_plugin_dir() {
   local src_dir="$1"
@@ -136,11 +148,150 @@ install_plugin_dir() {
 
   while IFS= read -r -d '' src_file; do
     local rel="${src_file#"${src_dir}/"}"
+    # Skip workflow templates — installed via --workflows only
+    [[ "$rel" == workflows/* ]] && continue
     local dest_file="${dest_dir}/${rel}"
     install_file "${src_file}" "${dest_file}" "${rel}" "${ver}" || conflicts=$((conflicts + 1))
   done < <(find "${src_dir}" -type f -print0)
 
   return "${conflicts}"
+}
+
+# ---------------------------------------------------------------------------
+# Workflow management helpers
+# ---------------------------------------------------------------------------
+
+# Managed workflow names and their source plugin.
+# Each entry is "filename:plugin" where plugin is claudio-dr or cody-dr.
+readonly managed_workflows=(
+  "publish-claudio-issue.yml:claudio-dr"
+  "publish-claudio-pr-metadata.yml:claudio-dr"
+  "publish-claudio-review.yml:claudio-dr"
+  "publish-claudio-reply.yml:claudio-dr"
+  "publish-claudio-resolve.yml:claudio-dr"
+  "publish-cody-issue.yml:cody-dr"
+  "publish-cody-pr-metadata.yml:cody-dr"
+  "publish-cody-review.yml:cody-dr"
+  "publish-cody-reply.yml:cody-dr"
+  "publish-cody-resolve.yml:cody-dr"
+)
+
+# Read the embedded version comment from a workflow file.
+# Returns the version string (e.g. "0.1.13") or "unknown" when absent.
+workflow_embedded_version() {
+  local file="$1"
+  local plugin="$2"
+  if [[ ! -f "$file" ]]; then
+    echo "absent"
+    return
+  fi
+  local ver
+  ver="$(grep -m1 "^# ${plugin}: v" "$file" 2>/dev/null \
+    | sed "s/^# ${plugin}: v//" || true)"
+  if [[ -z "$ver" ]]; then
+    echo "unknown"
+  else
+    echo "$ver"
+  fi
+}
+
+# Return the catalog version for a plugin ("claudio-dr" or "cody-dr").
+plugin_catalog_version() {
+  local plugin="$1"
+  if [[ "$plugin" == "claudio-dr" ]]; then
+    claudio_version
+  else
+    cody_version
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# (no args) — check workflow presence and drift in CWD .github/workflows/
+# ---------------------------------------------------------------------------
+
+mode_check_workflows() {
+  local repo_root
+  repo_root="$(pwd)"
+  local wf_dir="${repo_root}/.github/workflows"
+
+  echo "Workflow status in ${wf_dir}:"
+  echo ""
+
+  for entry in "${managed_workflows[@]}"; do
+    local wf_name="${entry%%:*}"
+    local plugin="${entry##*:}"
+    local catalog_ver
+    catalog_ver="$(plugin_catalog_version "$plugin")"
+    local dest="${wf_dir}/${wf_name}"
+    local embedded_ver
+    embedded_ver="$(workflow_embedded_version "$dest" "$plugin")"
+
+    local status
+    if [[ "$embedded_ver" == "absent" ]]; then
+      status="absent"
+    elif [[ "$embedded_ver" == "$catalog_ver" ]]; then
+      status="present"
+    else
+      status="drifted  (installed: v${embedded_ver}, catalog: v${catalog_ver})"
+    fi
+    printf "  %-50s %s\n" "$wf_name" "$status"
+  done
+  echo ""
+}
+
+# ---------------------------------------------------------------------------
+# --workflows — install managed workflows to CWD .github/workflows/
+# ---------------------------------------------------------------------------
+
+mode_install_workflows() {
+  local repo_root
+  repo_root="$(pwd)"
+  local wf_dir="${repo_root}/.github/workflows"
+
+  if [[ "${FORCE:-0}" == "1" ]]; then
+    echo "WARNING: --force is set; all managed workflows will be overwritten."
+    echo ""
+  fi
+
+  echo "Installing managed workflows to ${wf_dir}:"
+  echo ""
+
+  local any_conflict=0
+  for entry in "${managed_workflows[@]}"; do
+    local wf_name="${entry%%:*}"
+    local plugin="${entry##*:}"
+    local catalog_ver
+    catalog_ver="$(plugin_catalog_version "$plugin")"
+    local src="${REPO_DIR}/plugins/${plugin}/workflows/${wf_name}"
+    local dest="${wf_dir}/${wf_name}"
+    local embedded_ver
+    embedded_ver="$(workflow_embedded_version "$dest" "$plugin")"
+
+    if [[ "$embedded_ver" == "absent" ]]; then
+      mkdir -p "$wf_dir"
+      cp "$src" "$dest"
+      echo "  installed  ${wf_name}  (v${catalog_ver})"
+    elif [[ "$embedded_ver" == "$catalog_ver" ]]; then
+      if [[ "${FORCE:-0}" == "1" ]]; then
+        cp "$src" "$dest"
+        echo "  installed  ${wf_name}  (force, v${catalog_ver})"
+      else
+        echo "  unchanged  ${wf_name}  (v${catalog_ver})"
+      fi
+    else
+      # drifted — update to catalog version
+      if [[ "${FORCE:-0}" == "1" ]]; then
+        cp "$src" "$dest"
+        echo "  installed  ${wf_name}  (force, v${embedded_ver} -> v${catalog_ver})"
+      else
+        cp "$src" "$dest"
+        echo "  updated    ${wf_name}  (v${embedded_ver} -> v${catalog_ver})"
+      fi
+    fi
+  done
+
+  echo ""
+  echo "Workflow install complete."
 }
 
 # ---------------------------------------------------------------------------
@@ -299,10 +450,6 @@ mode_status() {
 # Argument parsing
 # ---------------------------------------------------------------------------
 
-if [[ $# -eq 0 ]]; then
-  usage
-fi
-
 MODE=""
 PROFILE_NAME=""
 FORCE=0
@@ -329,6 +476,10 @@ while [[ $# -gt 0 ]]; do
       MODE="status"
       shift
       ;;
+    --workflows)
+      MODE="workflows"
+      shift
+      ;;
     --force)
       FORCE=1
       shift
@@ -343,8 +494,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# No args: check workflow presence/drift (new default behavior)
 if [[ -z "${MODE}" ]]; then
-  usage
+  MODE="check_workflows"
 fi
 
 if [[ "${PROFILE_NAME}" != "" && "${MODE}" != "repo" ]]; then
@@ -357,10 +509,17 @@ if [[ "${FORCE}" == "1" && "${MODE}" == "status" ]]; then
   exit 1
 fi
 
+if [[ "${FORCE}" == "1" && "${MODE}" == "check_workflows" ]]; then
+  echo "--force is not valid without --workflows" >&2
+  exit 1
+fi
+
 export FORCE
 
 case "${MODE}" in
-  global) mode_global ;;
-  repo)   mode_repo "${PROFILE_NAME}" ;;
-  status) mode_status ;;
+  check_workflows) mode_check_workflows ;;
+  global)          mode_global ;;
+  repo)            mode_repo "${PROFILE_NAME}" ;;
+  status)          mode_status ;;
+  workflows)       mode_install_workflows ;;
 esac

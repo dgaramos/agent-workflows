@@ -140,11 +140,40 @@ readonly required_paths=(
   "profiles/agent-workflows.md"
   "profiles/example-project.md"
   "examples/.gitkeep"
+  "plugins/claudio-dr/workflows/publish-claudio-issue.yml"
+  "plugins/claudio-dr/workflows/publish-claudio-pr-metadata.yml"
+  "plugins/claudio-dr/workflows/publish-claudio-review.yml"
+  "plugins/claudio-dr/workflows/publish-claudio-reply.yml"
+  "plugins/claudio-dr/workflows/publish-claudio-resolve.yml"
+  "plugins/cody-dr/workflows/publish-cody-issue.yml"
+  "plugins/cody-dr/workflows/publish-cody-pr-metadata.yml"
+  "plugins/cody-dr/workflows/publish-cody-review.yml"
+  "plugins/cody-dr/workflows/publish-cody-reply.yml"
+  "plugins/cody-dr/workflows/publish-cody-resolve.yml"
 )
 
 for path in "${required_paths[@]}"; do
   if ! test -f "$path"; then
     echo "required path missing: $path" >&2
+    exit 1
+  fi
+done
+
+# Each managed workflow template must carry a version comment so the installer
+# can detect drift without a full file diff.
+claudio_wf_ver="$(grep '"version"' plugins/claudio-dr/.claude-plugin/plugin.json | head -1 \
+  | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')"
+cody_wf_ver="$(grep '"version"' plugins/cody-dr/.codex-plugin/plugin.json | head -1 \
+  | sed 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')"
+for wf in plugins/claudio-dr/workflows/publish-claudio-*.yml; do
+  if ! grep -qF "# claudio-dr: v${claudio_wf_ver}" "$wf"; then
+    echo "drift: $wf is missing version comment '# claudio-dr: v${claudio_wf_ver}'" >&2
+    exit 1
+  fi
+done
+for wf in plugins/cody-dr/workflows/publish-cody-*.yml; do
+  if ! grep -qF "# cody-dr: v${cody_wf_ver}" "$wf"; then
+    echo "drift: $wf is missing version comment '# cody-dr: v${cody_wf_ver}'" >&2
     exit 1
   fi
 done
