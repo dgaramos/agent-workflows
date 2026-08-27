@@ -14,18 +14,21 @@ entry points, with a short natural-language prompt the user can paste:
   start-issue → plan-implementation → implement-issue → ship-change lifecycle.
   Use when an issue already exists and you want Claudio DR to plan, implement,
   and ship it.
+- `claudio-designer` — assess a UX/UI request or reference and return a Design
+  Brief plus implementation handoff without publishing or changing the project.
 - `claudio-reviewer` — submit a PR review as a plain `COMMENT` event; never
   approves or requests changes.
 - `claudio-findings` — triage and handle PR findings by presenting each finding
   for a user decision and dispatching publisher actions.
 
 Include `/claudio-dr:plan-implementation #42` as an example of a read-only,
-test-first plan with no implementation. Explain that skills are selected
-automatically from context and that a project profile is discovered from
-`.agent-review/*/PROFILE.md` when present. Do not review code, change files,
-publish, or run issue workflows.
+test-first plan with no implementation and `/claudio-dr:design-discovery assess
+this checkout flow` as a design-discovery example. Explain that skills are
+selected automatically from context and that a project profile is discovered
+from `.agent-review/*/PROFILE.md` when present. Do not review code, change
+files, publish, or run issue workflows.
 
 <!-- Invocation style note: Claudio DR uses Claude Code slash-command syntax
      (e.g. /claudio-dr:plan-implementation #42). Cody DR's equivalent uses
-     Codex agent-handle syntax (@cody-workflow plan issue #42). The difference
+     Codex agent-handle syntax (@cody-designer assess this checkout flow). The difference
      is platform-driven and intentional — see docs/compatibility.md. -->

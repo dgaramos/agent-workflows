@@ -37,10 +37,11 @@ not mean an App is inactive.
 | Platform | Claude Code |
 | Plugin manifest | `.claude-plugin/plugin.json` |
 | Reviewer agent | `plugins/claudio-dr/agents/claudio-reviewer.md` |
+| Designer agent | `plugins/claudio-dr/agents/claudio-designer.md` |
 | Invocation | `/claudio-dr:review-pr <PR URL or ref>` |
 | Issue authoring | `/claudio-dr:author-issue <problem statement>` |
 | Implementation planning | `/claudio-dr:plan-implementation <issue>` |
-| Agent invocation | `@claudio-reviewer review <ref>` |
+| Agent invocation | `@claudio-reviewer review <ref>` or `/claudio-dr:design-discovery <request>` |
 | Local validation | `claude plugin validate ./plugins/claudio-dr` |
 | Local session | `claude --plugin-dir ./plugins/claudio-dr` |
 | Update flow | bump version → `/plugin marketplace update` → `/plugin update claudio-dr@agent-workflows` |
@@ -52,10 +53,11 @@ not mean an App is inactive.
 | Platform | Codex |
 | Plugin manifest | `.codex-plugin/plugin.json` |
 | Reviewer agent | `plugins/cody-dr/agents/cody-reviewer.md` |
+| Designer agent | `plugins/cody-dr/agents/cody-designer.md` |
 | Invocation | `review-pr <PR URL or ref>` |
 | Issue authoring | `author-issue <problem statement>` |
 | Implementation planning | `plan-implementation <issue>` |
-| Agent invocation | `@cody-reviewer review <ref>`, `@cody-author draft issue`, or `@cody-executor execute issue #42` |
+| Agent invocation | `@cody-reviewer review <ref>`, `@cody-author draft issue`, `@cody-executor execute issue #42`, or `@cody-designer assess <request>` |
 | Local validation | `bin/check` + `codex --plugin-dir ./plugins/cody-dr` |
 | Local session | `codex --plugin-dir ./plugins/cody-dr` |
 | Update flow | bump version → reinstall from marketplace root → new thread |
@@ -72,7 +74,7 @@ not mean an App is inactive.
   reinstall and a new thread. Neither difference affects review behavior.
 - **Helper invocation style**: `claudio-helper` demonstrates slash-command style
   (e.g. `/claudio-dr:plan-implementation #42`) while `cody-helper` demonstrates
-  agent-handle style (e.g. `@cody-workflow plan issue #42`). This divergence is
+  agent-handle style (e.g. `@cody-designer assess this checkout flow`). This divergence is
   intentional and platform-driven — each adapter uses its platform's native
   invocation model. It is not a parity bug. Contributors extending either adapter
   should follow the invocation style of the target platform, not mirror the other
@@ -123,7 +125,7 @@ quality gates.
 
 As a rule of thumb, a local agent longer than roughly ten lines is probably
 carrying behavior that belongs in `PROFILE.md`. Prefer the global plugin agents
-(`cody-reviewer`, `cody-author`, `cody-executor`, `cody-findings`, and their Claudio
+(`cody-reviewer`, `cody-author`, `cody-executor`, `cody-designer`, `cody-findings`, and their Claudio
 counterparts) for new projects; they discover the profile automatically.
 
 ### Example split
