@@ -8,23 +8,27 @@ confirmed branch, issue reference, and test-first plan.
 
 ## Steps
 
-1. Follow the accepted plan criterion by criterion. For each executable
+1. Apply commit-format and validation guidance discovered from `CONTRIBUTING.md`
+   following [contribution-guidance-contract](contribution-guidance-contract.md).
+   A missing file is not a blocker. Surface any material conflict with the
+   profile before committing.
+2. Follow the accepted plan criterion by criterion. For each executable
    behavior change, write or update the planned Red test first and verify its
    failure for the expected reason.
-2. Make the smallest Green implementation that passes the planned happy path,
+3. Make the smallest Green implementation that passes the planned happy path,
    failure path, relevant edge cases, and regression coverage. Refactor only
    with those tests still passing.
-3. For an explicitly non-executable change, run the structural validation named
+4. For an explicitly non-executable change, run the structural validation named
    in the plan. Do not claim TDD is inapplicable merely to avoid writing tests.
-4. After each logical unit, run the profile's quality command. Stop immediately
+5. After each logical unit, run the profile's quality command. Stop immediately
    if it fails.
-5. Commit each logical unit with a message that references the issue and
+6. Commit each logical unit with a message that references the issue and
    describes the intent, not the mechanics. Append the adapter's
    `Co-authored-by trailer` from `reviewer-identity.md` to every commit
    message — never the generic model or CLI identity, and never the trailer
    belonging to a different adapter (e.g. a Claudio DR execution must not
    carry the `cody-dr[bot]` trailer and vice versa).
-6. Do not push, open a PR, or touch files outside the issue's stated scope.
+7. Do not push, open a PR, or touch files outside the issue's stated scope.
 
 ## Output
 

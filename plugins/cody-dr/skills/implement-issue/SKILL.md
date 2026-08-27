@@ -13,3 +13,8 @@ changes and running the profile's quality command.
 
 Discover the target profile first with
 `core/profile-discovery/references/profile-discovery-contract.md`.
+
+Follow `core/issue-workflow/references/contribution-guidance-contract.md` to
+apply commit-format and validation guidance from `CONTRIBUTING.md`. A missing
+file is not a blocker; surface any material conflict with the profile before
+committing.
