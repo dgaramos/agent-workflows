@@ -10,8 +10,11 @@ creation.
 ## Steps
 
 1. Run `start-issue`. Stop on any handoff.
-2. Run `plan-implementation` and emit its complete read-only plan.
-3. Run `implement-issue` from that plan. Stop on any handoff.
+2. Run `plan-implementation` and emit its complete read-only plan. After the
+   plan is printed, halt and wait for explicit user confirmation before
+   proceeding. No file may be touched before confirmation is received. If the
+   user redirects or adjusts, re-emit a revised plan and wait again.
+3. Run `implement-issue` from the confirmed plan. Stop on any handoff.
 4. Run `ship-change`. Stop only for a failed quality gate, missing permission,
    unresolved dependency, or material out-of-scope decision.
 

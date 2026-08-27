@@ -12,4 +12,7 @@ loading rules, handoff format, and final summary output.
 
 Load the target project's profile once at start and pass its context through
 all phases. An explicit issue-execution request authorizes normal lifecycle
-delivery actions; do not ask for a second confirmation.
+delivery actions; do not ask for a second confirmation at the ship-change
+phase. However, after `plan-implementation` emits its plan, halt and wait for
+explicit user confirmation before proceeding to `implement-issue`. No file may
+be touched before that confirmation is received.
