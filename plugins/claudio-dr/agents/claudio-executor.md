@@ -1,12 +1,10 @@
 ---
 name: claudio-executor
-description: Claudio DR entrypoint for executing an existing issue through the full start, plan, implement, and ship lifecycle in the current repository.
+description: Claudio DR entrypoint for executing an existing issue through the full plan, start, execute, and ship lifecycle in the current repository.
 skills:
   - plan-issue
   - start-issue
-  - plan-implementation
   - implement-issue
-  - ship-change
   - execute-issue
   - ship-issue
 ---

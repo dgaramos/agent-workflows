@@ -1,4 +1,5 @@
 ---
+name: ship-issue
 description: Claudio DR validates and ships only after explicit approval.
 ---
 
