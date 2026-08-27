@@ -125,4 +125,39 @@ grep -qF "# claudio-dr: v${claudio_ver}" "$fake_repo/.github/workflows/publish-c
 
 rm -rf "$fake_repo/.github"
 
+# ---------------------------------------------------------------------------
+# Criterion 4 — workflow template content satisfies policy constraints
+# ---------------------------------------------------------------------------
+
+# Review workflows must allow COMMENT only — APPROVE must not appear as an option.
+for wf in \
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-review.yml" \
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-review.yml"; do
+  name="$(basename "$wf")"
+  grep -qE "options:[[:space:]]*\[COMMENT\]" "$wf" \
+    || { echo "FAIL: $name must have options: [COMMENT] only" >&2; exit 1; }
+  grep -q "APPROVE" "$wf" \
+    && { echo "FAIL: $name must not contain APPROVE — it is a human decision" >&2; exit 1; } || true
+done
+
+# PR metadata workflows must declare project_owner, project_number, project_status.
+for wf in \
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-pr-metadata.yml" \
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-pr-metadata.yml"; do
+  name="$(basename "$wf")"
+  for field in project_owner project_number project_status; do
+    grep -qF "${field}:" "$wf" \
+      || { echo "FAIL: $name must declare input field: $field" >&2; exit 1; }
+  done
+done
+
+# Issue workflows must not request organization-level project permissions.
+for wf in \
+  "$repository_root/plugins/claudio-dr/workflows/publish-claudio-issue.yml" \
+  "$repository_root/plugins/cody-dr/workflows/publish-cody-issue.yml"; do
+  name="$(basename "$wf")"
+  grep -q "permission-organization-projects" "$wf" \
+    && { echo "FAIL: $name must not request permission-organization-projects" >&2; exit 1; } || true
+done
+
 echo "bin/install workflow tests passed"
