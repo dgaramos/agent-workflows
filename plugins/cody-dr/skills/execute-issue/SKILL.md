@@ -1,6 +1,6 @@
 ---
 name: execute-issue
-description: Cody DR orchestrates the full issue-to-change lifecycle: start, test-first planning, implementation, and shipping with authorized normal delivery.
+description: Cody DR implements an approved issue plan and stops before shipping.
 ---
 
 # Cody DR execute-issue
@@ -8,8 +8,7 @@ description: Cody DR orchestrates the full issue-to-change lifecycle: start, tes
 Reviewer identity: **Cody DR** (Codex App reviewer).
 
 Load `core/issue-workflow/skills/execute-issue/SKILL.md` and follow its
-referenced contracts. An explicit issue-execution request authorizes push and
-PR creation; do not ask for a second confirmation at the ship-change phase.
+referenced contracts. Require explicit approval before `ship-issue` publishes.
 
 Discover the target profile first with
 `core/profile-discovery/references/profile-discovery-contract.md`.

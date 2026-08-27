@@ -187,6 +187,8 @@ readonly public_skill_names=(
   "design-discovery"
   "design-and-author"
   "start-issue"
+  "plan-issue"
+  "ship-issue"
   "plan-implementation"
   "implement-issue"
   "ship-change"
@@ -559,7 +561,7 @@ for pair in "${claudio_cody_agent_pairs[@]}"; do
 done
 
 # Adapter workflow skills must reference the corresponding core skill (parity check).
-readonly workflow_skill_names=("start-issue" "plan-implementation" "implement-issue" "ship-change" "execute-issue")
+readonly workflow_skill_names=("plan-issue" "start-issue" "execute-issue" "ship-issue")
 readonly adapter_prefixes=("plugins/claudio-dr" "plugins/cody-dr")
 
 for skill_name in "${workflow_skill_names[@]}"; do

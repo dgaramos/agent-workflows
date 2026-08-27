@@ -2,8 +2,7 @@
 
 ## Inputs
 
-Require an explicit issue reference (number or URL). Do not infer the target
-issue from unrelated context.
+Require an approved `plan-issue` handoff. Do not create a branch before plan approval.
 
 ## Steps
 
@@ -32,7 +31,7 @@ issue from unrelated context.
 **Profile:** <profile name or none>
 **Dependencies:** <all resolved|blocked by: #N, …>
 **Contribution guidance:** <applied: <items> | not found | conflict: <description>>
-**Next:** implement-issue
+**Next:** execute-issue (awaiting explicit approval)
 ```
 
 Stop and emit a handoff block if any dependency is unresolved or the profile
