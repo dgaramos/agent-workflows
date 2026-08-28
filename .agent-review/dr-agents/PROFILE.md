@@ -1,7 +1,7 @@
 # Agent Workflows profile
 
 Use this profile when executing workflows in this repository. Read `AGENTS.md`,
-the issue, and `profiles/agent-workflows.md`; run `bin/check` before handoff.
+the issue, and `profiles/dr-agents.md`; run `bin/check` before handoff.
 
 ## Delivery metadata
 

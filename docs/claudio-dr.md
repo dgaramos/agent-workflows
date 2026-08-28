@@ -4,8 +4,8 @@ Add this private repository as a Claude Code plugin marketplace, then install
 the plugin:
 
 ```text
-/plugin marketplace add dgaramos/agent-workflows
-/plugin install claudio-dr@agent-workflows
+/plugin marketplace add dgaramos/dr-agents
+/plugin install claudio-dr@dr-agents
 ```
 
 Start a new Claude Code session after installation. Use the
@@ -42,7 +42,7 @@ update the marketplace and reinstall:
 
 ```bash
 /plugin marketplace update
-/plugin update claudio-dr@agent-workflows
+/plugin update claudio-dr@dr-agents
 ```
 
 The installed plugin includes a read-only bundle of the portable core contracts,
@@ -63,5 +63,5 @@ requested App operation is unavailable before dispatch, an explicitly authorized
 authenticated personal account may publish the prepared action and is reported
 as a personal fallback. A failed App dispatch or verification is reported as a
 failure and never retried through that account.
-For this repository, see `profiles/agent-workflows.md` for the configuration
+For this repository, see `profiles/dr-agents.md` for the configuration
 names and publication boundary; it contains no credential values.

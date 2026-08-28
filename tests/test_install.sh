@@ -39,7 +39,7 @@ agents_bin="$fake_home/.local/bin/agents"
 # The wrapper reads the pointer file at runtime; verify it references the pointer file path.
 grep -q "catalog-path" "$agents_bin" || { echo "FAIL: agents wrapper does not reference pointer file (catalog-path)" >&2; exit 1; }
 
-global_pointer="$fake_home/.local/share/agent-workflows/catalog-path"
+global_pointer="$fake_home/.local/share/dr-agents/catalog-path"
 [[ -f "$global_pointer" ]] || { echo "FAIL: --global did not write pointer file at $global_pointer" >&2; exit 1; }
 pointer_content="$(< "$global_pointer")"
 [[ -n "$pointer_content" ]] || { echo "FAIL: --global wrote an empty pointer file" >&2; exit 1; }
@@ -69,7 +69,7 @@ rm -rf "$fake_home/.claude"
 repo_manifest="$fake_repo/.claude/.claude-plugin/plugin.json"
 [[ -f "$repo_manifest" ]] || { echo "FAIL: repo claudio-dr plugin.json not installed" >&2; exit 1; }
 
-repo_pointer="$fake_home/.local/share/agent-workflows/catalog-path"
+repo_pointer="$fake_home/.local/share/dr-agents/catalog-path"
 [[ -f "$repo_pointer" ]] || { echo "FAIL: --repo did not write pointer file at $repo_pointer" >&2; exit 1; }
 repo_pointer_content="$(< "$repo_pointer")"
 [[ -n "$repo_pointer_content" ]] || { echo "FAIL: --repo wrote an empty pointer file" >&2; exit 1; }
@@ -77,9 +77,9 @@ repo_pointer_content="$(< "$repo_pointer")"
 # ---------------------------------------------------------------------------
 # --repo --profile: copies the named profile file
 # ---------------------------------------------------------------------------
-(cd "$fake_repo" && HOME="$fake_home" CODEX_CONFIG_DIR="$codex_dir" bash "$repository_root/bin/install" --repo --profile agent-workflows >/dev/null)
+(cd "$fake_repo" && HOME="$fake_home" CODEX_CONFIG_DIR="$codex_dir" bash "$repository_root/bin/install" --repo --profile dr-agents >/dev/null)
 
-profile_dest="$fake_repo/.claude/profiles/agent-workflows.md"
+profile_dest="$fake_repo/.claude/profiles/dr-agents.md"
 [[ -f "$profile_dest" ]] || { echo "FAIL: profile not installed at $profile_dest" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
@@ -106,7 +106,7 @@ echo "$noargs_output" | grep -qE "absent|present|drifted|Workflow status" \
   || { echo "FAIL: no-args should report workflow status" >&2; exit 1; }
 
 # --profile without --repo exits non-zero
-if run_install "$tmp" --profile agent-workflows 2>/dev/null; then
+if run_install "$tmp" --profile dr-agents 2>/dev/null; then
   echo "FAIL: expected error for --profile without --repo, got success" >&2
   exit 1
 fi

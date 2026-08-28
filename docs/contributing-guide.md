@@ -147,7 +147,7 @@ labels, milestone, assignee, and Project board status:
 
 ```bash
 gh workflow run publish-claudio-pr-metadata.yml \
-  --repo dgaramos/agent-workflows \
+  --repo dgaramos/dr-agents \
   -f pr_number=<pr-number> \
   -f labels="enhancement,docs" \
   -f milestone=3 \
@@ -169,8 +169,8 @@ automatically. To request Claudio DR to review the PR, open a new conversation
 with Claude Code and ask:
 
 ```text
-Review <PR URL> with Claudio DR using the agent-workflows profile at
-profiles/agent-workflows.md.
+Review <PR URL> with Claudio DR using the dr-agents profile at
+profiles/dr-agents.md.
 ```
 
 The PR template's review-request checkboxes are a collaboration signal — they

@@ -58,9 +58,9 @@ grep -qF "pull --ff-only" "$tmp/git.log" || { echo "FAIL: git pull not called fo
 # --repo --profile: applies named profile after pull
 # ---------------------------------------------------------------------------
 rm -f "$tmp/git.log"
-(cd "$fake_repo" && run_update --repo --profile agent-workflows >/dev/null)
+(cd "$fake_repo" && run_update --repo --profile dr-agents >/dev/null)
 
-[[ -f "$fake_repo/.claude/profiles/agent-workflows.md" ]] || { echo "FAIL: profile not applied" >&2; exit 1; }
+[[ -f "$fake_repo/.claude/profiles/dr-agents.md" ]] || { echo "FAIL: profile not applied" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
 # --all: pulls once, installs global + repo when .claude/ exists
@@ -95,7 +95,7 @@ if run_update 2>/dev/null; then
 fi
 
 # --profile with --global exits non-zero
-if run_update --global --profile agent-workflows 2>/dev/null; then
+if run_update --global --profile dr-agents 2>/dev/null; then
   echo "FAIL: expected error for --profile with --global, got success" >&2
   exit 1
 fi

@@ -139,7 +139,7 @@ readonly required_paths=(
   "plugins/codex/.gitkeep"
   "plugins/claude/.gitkeep"
   "profiles/.gitkeep"
-  "profiles/agent-workflows.md"
+  "profiles/dr-agents.md"
   "profiles/example-project.md"
   "examples/.gitkeep"
   "plugins/claudio-dr/workflows/publish-claudio-issue.yml"
@@ -287,16 +287,16 @@ grep -qF '| Publisher | Claudio DR GitHub App |' "$claudio_identity"
 grep -qF '| Verified GitHub actor | `claudio-dr[bot]` |' "$claudio_identity"
 grep -qF '| Co-authored-by trailer | `Co-Authored-By: claudio-dr[bot] <claudio-dr[bot]@users.noreply.github.com>` |' "$claudio_identity"
 
-grep -qF 'cody-dr[bot]' profiles/agent-workflows.md
-grep -qF 'claudio-dr[bot]' profiles/agent-workflows.md
-grep -qF '`review`' profiles/agent-workflows.md
-grep -qF '`reply`' profiles/agent-workflows.md
-grep -qF '`resolve-thread`' profiles/agent-workflows.md
-grep -qF '`create-issue`' profiles/agent-workflows.md
-grep -qF '`reply`: `.github/workflows/publish-claudio-reply.yml`' profiles/agent-workflows.md
-grep -qF '`resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`' profiles/agent-workflows.md
-grep -qF '`reply`: `.github/workflows/publish-cody-reply.yml`' profiles/agent-workflows.md
-grep -qF '`resolve-thread`: `.github/workflows/publish-cody-resolve.yml`' profiles/agent-workflows.md
+grep -qF 'cody-dr[bot]' profiles/dr-agents.md
+grep -qF 'claudio-dr[bot]' profiles/dr-agents.md
+grep -qF '`review`' profiles/dr-agents.md
+grep -qF '`reply`' profiles/dr-agents.md
+grep -qF '`resolve-thread`' profiles/dr-agents.md
+grep -qF '`create-issue`' profiles/dr-agents.md
+grep -qF '`reply`: `.github/workflows/publish-claudio-reply.yml`' profiles/dr-agents.md
+grep -qF '`resolve-thread`: `.github/workflows/publish-claudio-resolve.yml`' profiles/dr-agents.md
+grep -qF '`reply`: `.github/workflows/publish-cody-reply.yml`' profiles/dr-agents.md
+grep -qF '`resolve-thread`: `.github/workflows/publish-cody-resolve.yml`' profiles/dr-agents.md
 
 while IFS= read -r skill; do
   awk '
@@ -731,7 +731,7 @@ fi
 # This catalog may keep only its own profile and the neutral template. A
 # consumer profile belongs in the consumer repository, never in this public
 # catalog.
-readonly allowed_profile_paths=$'.gitkeep\nagent-workflows.md\nexample-project.md'
+readonly allowed_profile_paths=$'.gitkeep\ndr-agents.md\nexample-project.md'
 if [[ "${_IN_GIT_REPO}" == "1" ]]; then
   actual_profile_paths="$(git ls-files profiles/ | sed 's#^profiles/##' | sort)"
   if [[ "$actual_profile_paths" != "$allowed_profile_paths" ]]; then

@@ -4,8 +4,8 @@ Clone this private repository on the machine that runs Codex. Add its local
 marketplace root, then install the plugin:
 
 ```bash
-codex plugin marketplace add /absolute/path/to/agent-workflows
-codex plugin add cody-dr@agent-workflows
+codex plugin marketplace add /absolute/path/to/dr-agents
+codex plugin add cody-dr@dr-agents
 ```
 
 Start a new Codex thread after installation. Use the `cody-reviewer` agent for
@@ -49,7 +49,7 @@ After changing the plugin, bump the version in `.codex-plugin/plugin.json`,
 reinstall from the same marketplace root, and start a new thread:
 
 ```bash
-codex plugin add cody-dr@agent-workflows
+codex plugin add cody-dr@dr-agents
 ```
 
 The installed plugin includes a read-only bundle of the portable core contracts,
@@ -70,5 +70,5 @@ App operation is unavailable before dispatch, an explicitly authorized
 authenticated personal account may publish the prepared action and is reported
 as a personal fallback. A failed App dispatch or verification is reported as a
 failure and never retried through that account.
-For this repository, see `profiles/agent-workflows.md` for the configuration
+For this repository, see `profiles/dr-agents.md` for the configuration
 names and publication boundary; it contains no credential values.

@@ -8,7 +8,7 @@ trap 'rm -rf "$tmp"' EXIT
 
 readonly fake_home="$tmp/home"
 readonly fake_bin="$tmp/fake-bin"
-readonly fake_catalog_store="$fake_home/.local/share/agent-workflows"
+readonly fake_catalog_store="$fake_home/.local/share/dr-agents"
 readonly codex_dir="$fake_home/.codex"
 
 mkdir -p "$fake_home" "$fake_bin" "$fake_catalog_store/tmp" "$codex_dir"
@@ -17,9 +17,9 @@ readonly current_ver="v0.9.10"
 readonly newer_ver="v0.9.11"
 
 # Stage a fake tarball for the newer version
-readonly newer_tarball_name="agent-workflows-${newer_ver}.tar.gz"
+readonly newer_tarball_name="dr-agents-${newer_ver}.tar.gz"
 readonly newer_tarball_path="$fake_catalog_store/tmp/$newer_tarball_name"
-readonly newer_sha256_name="agent-workflows-${newer_ver}.sha256"
+readonly newer_sha256_name="dr-agents-${newer_ver}.sha256"
 readonly newer_sha256_path="$fake_catalog_store/tmp/$newer_sha256_name"
 
 tar czf "$newer_tarball_path" -C "$repository_root" . 2>/dev/null || true

@@ -8,7 +8,7 @@ trap 'rm -rf "$tmp"' EXIT
 
 readonly fake_home="$tmp/home"
 readonly fake_bin="$tmp/fake-bin"
-readonly fake_catalog_store="$fake_home/.local/share/agent-workflows"
+readonly fake_catalog_store="$fake_home/.local/share/dr-agents"
 readonly codex_dir="$fake_home/.codex"
 
 mkdir -p "$fake_home" "$fake_bin" "$fake_catalog_store/tmp" "$codex_dir"
@@ -23,16 +23,16 @@ readonly test_ver="v0.9.99"
 # real repository root and place it where the download logic expects it.
 # ---------------------------------------------------------------------------
 
-readonly fake_tarball_name="agent-workflows-${test_ver}.tar.gz"
+readonly fake_tarball_name="dr-agents-${test_ver}.tar.gz"
 readonly fake_tarball_path="$fake_catalog_store/tmp/$fake_tarball_name"
 
 # Build a minimal tarball with the real catalog content under a top-level dir
 (cd "$repository_root" && \
   tar czf "$fake_tarball_path" \
-    --transform "s|^|agent-workflows-${test_ver}/|" \
+    --transform "s|^|dr-agents-${test_ver}/|" \
     bin plugins profiles core .agent-review 2>/dev/null || \
   tar czf "$fake_tarball_path" \
-    -s "|^|agent-workflows-${test_ver}/|" \
+    -s "|^|dr-agents-${test_ver}/|" \
     bin plugins profiles core .agent-review 2>/dev/null || \
   COPYFILE_DISABLE=1 tar czf "$fake_tarball_path" \
     --exclude="*.DS_Store" \
@@ -46,7 +46,7 @@ if [[ ! -f "$fake_tarball_path" ]] || [[ ! -s "$fake_tarball_path" ]]; then
 fi
 
 # Generate sha256 for the fake tarball
-readonly fake_sha256_name="agent-workflows-${test_ver}.sha256"
+readonly fake_sha256_name="dr-agents-${test_ver}.sha256"
 readonly fake_sha256_path="$fake_catalog_store/tmp/$fake_sha256_name"
 if command -v sha256sum >/dev/null 2>&1; then
   (cd "$fake_catalog_store/tmp" && sha256sum "$fake_tarball_name" > "$fake_sha256_name")
