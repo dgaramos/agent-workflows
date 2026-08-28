@@ -41,7 +41,7 @@ responsibility. No layer reaches into the one above it.
 flowchart TD
     P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/agent-workflows.md · profiles/example-project.md"]
     A["ADAPTERS\nPlatform invocation + reviewer identity — no portable content\nplugins/claudio-dr/ (Claude Code) · plugins/cody-dr/ (Codex)"]
-    C["CORE\nPortable, model-neutral contracts — single source of truth\ncore/pr-review/ · core/findings-handling/\ncore/issue-authoring/ · core/issue-workflow/\ncore/profile-discovery/"]
+    C["CORE\nPortable, model-neutral contracts — single source of truth\ncore/pr-review/ · core/findings-handling/\ncore/issue-authoring/ · core/issue-workflow/\ncore/profile-discovery/ · core/design-discovery/"]
     P -->|"loaded by"| A
     A -->|"references"| C
 ```
@@ -118,6 +118,7 @@ Once installed, use `agents` for all operations from any directory:
 
 ```bash
 agents install --global              # install claudio-dr, cody-dr, and agents CLI globally
+agents install --workflows           # install workflow skills only (no adapter plugins)
 agents install --repo                # install claudio-dr into the current repo
 agents install --repo --profile <name>  # with a project-specific profile
 agents status                        # show installed versions and locations
@@ -186,7 +187,7 @@ Drop a profile into the target repository:
 <target-repo>/.agent-review/<name>/PROFILE.md
 ```
 
-Use `profiles/example-project.md` as the starting template. A profile defines
+Use `profiles/example-project.md` in the catalog as the starting template; the deployed profile lives in the consuming repository under `.agent-review/<name>/PROFILE.md`. A profile defines
 architecture boundaries, the quality command, PR metadata (labels, milestone,
 assignees, Project), and publisher workflow names. It cannot weaken the core
 evidence threshold or the explicit-publication boundary.
@@ -202,6 +203,7 @@ examples/                One generic example per core skill area
 docs/                    Compatibility, installation, development docs
 bin/agents               Unified CLI entrypoint (install / update / status)
 bin/check                Catalog quality gate — run before every handoff
+bin/drift                Profile-drift detector — checks profiles against current core contracts
 bin/install              Install plugins globally or into a repo; detects conflicts
 bin/update               Pull the catalog and re-run bin/install for active installs
 .envrc                   Adds bin/ to PATH via direnv so `agents` works without prefix
@@ -225,12 +227,12 @@ What is in place:
 - Quality gate (`bin/check`) with path, frontmatter, parity, and drift checks
 - Installation tooling (`bin/install`, `bin/update`) with `agents install --workflows` for workflow-only deploys
 - Plan surfacing via `SendMessage` so plans appear in the main conversation before implementation begins
+- Automated profile-drift detection (`bin/drift`) for profiles that reference removed core contracts
+- End-to-end examples covering design-discovery → author-issue → execute-issue chains (`examples/generic-chain-design-to-issue.md`)
 
 What is next:
 
 - Canonical profile templates for web-app, library, and CLI project archetypes
-- Automated profile-drift detection in `bin/check` for profiles that reference removed core contracts
-- Expanded end-to-end examples covering design-discovery → author-issue → execute-issue chains
 
 ## Contributing
 
