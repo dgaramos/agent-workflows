@@ -58,14 +58,14 @@ flowchart TD
     I["author-issue\nDraft structured GitHub issue\nPublication requires explicit authorization"]
     PL["plan-issue\nRead-only test-first plan\nSurfaces plan · waits for explicit approval"]
     S["start-issue\nLoad profile · check dependencies\nCreate working branch"]
-    EX["execute-issue\nMinimal in-scope changes\nQuality gate after each unit"]
+    IM["implement-issue\nMinimal in-scope changes\nQuality gate after each unit"]
     SH["ship-issue\nFinal quality gate · push branch\nOpen fully-populated PR · awaits explicit approval"]
     RV["review-pr\nIndependent review of explicit PR/ref\nPublication separately authorized"]
 
     I --> PL
     PL -->|"explicit approval"| S
-    S -->|"explicit approval"| EX
-    EX -->|"explicit approval"| SH
+    S -->|"explicit approval"| IM
+    IM -->|"explicit approval"| SH
     R["explicit PR/ref\nany contributor"] --> RV
 ```
 
