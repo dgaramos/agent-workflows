@@ -1,10 +1,11 @@
-# dr-agents
+<p align="center">
+  <img src="assets/dr-agents-header.png" alt="Pixel-art header with dgaramos, Cody DR, and Claudio DR" width="100%">
+</p>
 
-A portable, model-neutral catalog of agent workflows for design discovery,
-reviewing pull requests, handling findings, authoring issues, and driving the full
-issue-to-change lifecycle — defined once in `core/`, delivered through thin
-adapter plugins for Claude Code and Codex, and tuned per project through
-optional profiles.
+dr-agents is a shared workflow catalog for design discovery, pull-request
+review, finding triage, issue authoring, and the full issue-to-change lifecycle.
+Its portable contracts live in `core/`, with thin adapters for Claude Code and
+Codex and optional per-project profiles.
 
 ## Why it exists
 
