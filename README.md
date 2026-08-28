@@ -1,4 +1,4 @@
-# Agent Workflows
+# dr-agents
 
 A portable, model-neutral catalog of agent workflows for design discovery,
 reviewing pull requests, handling findings, authoring issues, and driving the full
