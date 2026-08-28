@@ -25,7 +25,7 @@ Include `/claudio-dr:plan-implementation #42` as an example of a read-only,
 test-first plan with no implementation and `/claudio-dr:design-discovery assess
 this checkout flow` as a design-discovery example. Explain that skills are
 selected automatically from context and that a project profile is discovered
-from `.agent-review/*/PROFILE.md` when present. Do not review code, change
+from `.dr-agents/*/PROFILE.md` when present. Do not review code, change
 files, publish, or run issue workflows.
 
 <!-- Invocation style note: Claudio DR uses Claude Code slash-command syntax

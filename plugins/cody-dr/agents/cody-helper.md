@@ -20,7 +20,7 @@ points, with a short natural-language prompt the user can paste:
 Include `@cody-executor execute issue #42`, `@cody-author draft issue`, and
 `@cody-designer assess this checkout flow` as invocation examples. Explain that
 skills are selected automatically from context and that a project profile is
-discovered from `.agent-review/*/PROFILE.md` when present. Do not review code,
+discovered from `.dr-agents/*/PROFILE.md` when present. Do not review code,
 change files, publish, or run issue workflows.
 
 <!-- Invocation style note: Cody DR uses Codex agent-handle syntax

@@ -31,7 +31,7 @@ Brief without publishing or changing the project. Use `@cody-author draft issue`
 `@cody-executor execute issue #42` for normal issue delivery,
 `@cody-findings` to handle review findings, and `@cody-helper` to select the
 right capability. From a target repository,
-they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With
+they discover exactly one local profile at `.dr-agents/*/PROFILE.md`. With
 no profile they use generic portable rules; they stop rather than guess when
 more than one profile exists.
 

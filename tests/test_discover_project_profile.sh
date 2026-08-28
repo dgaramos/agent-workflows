@@ -8,12 +8,12 @@ trap 'rm -rf "$temporary_directory"' EXIT
 
 [[ -z "$("$script" --root "$temporary_directory")" ]]
 
-mkdir -p "$temporary_directory/.agent-review/example"
-touch "$temporary_directory/.agent-review/example/PROFILE.md"
-[[ "$("$script" --root "$temporary_directory")" == "$temporary_directory/.agent-review/example/PROFILE.md" ]]
+mkdir -p "$temporary_directory/.dr-agents/example"
+touch "$temporary_directory/.dr-agents/example/PROFILE.md"
+[[ "$("$script" --root "$temporary_directory")" == "$temporary_directory/.dr-agents/example/PROFILE.md" ]]
 
-mkdir -p "$temporary_directory/.agent-review/second"
-touch "$temporary_directory/.agent-review/second/PROFILE.md"
+mkdir -p "$temporary_directory/.dr-agents/second"
+touch "$temporary_directory/.dr-agents/second/PROFILE.md"
 if "$script" --root "$temporary_directory" >/dev/null 2>&1; then
   echo "expected ambiguous discovery to fail" >&2
   exit 1

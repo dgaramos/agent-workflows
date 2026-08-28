@@ -216,10 +216,10 @@ validation flow.
 Drop a profile into the target repository:
 
 ```text
-<target-repo>/.agent-review/<name>/PROFILE.md
+<target-repo>/.dr-agents/<name>/PROFILE.md
 ```
 
-Use `profiles/example-project.md` in the catalog as the starting template; the deployed profile lives in the consuming repository under `.agent-review/<name>/PROFILE.md`. A profile defines
+Use `profiles/example-project.md` in the catalog as the starting template; the deployed profile lives in the consuming repository under `.dr-agents/<name>/PROFILE.md`. A profile defines
 architecture boundaries, the quality command, PR metadata (labels, milestone,
 assignees, Project), and publisher workflow names. It cannot weaken the core
 evidence threshold or the explicit-publication boundary.

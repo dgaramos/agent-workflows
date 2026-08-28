@@ -90,7 +90,7 @@ cannot weaken its evidence or explicit-publication requirements.
 Place one profile in the target repository at:
 
 ```text
-.agent-review/<project-name>/PROFILE.md
+.dr-agents/<project-name>/PROFILE.md
 ```
 
 Global Cody DR and Claudio DR agents discover the sole matching profile from
@@ -136,3 +136,20 @@ counterparts) for new projects; they discover the profile automatically.
 | Cody/Claudio identity and platform invocation | `plugins/` |
 | `bin/check`, architecture guidance, PR metadata, deployment policy | target `PROFILE.md` |
 | A legacy alias that delegates to an installed skill | thin local wrapper |
+
+## Migration: `.agent-review/` to `.dr-agents/`
+
+Profile discovery was updated in v0.1.14 to scan `.dr-agents/*/PROFILE.md`
+instead of `.agent-review/*/PROFILE.md`. This is a breaking convention change
+for repositories that already carry a profile.
+
+**Steps for consuming repositories:**
+
+1. Rename the directory: `mv .agent-review .dr-agents`
+2. No changes are needed inside `PROFILE.md` itself.
+3. Update the dr-agents plugin to v0.1.14 or later.
+
+There is no automated migration. Repositories that have not yet renamed the
+directory will see no profile discovered until the rename is complete.
+Workflows that rely on an explicit `--root` flag or hardcoded path must also be
+updated to reference `.dr-agents/`.

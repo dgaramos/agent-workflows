@@ -4,7 +4,7 @@ Before a project-aware workflow starts, establish the repository root from the
 current working directory and inspect exactly this location:
 
 ```text
-<repository-root>/.agent-review/*/PROFILE.md
+<repository-root>/.dr-agents/*/PROFILE.md
 ```
 
 Use `core/profile-discovery/scripts/discover-project-profile.sh` when the

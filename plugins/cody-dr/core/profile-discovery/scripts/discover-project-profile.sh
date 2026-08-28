@@ -15,10 +15,10 @@ fi
 root="$(cd "$root" && pwd)"
 
 profiles=()
-if [[ -d "$root/.agent-review" ]]; then
+if [[ -d "$root/.dr-agents" ]]; then
   while IFS= read -r profile; do
     profiles+=("$profile")
-  done < <(find "$root/.agent-review" -mindepth 2 -maxdepth 2 -type f -name PROFILE.md -print | LC_ALL=C sort)
+  done < <(find "$root/.dr-agents" -mindepth 2 -maxdepth 2 -type f -name PROFILE.md -print | LC_ALL=C sort)
 fi
 
 case "${#profiles[@]}" in
