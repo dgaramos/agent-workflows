@@ -38,6 +38,11 @@ agents_bin="$fake_home/.local/bin/agents"
 [[ -x "$agents_bin" ]]       || { echo "FAIL: agents CLI is not executable" >&2; exit 1; }
 grep -q "$repository_root" "$agents_bin" || { echo "FAIL: agents wrapper does not reference catalog path" >&2; exit 1; }
 
+global_pointer="$fake_home/.local/share/agent-workflows/catalog-path"
+[[ -f "$global_pointer" ]] || { echo "FAIL: --global did not write pointer file at $global_pointer" >&2; exit 1; }
+pointer_content="$(< "$global_pointer")"
+[[ -n "$pointer_content" ]] || { echo "FAIL: --global wrote an empty pointer file" >&2; exit 1; }
+
 # ---------------------------------------------------------------------------
 # --global: re-run on unchanged files is clean (no conflict)
 # ---------------------------------------------------------------------------
@@ -62,6 +67,11 @@ rm -rf "$fake_home/.claude"
 
 repo_manifest="$fake_repo/.claude/.claude-plugin/plugin.json"
 [[ -f "$repo_manifest" ]] || { echo "FAIL: repo claudio-dr plugin.json not installed" >&2; exit 1; }
+
+repo_pointer="$fake_home/.local/share/agent-workflows/catalog-path"
+[[ -f "$repo_pointer" ]] || { echo "FAIL: --repo did not write pointer file at $repo_pointer" >&2; exit 1; }
+repo_pointer_content="$(< "$repo_pointer")"
+[[ -n "$repo_pointer_content" ]] || { echo "FAIL: --repo wrote an empty pointer file" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
 # --repo --profile: copies the named profile file

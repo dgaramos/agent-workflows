@@ -80,6 +80,7 @@ readonly required_paths=(
   "core/issue-workflow/skills/ship-change/SKILL.md"
   "core/issue-workflow/skills/execute-issue/SKILL.md"
   "bin/agents"
+  "bin/drift"
   "bin/install"
   "bin/update"
   "bin/sync-plugin-core-bundles.sh"
@@ -739,6 +740,8 @@ if merge_base="$(git merge-base HEAD main 2>/dev/null)"; then
 else
   echo "warning: cannot resolve merge-base with main; trailer identity check skipped (shallow clone?)" >&2
 fi
+
+AGENT_WORKFLOWS_DIR="$(pwd)" bin/drift
 
 git diff --check
 echo "catalog quality check: ok"
