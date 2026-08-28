@@ -121,14 +121,46 @@ agents install --global              # install claudio-dr, cody-dr, and agents C
 agents install --workflows           # install workflow skills only (no adapter plugins)
 agents install --repo                # install claudio-dr into the current repo
 agents install --repo --profile <name>  # with a project-specific profile
+agents download                      # download from GitHub releases and install globally (no git required)
+agents download --version v1.2.3     # pin to a specific release tag
 agents status                        # show installed versions and locations
 agents update --global               # pull catalog and update global install
 agents update --repo [--profile <name>]  # pull and update repo-local install
+agents update --download             # update a download-based install to the latest release
 agents update --all                  # pull and update both installs
 ```
 
 The install scripts detect conflicts and never silently overwrite an existing
 file whose content differs from the source.
+
+### Tarball install (no git required)
+
+Download and install directly from a GitHub release without cloning the
+repository. This is the recommended method for machines where git is
+unavailable or where you want a pinned, immutable version:
+
+```bash
+# Install the latest release
+bin/install --download
+
+# Install a specific version
+bin/install --download --version v1.2.3
+```
+
+The tarball is downloaded from GitHub releases, its SHA-256 checksum is
+verified, and the catalog is extracted to
+`~/.local/share/agent-workflows/<version>/`. The `agents` CLI wrapper is
+written to `~/.local/bin/agents`. Previous version directories are preserved
+for manual rollback.
+
+To update a download-based install to the latest release:
+
+```bash
+agents update --download
+```
+
+`bin/check` handles the non-git context gracefully when run from an extracted
+tarball — git-specific checks are skipped automatically.
 
 ### direnv (optional, for catalog development)
 
@@ -202,11 +234,12 @@ profiles/                Project profiles — architecture, commands, metadata, 
 examples/                One generic example per core skill area
 docs/                    Compatibility, installation, development docs
 bin/agents               Unified CLI entrypoint (install / update / status)
-bin/check                Catalog quality gate — run before every handoff
+bin/check                Catalog quality gate — run before every handoff; skips git checks when run outside a git repository (e.g. from an extracted tarball)
 bin/drift                Profile-drift detector — checks profiles against current core contracts
-bin/install              Install plugins globally or into a repo; detects conflicts
-bin/update               Pull the catalog and re-run bin/install for active installs
+bin/install              Install plugins globally or into a repo; detects conflicts; --download installs from GitHub releases without cloning
+bin/update               Pull the catalog and re-run bin/install for active installs; --download updates a tarball-based install
 .envrc                   Adds bin/ to PATH via direnv so `agents` works without prefix
+.github/workflows/release.yml  Automated release workflow — builds and publishes a versioned tarball and SHA-256 checksum to GitHub releases on each tag push
 ```
 
 ## Status and roadmap
@@ -229,6 +262,7 @@ What is in place:
 - Plan surfacing via `SendMessage` so plans appear in the main conversation before implementation begins
 - Automated profile-drift detection (`bin/drift`) for profiles that reference removed core contracts
 - End-to-end examples covering design-discovery → author-issue → execute-issue chains (`examples/generic-chain-design-to-issue.md`)
+- Automated release workflow (`release.yml`) that builds and publishes a versioned tarball with SHA-256 checksum to GitHub releases on each tag push; tarball installs (`bin/install --download`, `agents download`) and updates (`bin/update --download`) are supported without a git clone
 
 What is next:
 
