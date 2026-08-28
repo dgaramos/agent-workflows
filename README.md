@@ -56,13 +56,16 @@ A typical issue-to-PR cycle with Claudio DR looks like this:
 ```mermaid
 flowchart TD
     I["author-issue\nDraft structured GitHub issue\nPublication requires explicit authorization"]
+    PL["plan-issue\nRead-only test-first plan\nSurfaces plan · waits for explicit approval"]
     S["start-issue\nLoad profile · check dependencies\nCreate working branch"]
-    PL["plan-implementation\nRead-only test-first plan\nprinted before any file is touched"]
-    IM["implement-issue\nMinimal in-scope changes\nQuality gate after each unit"]
-    SH["ship-change\nFinal quality gate · push branch\nOpen fully-populated PR"]
+    EX["execute-issue\nMinimal in-scope changes\nQuality gate after each unit"]
+    SH["ship-issue\nFinal quality gate · push branch\nOpen fully-populated PR · awaits explicit approval"]
     RV["review-pr\nIndependent review of explicit PR/ref\nPublication separately authorized"]
 
-    I --> S --> PL --> IM --> SH
+    I --> PL
+    PL -->|"explicit approval"| S
+    S -->|"explicit approval"| EX
+    EX -->|"explicit approval"| SH
     R["explicit PR/ref\nany contributor"] --> RV
 ```
 
@@ -77,16 +80,16 @@ contributor.
 | --- | --- |
 | `review-pr` | Evidence-first PR review with incremental re-review |
 | `handle-pr-findings` | Triage, fix, defer, or reject findings against the current head |
-| `author-issue` | Draft and optionally publish a structured GitHub issue |
+| `author-issue` | Draft and optionally publish a structured GitHub issue; performs mode-detection and profile-discovery to select the correct publisher |
 | `design-discovery` | Produce an evidence-grounded UX/UI Design Brief and implementation handoff |
 | `design-and-author` | Chain design discovery into issue authoring in a single invocation |
+| `plan-issue` | Surface a read-only, test-first implementation plan and wait for explicit approval before any file is touched |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
-| `plan-issue` | Surface a read-only plan and wait for explicit approval |
-| `ship-issue` | Validate and publish only after explicit approval |
-| `plan-implementation` | Print a read-only, test-first implementation plan before edits |
-| `implement-issue` | Make minimal in-scope changes with quality-gate validation |
-| `ship-change` | Run final quality gate, prepare PR with profile metadata, push and open |
-| `execute-issue` | Orchestrate the full start → plan → implement → ship lifecycle |
+| `execute-issue` | Orchestrate the 4-phase lifecycle (plan → start → implement → ship) with explicit approval gates between each phase |
+| `ship-issue` | Run final quality gate, push branch, and open fully-populated PR — requires explicit approval |
+| `plan-implementation` | _(internal)_ Read-only plan step used within execute-issue |
+| `implement-issue` | _(internal)_ In-scope implementation step used within execute-issue |
+| `ship-change` | _(internal)_ Delivery step used within execute-issue |
 
 ## Installation
 
@@ -211,20 +214,23 @@ Current milestone: **3** · [Project board](https://github.com/users/dgaramos/pr
 What is in place:
 
 - Full PR review and findings-handling contracts (Claudio DR + Cody DR)
-- Complete issue-to-change lifecycle (start → plan → implement → ship → execute)
-- Issue authoring with optional bot publication
+- 4-phase issue lifecycle (plan-issue → start-issue → execute-issue → ship-issue) with explicit approval gates between each phase
+- Issue authoring with mode-detection, profile-discovery, and optional bot publication
+- Contribution guidance discovery in start-issue and implement-issue
+- Designer agents (`claudio-designer`, `cody-designer`) for evidence-grounded UX/UI design discovery
 - Profile discovery and loading
 - Self-profile for this repository
 - Publisher workflows for review, reply, thread resolution, PR metadata, and
   issue creation (both apps)
 - Quality gate (`bin/check`) with path, frontmatter, parity, and drift checks
-- Installation tooling (`bin/install`, `bin/update`) for global and per-repo deploys
+- Installation tooling (`bin/install`, `bin/update`) with `agents install --workflows` for workflow-only deploys
+- Plan surfacing via `SendMessage` so plans appear in the main conversation before implementation begins
 
 What is next:
 
-- Broader profile library covering additional consumer project archetypes
-- Expanded compatibility documentation as platform releases evolve
-- Additional generic examples for emerging skill areas
+- Canonical profile templates for web-app, library, and CLI project archetypes
+- Automated profile-drift detection in `bin/check` for profiles that reference removed core contracts
+- Expanded end-to-end examples covering design-discovery → author-issue → execute-issue chains
 
 ## Contributing
 
