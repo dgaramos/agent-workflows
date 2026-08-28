@@ -39,7 +39,7 @@ responsibility. No layer reaches into the one above it.
 
 ```mermaid
 flowchart TD
-    P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/agent-workflows.md · profiles/example-project.md"]
+    P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/dr-agents.md · profiles/example-project.md"]
     A["ADAPTERS\nPlatform invocation + reviewer identity — no portable content\nplugins/claudio-dr/ (Claude Code) · plugins/cody-dr/ (Codex)"]
     C["CORE\nPortable, model-neutral contracts — single source of truth\ncore/pr-review/ · core/findings-handling/\ncore/issue-authoring/ · core/issue-workflow/\ncore/profile-discovery/ · core/design-discovery/"]
     P -->|"loaded by"| A
@@ -98,8 +98,8 @@ contributor.
 Clone the repo and run the installer directly from the catalog:
 
 ```bash
-git clone https://github.com/dgaramos/agent-workflows.git ~/agent-workflows
-~/agent-workflows/bin/install --global
+git clone https://github.com/dgaramos/dr-agents.git ~/dr-agents
+~/dr-agents/bin/install --global
 ```
 
 `bin/install --global` installs:
@@ -149,7 +149,7 @@ bin/install --download --version v1.2.3
 
 The tarball is downloaded from GitHub releases, its SHA-256 checksum is
 verified, and the catalog is extracted to
-`~/.local/share/agent-workflows/<version>/`. The `agents` CLI wrapper is
+`~/.local/share/dr-agents/<version>/`. The `agents` CLI wrapper is
 written to `~/.local/bin/agents`. Previous version directories are preserved
 for manual rollback.
 
@@ -171,8 +171,8 @@ itself. If you have direnv installed, run `direnv allow` once after cloning.
 ### Claude Code (Claudio DR)
 
 ```text
-/plugin marketplace add dgaramos/agent-workflows
-/plugin install claudio-dr@agent-workflows
+/plugin marketplace add dgaramos/dr-agents
+/plugin install claudio-dr@dr-agents
 ```
 
 Invoke a skill or use a workflow agent:
@@ -192,8 +192,8 @@ update, and local validation flow.
 ### Codex (Cody DR)
 
 ```bash
-codex plugin marketplace add /path/to/agent-workflows
-codex plugin add cody-dr@agent-workflows
+codex plugin marketplace add /path/to/dr-agents
+codex plugin add cody-dr@dr-agents
 ```
 
 Invoke a workflow agent or skill:

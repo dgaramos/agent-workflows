@@ -7,7 +7,7 @@ responsibility and a strict boundary — no layer reaches into the one above it.
 
 ```mermaid
 flowchart TD
-    P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/agent-workflows.md · profiles/example-project.md"]
+    P["PROFILES\nProject-specific: architecture, commands, metadata, publishers\nprofiles/dr-agents.md · profiles/example-project.md"]
     A["ADAPTERS\nPlatform invocation + reviewer identity — no portable content\nplugins/claudio-dr/ (Claude Code) · plugins/cody-dr/ (Codex)"]
     C["CORE\nPortable, model-neutral contracts — single source of truth\ncore/pr-review/ · core/findings-handling/\ncore/issue-authoring/ · core/issue-workflow/"]
     P -->|"loads"| A

@@ -44,7 +44,7 @@ not mean an App is inactive.
 | Agent invocation | `@claudio-reviewer review <ref>` or `/claudio-dr:design-discovery <request>` |
 | Local validation | `claude plugin validate ./plugins/claudio-dr` |
 | Local session | `claude --plugin-dir ./plugins/claudio-dr` |
-| Update flow | bump version → `/plugin marketplace update` → `/plugin update claudio-dr@agent-workflows` |
+| Update flow | bump version → `/plugin marketplace update` → `/plugin update claudio-dr@dr-agents` |
 
 ### Cody DR (Codex)
 

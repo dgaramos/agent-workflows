@@ -35,8 +35,8 @@ authored by another contributor. In the review request, name this profile
 explicitly:
 
 ```text
-Review <PR URL> with Claudio DR using the agent-workflows profile at
-profiles/agent-workflows.md.
+Review <PR URL> with Claudio DR using the dr-agents profile at
+profiles/dr-agents.md.
 ```
 
 Before reviewing, Claudio DR must load this profile and read `CLAUDE.md`, the

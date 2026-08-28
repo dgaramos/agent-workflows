@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/agents — unified entrypoint for agent-workflows tooling
+# bin/agents — unified entrypoint for dr-agents tooling
 #
 # Usage:
 #   agents install --global

@@ -15,7 +15,7 @@ and pushes to `main`.
 
 ## Installing adapters with bin/install
 
-`bin/install` manages the deployment of agent-workflows skills and plugins to
+`bin/install` manages the deployment of dr-agents skills and plugins to
 global and per-repo locations.
 
 ```bash
@@ -72,7 +72,7 @@ After a Cody DR or Claudio DR change, bump only the affected plugin's patch
 version in both its manifest and matching marketplace entry; `bin/check`
 verifies that the values match. Reinstall Cody DR from the marketplace root and
 start a new Codex thread. For Claudio DR, run `/plugin marketplace update`,
-then `/plugin update claudio-dr@agent-workflows`.
+then `/plugin update claudio-dr@dr-agents`.
 
 Do not treat a locally installed plugin as proof that an installation workflow
 works; document and validate the fresh-install path as part of each adapter.
@@ -87,7 +87,7 @@ GitHub release from that tag:
 ```bash
 git tag -a vX.Y.Z -m "vX.Y.Z" <merged-main-sha>
 git push origin vX.Y.Z
-gh release create vX.Y.Z --repo dgaramos/agent-workflows --title "vX.Y.Z" --notes-file CHANGELOG.md
+gh release create vX.Y.Z --repo dgaramos/dr-agents --title "vX.Y.Z" --notes-file CHANGELOG.md
 ```
 
 Use the release notes for that version's section only. Record incompatible

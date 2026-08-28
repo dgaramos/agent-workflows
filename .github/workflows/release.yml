@@ -23,12 +23,12 @@ jobs:
       - name: Build tarball and checksum
         run: |
           TAG="${{ github.ref_name }}"
-          TARBALL="agent-workflows-${TAG}.tar.gz"
-          SHA256="agent-workflows-${TAG}.sha256"
+          TARBALL="dr-agents-${TAG}.tar.gz"
+          SHA256="dr-agents-${TAG}.sha256"
 
           git archive \
             --format=tar.gz \
-            --prefix="agent-workflows-${TAG}/" \
+            --prefix="dr-agents-${TAG}/" \
             "${TAG}" \
             -o "${TARBALL}"
 
