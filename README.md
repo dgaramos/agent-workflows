@@ -1,5 +1,13 @@
 # dr-agents
 
+<p align="center">
+  <img src="assets/dr-agents-header.png" alt="Pixel-art header with dgaramos, Cody DR, and Claudio DR" width="100%">
+</p>
+
+<p align="center">
+  <img src="assets/dr-agents-icon.png" alt="Cody DR and Claudio DR pixel-art icon" width="180">
+</p>
+
 A portable, model-neutral catalog of agent workflows for design discovery,
 reviewing pull requests, handling findings, authoring issues, and driving the full
 issue-to-change lifecycle — defined once in `core/`, delivered through thin
