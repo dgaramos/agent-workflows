@@ -36,6 +36,7 @@ readonly required_paths=(
   ".github/ISSUE_TEMPLATE/feature.md"
   ".github/ISSUE_TEMPLATE/bug.md"
   ".github/workflows/ci.yml"
+  ".github/workflows/release.yml"
   ".github/workflows/publish-cody-issue.yml"
   ".github/workflows/publish-claudio-issue.yml"
   ".github/workflows/publish-cody-review.yml"
@@ -152,6 +153,17 @@ readonly required_paths=(
   "plugins/cody-dr/workflows/publish-cody-reply.yml"
   "plugins/cody-dr/workflows/publish-cody-resolve.yml"
 )
+
+# Detect whether we are running inside a git repository.
+# Checks that require git (secret detection, pattern search, profile listing,
+# trailer validation) are skipped with a warning when running from an extracted
+# tarball that has no .git directory.
+if git rev-parse --git-dir >/dev/null 2>&1; then
+  _IN_GIT_REPO=1
+else
+  _IN_GIT_REPO=0
+  echo "warning: not a git repository; git-dependent checks will be skipped" >&2
+fi
 
 for path in "${required_paths[@]}"; do
   if ! test -f "$path"; then
@@ -312,7 +324,7 @@ while IFS= read -r skill; do
     { exit 1 }
     END { if (!valid) exit 1 }
   ' "$skill"
-done < <(git ls-files '*SKILL.md')
+done < <(if [[ "${_IN_GIT_REPO}" == "1" ]]; then git ls-files '*SKILL.md'; else find . -name 'SKILL.md' -not -path '*/.git/*'; fi)
 
 bash -n .github/scripts/publish-review.sh
 bash -n .github/scripts/publish-claudio-thread-action.sh
@@ -686,9 +698,11 @@ for path in "${forbidden_paths[@]}"; do
   fi
 done
 
-if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|token))$' >/dev/null; then
-  echo "tracked sensitive-looking file detected" >&2
-  exit 1
+if [[ "${_IN_GIT_REPO}" == "1" ]]; then
+  if git ls-files | grep -E '(^|/)(\.env|.*\.(pem|key|token))$' >/dev/null; then
+    echo "tracked sensitive-looking file detected" >&2
+    exit 1
+  fi
 fi
 
 # Helper invocation style divergence must be documented as intentional in
@@ -707,19 +721,23 @@ grep -qF '## Knowledge sources' profiles/example-project.md
 # The public catalog must not embed a consumer project's identifying details.
 # Split the sentinel so this check does not match its own source.
 readonly forbidden_target_pattern='craft''control|dgaramos/craft''control'
-if git grep -n -i -E "$forbidden_target_pattern" -- . >/dev/null; then
-  echo "target-project reference detected; consumer profiles belong in their target repository" >&2
-  exit 1
+if [[ "${_IN_GIT_REPO}" == "1" ]]; then
+  if git grep -n -i -E "$forbidden_target_pattern" -- . >/dev/null; then
+    echo "target-project reference detected; consumer profiles belong in their target repository" >&2
+    exit 1
+  fi
 fi
 
 # This catalog may keep only its own profile and the neutral template. A
 # consumer profile belongs in the consumer repository, never in this public
 # catalog.
 readonly allowed_profile_paths=$'.gitkeep\nagent-workflows.md\nexample-project.md'
-actual_profile_paths="$(git ls-files profiles/ | sed 's#^profiles/##' | sort)"
-if [[ "$actual_profile_paths" != "$allowed_profile_paths" ]]; then
-  echo "profiles: consumer project profiles must not be committed to the catalog" >&2
-  exit 1
+if [[ "${_IN_GIT_REPO}" == "1" ]]; then
+  actual_profile_paths="$(git ls-files profiles/ | sed 's#^profiles/##' | sort)"
+  if [[ "$actual_profile_paths" != "$allowed_profile_paths" ]]; then
+    echo "profiles: consumer project profiles must not be committed to the catalog" >&2
+    exit 1
+  fi
 fi
 
 # Validate that branch commits use one recognized adapter co-author identity.
@@ -727,21 +745,26 @@ fi
 # within one branch would make its execution provenance ambiguous.
 # In shallow clones (e.g. CI with fetch-depth != 0) git merge-base may fail;
 # emit a warning and skip the check rather than producing false positives.
-if merge_base="$(git merge-base HEAD main 2>/dev/null)"; then
-  branch_log="$(git log "${merge_base}..HEAD" --format="%B")"
-  if [[ -n "$branch_log" ]]; then
-    branch_adapters="$(echo "$branch_log" | sed -nE 's/^Co-Authored-By: (cody-dr|claudio-dr)\[bot\] <.*>$/\1/p' | sort -u)"
-    if [[ "$(echo "$branch_adapters" | sed '/^$/d' | wc -l | tr -d ' ')" -gt 1 ]]; then
-      echo "trailer: branch commits mix Cody DR and Claudio DR identities" >&2
-      echo "  observed: $branch_adapters" >&2
-      exit 1
+# When running from an extracted tarball (no git repo) this check is skipped.
+if [[ "${_IN_GIT_REPO}" == "1" ]]; then
+  if merge_base="$(git merge-base HEAD main 2>/dev/null)"; then
+    branch_log="$(git log "${merge_base}..HEAD" --format="%B")"
+    if [[ -n "$branch_log" ]]; then
+      branch_adapters="$(echo "$branch_log" | sed -nE 's/^Co-Authored-By: (cody-dr|claudio-dr)\[bot\] <.*>$/\1/p' | sort -u)"
+      if [[ "$(echo "$branch_adapters" | sed '/^$/d' | wc -l | tr -d ' ')" -gt 1 ]]; then
+        echo "trailer: branch commits mix Cody DR and Claudio DR identities" >&2
+        echo "  observed: $branch_adapters" >&2
+        exit 1
+      fi
     fi
+  else
+    echo "warning: cannot resolve merge-base with main; trailer identity check skipped (shallow clone?)" >&2
   fi
-else
-  echo "warning: cannot resolve merge-base with main; trailer identity check skipped (shallow clone?)" >&2
 fi
 
 AGENT_WORKFLOWS_DIR="$(pwd)" bin/drift
 
-git diff --check
+if [[ "${_IN_GIT_REPO}" == "1" ]]; then
+  git diff --check
+fi
 echo "catalog quality check: ok"
