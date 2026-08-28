@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install-global-agents — symlink agent-workflows plugin agents into ~/.claude/agents/
+# install-global-agents — symlink dr-agents plugin agents into ~/.claude/agents/
 #
 # Run from anywhere. Re-running is safe: existing symlinks are replaced.
 # To uninstall: remove the symlinks from ~/.claude/agents/.
@@ -29,7 +29,7 @@ install_agent() {
     echo "  linked  ${name}"
 }
 
-echo "Installing agent-workflows global agents from:"
+echo "Installing dr-agents global agents from:"
 echo "  ${PLUGINS_DIR}"
 echo "Into:"
 echo "  ${AGENTS_DIR}"

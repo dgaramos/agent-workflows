@@ -4,7 +4,7 @@
 # Catalog discovery order (first match wins):
 #   1. AGENT_WORKFLOWS_DIR environment variable
 #   2. CWD self-detection (bin/check marker present in current directory)
-#   3. Pointer file at ~/.local/share/agent-workflows/catalog-path
+#   3. Pointer file at ~/.local/share/dr-agents/catalog-path
 #
 # When no catalog is locatable: prints a warning naming all three discovery
 # methods and exits 0 so consumer CI is never broken by a missing installation.
@@ -14,7 +14,7 @@
 
 set -euo pipefail
 
-readonly pointer_file="${HOME}/.local/share/agent-workflows/catalog-path"
+readonly pointer_file="${HOME}/.local/share/dr-agents/catalog-path"
 
 # ---------------------------------------------------------------------------
 # Locate the catalog root
@@ -48,7 +48,7 @@ locate_catalog() {
 
 catalog=""
 if ! catalog="$(locate_catalog)"; then
-  echo "warning: no agent-workflows catalog locatable;" \
+  echo "warning: no dr-agents catalog locatable;" \
        "set AGENT_WORKFLOWS_DIR, run from the catalog directory (bin/check marker)," \
        "or write the catalog path to ${pointer_file} (catalog-path pointer file)" >&2
   exit 0

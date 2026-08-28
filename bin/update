@@ -54,9 +54,9 @@ pull_catalog() {
 # ---------------------------------------------------------------------------
 
 update_downloaded() {
-  local catalog_store="${HOME}/.local/share/agent-workflows"
+  local catalog_store="${HOME}/.local/share/dr-agents"
   local pointer_file="${catalog_store}/catalog-path"
-  local repo_slug="dgaramos/agent-workflows"
+  local repo_slug="dgaramos/dr-agents"
   local api_base="https://api.github.com/repos/${repo_slug}"
 
   # Read current installed path from pointer file

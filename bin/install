@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/install — install agent-workflows skills and plugins globally or per-repo
+# bin/install — install dr-agents skills and plugins globally or per-repo
 #
 # Modes:
 #   (no args)             check workflow presence and drift in CWD .github/workflows/
@@ -40,7 +40,7 @@ Usage: bin/install [--force]
                     overrides from profiles/<name>.md.
   --download        Download the catalog from GitHub releases and install globally.
                     Resolves the latest release unless --version <tag> is given.
-                    Extracts to ~/.local/share/agent-workflows/<version>/ and
+                    Extracts to ~/.local/share/dr-agents/<version>/ and
                     writes a catalog-path pointer file. Skips download when the
                     version is already extracted. Previous version directories
                     are preserved for manual rollback.
@@ -149,7 +149,7 @@ install_file() {
 # the catalog without AGENT_WORKFLOWS_DIR being set.
 write_pointer_file() {
   local catalog_path="$1"
-  local pointer_dir="${HOME}/.local/share/agent-workflows"
+  local pointer_dir="${HOME}/.local/share/dr-agents"
   mkdir -p "${pointer_dir}"
   echo "${catalog_path}" > "${pointer_dir}/catalog-path"
 }
@@ -200,9 +200,9 @@ verify_checksum() {
 mode_download() {
   local version="$1"  # may be empty → resolve latest from GitHub releases API
 
-  local catalog_store="${HOME}/.local/share/agent-workflows"
+  local catalog_store="${HOME}/.local/share/dr-agents"
   local tmp_dir="${catalog_store}/tmp"
-  local repo_slug="dgaramos/agent-workflows"
+  local repo_slug="dgaramos/dr-agents"
   local api_base="https://api.github.com/repos/${repo_slug}"
   local release_base="https://github.com/${repo_slug}/releases/download"
 
@@ -231,8 +231,8 @@ mode_download() {
     return
   fi
 
-  local tarball_name="agent-workflows-${version}.tar.gz"
-  local sha256_name="agent-workflows-${version}.sha256"
+  local tarball_name="dr-agents-${version}.tar.gz"
+  local sha256_name="dr-agents-${version}.sha256"
 
   echo "Downloading ${tarball_name}..."
   curl -fsSL "${release_base}/${version}/${tarball_name}" \
@@ -468,7 +468,7 @@ mode_global() {
   echo "  to  : ${agents_dest}"
   echo ""
   mkdir -p "$(dirname "${agents_dest}")"
-  write_agents_wrapper "${HOME}/.local/share/agent-workflows/catalog-path" "${agents_dest}"
+  write_agents_wrapper "${HOME}/.local/share/dr-agents/catalog-path" "${agents_dest}"
   echo "  installed  agents  (catalog: ${REPO_DIR})"
 
   write_pointer_file "${REPO_DIR}"
@@ -552,7 +552,7 @@ mode_status() {
   local global_cody_manifest="${codex_config}/plugins/cache/cody-dr/${catalog_cody_ver}/.codex-plugin/plugin.json"
   local local_claudio_manifest="${repo_root}/.claude/.claude-plugin/plugin.json"
 
-  echo "agent-workflows install status"
+  echo "dr-agents install status"
   echo ""
   echo "Catalog: ${REPO_DIR}"
   echo "  claudio-dr  v${catalog_claudio_ver}"
