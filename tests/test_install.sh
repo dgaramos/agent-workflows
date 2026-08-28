@@ -36,7 +36,8 @@ agents_bin="$fake_home/.local/bin/agents"
 [[ -f "$cody_manifest" ]]    || { echo "FAIL: cody-dr plugin.json not installed" >&2; exit 1; }
 [[ -f "$agents_bin" ]]       || { echo "FAIL: agents CLI not installed at $agents_bin" >&2; exit 1; }
 [[ -x "$agents_bin" ]]       || { echo "FAIL: agents CLI is not executable" >&2; exit 1; }
-grep -q "$repository_root" "$agents_bin" || { echo "FAIL: agents wrapper does not reference catalog path" >&2; exit 1; }
+# The wrapper reads the pointer file at runtime; verify it references the pointer file path.
+grep -q "catalog-path" "$agents_bin" || { echo "FAIL: agents wrapper does not reference pointer file (catalog-path)" >&2; exit 1; }
 
 global_pointer="$fake_home/.local/share/agent-workflows/catalog-path"
 [[ -f "$global_pointer" ]] || { echo "FAIL: --global did not write pointer file at $global_pointer" >&2; exit 1; }

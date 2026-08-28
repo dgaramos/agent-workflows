@@ -20,6 +20,7 @@ Usage: bin/update --global [--force]
        bin/update --global --workflows [--force]
        bin/update --repo [--profile <name>] [--force]
        bin/update --all [--force]
+       bin/update --download
 
   --global             Pull the catalog and update the global install (~/.claude/ and Codex config).
   --global --workflows Pull the catalog and update managed workflows in .github/workflows/ of the
@@ -30,6 +31,11 @@ Usage: bin/update --global [--force]
                        Combine with --profile <name> to re-apply a named profile.
   --all                Pull the catalog and update both global and repo-local installs.
                        --repo is skipped when .claude/ does not exist in the current directory.
+  --download           Update a download-based install. Reads the current version from the
+                       catalog-path pointer file, queries GitHub releases for the latest tag,
+                       downloads and installs when a newer version is available, and prints
+                       "Already at vX.Y.Z" when already up to date. Previous version directories
+                       are preserved for manual rollback.
   --force              Forward --force to bin/install, skipping conflict checking and
                        overwriting all files from the catalog source. Use this as the
                        canonical resolution path for conflicts: agents update --global --force
@@ -41,6 +47,53 @@ pull_catalog() {
   echo "Pulling latest catalog from origin..."
   git -C "${REPO_DIR}" pull --ff-only
   echo ""
+}
+
+# ---------------------------------------------------------------------------
+# update_downloaded — update a download-based install to the latest release
+# ---------------------------------------------------------------------------
+
+update_downloaded() {
+  local catalog_store="${HOME}/.local/share/agent-workflows"
+  local pointer_file="${catalog_store}/catalog-path"
+  local repo_slug="dgaramos/agent-workflows"
+  local api_base="https://api.github.com/repos/${repo_slug}"
+
+  # Read current installed path from pointer file
+  if [[ ! -f "${pointer_file}" ]]; then
+    echo "ERROR: no pointer file found at ${pointer_file}" >&2
+    echo "Run 'bin/install --download' to perform an initial download-based install." >&2
+    exit 1
+  fi
+
+  local current_path
+  current_path="$(< "${pointer_file}")"
+  # Derive the version tag from the last component of the install path
+  local current_ver
+  current_ver="$(basename "${current_path}")"
+
+  echo "Current installed version: ${current_ver}"
+  echo "Resolving latest release from GitHub..."
+
+  local api_response
+  api_response="$(curl -fsSL "${api_base}/releases/latest")"
+  local latest_ver
+  latest_ver="$(echo "${api_response}" | grep '"tag_name"' | head -1 | sed 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')"
+
+  if [[ -z "${latest_ver}" ]]; then
+    echo "ERROR: could not resolve latest release version from GitHub" >&2
+    exit 1
+  fi
+
+  echo "Latest available version: ${latest_ver}"
+
+  if [[ "${current_ver}" == "${latest_ver}" ]]; then
+    echo "Already at ${current_ver}"
+    exit 0
+  fi
+
+  echo "Updating from ${current_ver} to ${latest_ver}..."
+  bash "${REPO_DIR}/bin/install" --download --version "${latest_ver}"
 }
 
 if [[ $# -eq 0 ]]; then
@@ -57,6 +110,7 @@ while [[ $# -gt 0 ]]; do
     --global)    MODE="global";    shift ;;
     --repo)      MODE="repo";      shift ;;
     --all)       MODE="all";       shift ;;
+    --download)  MODE="download";  shift ;;
     --workflows) WORKFLOWS=1;      shift ;;
     --force)     FORCE_FLAG="--force"; shift ;;
     --profile)
@@ -82,6 +136,21 @@ fi
 if [[ "${WORKFLOWS}" == "1" && "${MODE}" != "global" ]]; then
   echo "--workflows is only valid with --global" >&2
   exit 1
+fi
+
+if [[ "${MODE}" == "download" && -n "${FORCE_FLAG}" ]]; then
+  echo "--force is not valid with --download" >&2
+  exit 1
+fi
+
+if [[ "${MODE}" == "download" && "${WORKFLOWS}" == "1" ]]; then
+  echo "--workflows is not valid with --download" >&2
+  exit 1
+fi
+
+if [[ "${MODE}" == "download" ]]; then
+  update_downloaded
+  exit $?
 fi
 
 pull_catalog
