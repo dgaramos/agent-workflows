@@ -1,5 +1,3 @@
-# dr-agents
-
 <p align="center">
   <img src="assets/dr-agents-header.png" alt="Pixel-art header with dgaramos, Cody DR, and Claudio DR" width="100%">
 </p>
