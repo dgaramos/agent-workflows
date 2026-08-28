@@ -30,10 +30,10 @@ readonly fake_tarball_path="$fake_catalog_store/tmp/$fake_tarball_name"
 (cd "$repository_root" && \
   tar czf "$fake_tarball_path" \
     --transform "s|^|dr-agents-${test_ver}/|" \
-    bin plugins profiles core .agent-review 2>/dev/null || \
+    bin plugins profiles core .dr-agents 2>/dev/null || \
   tar czf "$fake_tarball_path" \
     -s "|^|dr-agents-${test_ver}/|" \
-    bin plugins profiles core .agent-review 2>/dev/null || \
+    bin plugins profiles core .dr-agents 2>/dev/null || \
   COPYFILE_DISABLE=1 tar czf "$fake_tarball_path" \
     --exclude="*.DS_Store" \
     -C "$repository_root" \

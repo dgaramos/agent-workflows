@@ -23,7 +23,7 @@ design discovery, and `claudio-findings` for findings handling. Use
 Brief, `/claudio-dr:plan-implementation #42` for a read-only test-first plan,
 `/claudio-dr:execute-issue #42` for normal issue delivery, and
 `/claudio-dr:handle-pr-findings` for review findings. From a target repository,
-they discover exactly one local profile at `.agent-review/*/PROFILE.md`. With
+they discover exactly one local profile at `.dr-agents/*/PROFILE.md`. With
 no profile they use generic portable rules; they stop rather than guess when
 more than one profile exists.
 
