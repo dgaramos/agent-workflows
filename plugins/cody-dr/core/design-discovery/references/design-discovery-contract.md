@@ -54,7 +54,7 @@ The output must contain these sections:
 - **Implementation direction:** components, behaviors, content, and acceptance
   signals a developer can use without rediscovering the rationale.
 - **Success criteria:** observable user-experience outcomes or measurements.
-- **Handoff:** concise context suitable for `author-issue`,
+- **Handoff:** concise context suitable for `author-issue`, `spec`,
   `plan-implementation`, or an existing issue.
 
 Only include states and accessibility concerns relevant to the request, but
@@ -65,10 +65,10 @@ explicitly say when a category is not applicable.
 <!-- bin/check anchor: "`author-issue` may" is a load-bearing phrase matched by bin/check. Do not reword this sentence without updating the corresponding grep assertion in bin/check. -->
 
 The Design Brief is context, not a publication command. `author-issue` may
-incorporate a supplied brief into a structured issue body. Implementation and
-planning may use it as prior design direction. The designer never creates the
-issue, opens a pull request, comments, uploads an artifact, or changes code by
-default.
+incorporate a supplied brief into a structured issue body. `spec` may use it as
+optional input for portable spec authoring. Implementation and planning may use
+it as prior design direction. The designer never creates the issue, opens a
+pull request, comments, uploads an artifact, or changes code by default.
 
 ## Publication boundary
 
