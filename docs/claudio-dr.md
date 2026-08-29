@@ -27,6 +27,12 @@ they discover exactly one local profile at `.dr-agents/*/PROFILE.md`. With
 no profile they use generic portable rules; they stop rather than guess when
 more than one profile exists.
 
+When a profile declares an exact `## Spec source`, Claudio resolves only that
+repository and trio path. The declaration never authorizes writing; external
+spec writes still require an explicit caller request. The repository field may
+be a single environment placeholder such as `${SPECS_REPOSITORY}`; Claudio
+stops when it is unset or invalid rather than substituting a default.
+
 ## Local validation and update
 
 Validate the plugin and load it in a local session without publishing:

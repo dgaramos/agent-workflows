@@ -3,6 +3,15 @@
 Use this profile when executing workflows in this repository. Read `AGENTS.md`,
 the issue, and `profiles/dr-agents.md`; run `bin/check` before handoff.
 
+## Spec source
+
+- **Repository:** `${SPECS_REPOSITORY}`
+- **Authorized path:** `specs/dr-agents/complete-sdd-pipeline/`
+
+Set `SPECS_REPOSITORY` to the private `owner/repository` identifier in the
+environment that invokes an agent. This declaration authorizes resolution of
+that exact trio only; it does not authorize writing to the resolved repository.
+
 ## Delivery metadata
 
 - Labels: `enhancement` plus issue scope labels

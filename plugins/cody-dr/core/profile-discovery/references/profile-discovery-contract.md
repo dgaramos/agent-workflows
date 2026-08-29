@@ -20,3 +20,35 @@ catalog checkout is available. It prints the sole matching profile path.
 Profiles are target-project data. Do not copy them into plugins, core, or a
 global agent. A wrapper may name an explicit profile for backwards
 compatibility, but must not prevent this discovery procedure for new projects.
+
+## Authorized spec source
+
+A profile may declare one exact external spec trio using this section:
+
+```md
+## Spec source
+
+- **Repository:** `owner/repository`
+- **Authorized path:** `specs/<project>/<feature>/`
+```
+
+`Repository` identifies the source when it is external; a profile may instead
+declare a local repository identity when the trio lives in the target project.
+It may also be one environment placeholder, such as
+`${SPECS_REPOSITORY}`. The resolver substitutes it only from the invoking
+environment; an unset, empty, or malformed value makes the source inaccessible
+and the agent must stop. Placeholders do not support defaults, concatenation,
+or shell evaluation.
+`Authorized path` is a directory containing exactly `requirements.md`,
+`design.md`, and `tasks.md`.
+
+An agent may resolve an external spec only when all of these conditions hold:
+
+- exactly one profile was discovered and it declares both fields;
+- the requested trio path exactly matches `Authorized path`;
+- the source is accessible through an authorized integration or local checkout.
+
+Missing, partial, ambiguous, or inaccessible declarations are not defaults. The
+agent must not infer a repository, project, path, or alternate spec. A source
+declaration authorizes resolution only; writing still requires explicit caller
+authorization.

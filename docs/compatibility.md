@@ -115,6 +115,8 @@ profile, including:
 - labels, milestone, assignees, reviewers, Project state, and PR template;
 - required context files, architecture boundaries, and layer checklists;
 - extra push remotes or deployment restrictions;
+- an optional `## Spec source` declaration with an external repository (or one
+  environment placeholder) and exact authorized trio path;
 - the publisher dispatch contract, inputs, verified actor, and available or
   unavailable publisher modes.
 

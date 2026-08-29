@@ -30,10 +30,10 @@ portable response only and state that project-specific settings are unknown.
    - task order exposes dependencies and any `## Checkpoint` approval boundary;
    - design decisions are supported by requirements, constraints, or disclosed
      assumptions.
-5. When an issue has been created and its body contains a `Spec:` reference,
-   add links to the three spec files using the profile-declared repository path.
-   Do not create the issue or alter its body without separate explicit
-   authorization.
+5. When an issue body already contains a `Spec:` reference, use the
+   profile-declared exact source only after it passes the authorized-source
+   conditions. Report the three resolved files in the handoff; do not infer an
+   alternate location or alter the issue body.
 6. Write the trio to a `specs/` repository only when the caller explicitly
    authorizes that exact write and the loaded profile declares the target path.
    Otherwise, return the complete trio in the response and report that it was

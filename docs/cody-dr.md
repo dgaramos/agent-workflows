@@ -35,6 +35,12 @@ they discover exactly one local profile at `.dr-agents/*/PROFILE.md`. With
 no profile they use generic portable rules; they stop rather than guess when
 more than one profile exists.
 
+When a profile declares an exact `## Spec source`, Cody resolves only that
+repository and trio path. The declaration never authorizes writing; external
+spec writes still require an explicit caller request. The repository field may
+be a single environment placeholder such as `${SPECS_REPOSITORY}`; Cody
+stops when it is unset or invalid rather than substituting a default.
+
 ## Local validation and update
 
 Codex has no standalone plugin-validation command. Run the catalog quality
