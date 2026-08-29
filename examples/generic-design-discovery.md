@@ -44,7 +44,8 @@ after an invalid-code response.
 
 The output ends with `Publication: not published`. It does not create an issue
 or upload the wireframe. The issue author can include the handoff as context
-when an issue is explicitly authored.
+when an issue is explicitly authored, or a spec agent can use it as optional
+input when drafting the portable spec trio.
 
 ## Profile design rules example
 
