@@ -643,7 +643,7 @@ grep -qF 'Verification:' "$spec_contract"
 grep -qF '**Publication:** not published' "$spec_contract"
 grep -qF '## Checkpoint' "$spec_contract"
 grep -qF 'tasks.md is read-only' "$spec_contract"
-grep -qF 'exact `## Spec source` convention' "$spec_contract"
+grep -qF '`## Spec source` convention' "$spec_contract"
 
 # External spec resolution is intentionally profile-controlled. These anchors
 # prevent adapters or contracts from silently regressing to inferred sources.
@@ -664,7 +664,7 @@ for required_anchor in \
   '## Spec source' \
   'Spec: acme/specs/specs/billing/overdue-invoice-notifications/' \
   '## Issue reference and execution' \
-  'ordered tasks' \
+  'tasks in order' \
   'Verification' \
   '## Checkpoint'; do
   grep -qF "$required_anchor" "$sdd_example"
