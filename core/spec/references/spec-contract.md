@@ -12,6 +12,10 @@ The contract is portable. It defines document structure and workflow behavior,
 not a target project's architecture, commands, credentials, issue metadata, or
 deployment policy.
 
+This initial contract is a reference artifact, not a directly invocable skill.
+The portable spec entrypoint and its adapter bindings are deliberately deferred
+to their dedicated follow-up issues.
+
 ## `requirements.md`
 
 `requirements.md` must contain these headings in this order:
