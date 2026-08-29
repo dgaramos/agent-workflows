@@ -55,11 +55,11 @@ not mean an App is inactive.
 | Plugin manifest | `.codex-plugin/plugin.json` |
 | Reviewer agent | `plugins/cody-dr/agents/cody-reviewer.md` |
 | Designer agent | `plugins/cody-dr/agents/cody-designer.md` |
-| Spec agent | Not yet available; Cody uses the portable contract without an adapter entrypoint. |
+| Spec agent | `plugins/cody-dr/agents/cody-spec.md` |
 | Invocation | `review-pr <PR URL or ref>` |
 | Issue authoring | `author-issue <problem statement>` |
 | Implementation planning | `plan-implementation <issue>` |
-| Agent invocation | `@cody-reviewer review <ref>`, `@cody-author draft issue`, `@cody-executor execute issue #42`, or `@cody-designer assess <request>` |
+| Agent invocation | `@cody-reviewer review <ref>`, `@cody-author draft issue`, `@cody-executor execute issue #42`, `@cody-designer assess <request>`, or `@cody-spec draft <request>` |
 | Local validation | `bin/check` + `codex --plugin-dir ./plugins/cody-dr` |
 | Local session | `codex --plugin-dir ./plugins/cody-dr` |
 | Update flow | bump version → reinstall from marketplace root → new thread |
@@ -81,9 +81,10 @@ not mean an App is inactive.
   invocation model. It is not a parity bug. Contributors extending either adapter
   should follow the invocation style of the target platform, not mirror the other
   adapter's syntax.
-- **Spec authoring availability**: Claudio DR currently exposes `claudio-spec`.
-  Cody DR has no adapter entrypoint yet, so it cannot write a `specs/` repository;
-  this temporary limitation is documented rather than treated as accidental parity.
+- **Spec authoring**: both adapters expose the portable spec-authoring contract
+  through `claudio-spec` and `cody-spec`. Both write only with explicit caller
+  authorization and a profile-declared target path; otherwise they return the
+  trio without writing it.
 
 ## Profiles
 
