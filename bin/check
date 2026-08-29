@@ -135,6 +135,7 @@ readonly required_paths=(
   "plugins/claudio-dr/agents/claudio-author.md"
   "plugins/claudio-dr/agents/claudio-executor.md"
   "plugins/claudio-dr/agents/claudio-designer.md"
+  "plugins/claudio-dr/agents/claudio-spec.md"
   "plugins/claudio-dr/references/reviewer-identity.md"
   "docs/claudio-dr.md"
   "docs/contributing-guide.md"

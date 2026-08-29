@@ -38,6 +38,7 @@ not mean an App is inactive.
 | Plugin manifest | `.claude-plugin/plugin.json` |
 | Reviewer agent | `plugins/claudio-dr/agents/claudio-reviewer.md` |
 | Designer agent | `plugins/claudio-dr/agents/claudio-designer.md` |
+| Spec agent | `plugins/claudio-dr/agents/claudio-spec.md` |
 | Invocation | `/claudio-dr:review-pr <PR URL or ref>` |
 | Issue authoring | `/claudio-dr:author-issue <problem statement>` |
 | Implementation planning | `/claudio-dr:plan-implementation <issue>` |
@@ -54,6 +55,7 @@ not mean an App is inactive.
 | Plugin manifest | `.codex-plugin/plugin.json` |
 | Reviewer agent | `plugins/cody-dr/agents/cody-reviewer.md` |
 | Designer agent | `plugins/cody-dr/agents/cody-designer.md` |
+| Spec agent | Not yet available; Cody uses the portable contract without an adapter entrypoint. |
 | Invocation | `review-pr <PR URL or ref>` |
 | Issue authoring | `author-issue <problem statement>` |
 | Implementation planning | `plan-implementation <issue>` |
@@ -79,6 +81,9 @@ not mean an App is inactive.
   invocation model. It is not a parity bug. Contributors extending either adapter
   should follow the invocation style of the target platform, not mirror the other
   adapter's syntax.
+- **Spec authoring availability**: Claudio DR currently exposes `claudio-spec`.
+  Cody DR has no adapter entrypoint yet, so it cannot write a `specs/` repository;
+  this temporary limitation is documented rather than treated as accidental parity.
 
 ## Profiles
 
