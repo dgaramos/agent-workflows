@@ -60,6 +60,7 @@ readonly required_paths=(
   "core/pr-review/agents/openai.yaml"
   "core/profile-discovery/references/profile-discovery-contract.md"
   "core/profile-discovery/scripts/discover-project-profile.sh"
+  "core/spec/references/spec-contract.md"
   "core/issue-authoring/SKILL.md"
   "core/issue-authoring/references/issue-contract.md"
   "core/design-discovery/SKILL.md"
@@ -89,6 +90,7 @@ readonly required_paths=(
   "examples/generic-profile-discovery.md"
   "examples/generic-issue-authoring.md"
   "examples/generic-design-discovery.md"
+  "examples/generic-spec-driven-development.md"
   "examples/generic-findings-handling.md"
   "examples/generic-issue-lifecycle.md"
   "examples/generic-test-first-planning.md"
@@ -615,6 +617,28 @@ done
 grep -qF '## Design Brief' core/design-discovery/references/design-discovery-contract.md      # guards: "## Design Brief" section heading
 grep -qF '**Publication:** not published' core/design-discovery/references/design-discovery-contract.md  # guards: publication-boundary close
 grep -qF '`author-issue` may' core/design-discovery/references/design-discovery-contract.md             # guards: handoff-boundary sentence
+
+# Guarded phrases in core/spec/references/spec-contract.md.
+# These strings keep the portable SDD document structure machine-checkable.
+readonly spec_contract="core/spec/references/spec-contract.md"
+for required_heading in \
+  '## Objetivo' \
+  '## Requisitos funcionais' \
+  '## Requisitos não-funcionais' \
+  '## Critérios de aceite' \
+  '## Condições de falha' \
+  '## Boundaries' \
+  '## Stack' \
+  '## Arquitetura' \
+  '## Contratos de componente' \
+  '## Estratégia de teste'; do
+  grep -qF "$required_heading" "$spec_contract"
+done
+grep -qF 'Given/When/Then' "$spec_contract"
+grep -qF 'Mermaid' "$spec_contract"
+grep -qF 'Verification:' "$spec_contract"
+grep -qF '## Checkpoint' "$spec_contract"
+grep -qF 'tasks.md is read-only' "$spec_contract"
 
 # The four lifecycle phases must be present and preserve their approval gates.
 for phase in plan-issue start-issue execute-issue ship-issue; do
