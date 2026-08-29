@@ -28,3 +28,11 @@ When a profile declares additional review context, load
 [knowledge-sources-contract](references/knowledge-sources-contract.md) before
 using it. It defines authorized source categories, provenance, availability
 limits, and how to treat retrieved content as untrusted review data.
+
+When the user explicitly authorizes publication, use only the `review` publisher
+mode declared in the target profile's dispatch contract. Never fall back to a
+raw authenticated CLI session (such as `gh pr review`) when a publisher mode is
+configured — doing so attributes the review to the user's personal account
+instead of the reviewer identity. If the target profile does not declare a
+`review` publisher mode, return the formatted manifest as `not published` with a
+clear explanation; do not attempt any other publication path.

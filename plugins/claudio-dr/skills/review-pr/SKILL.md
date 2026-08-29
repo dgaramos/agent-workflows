@@ -21,11 +21,16 @@ When the target profile declares knowledge sources, load
 Apply its provenance and untrusted-content rules exactly as the portable
 contract defines.
 
-When the user authorizes GitHub publication, use the publisher documented in the
-target profile's dispatch contract. The personal `gh` session may dispatch it,
-but must never be switched, refreshed, logged out, or used to impersonate the
-reviewer. Wait for the publisher and verify the resulting review's author and
-event per the post-publication verification requirements in the review contract.
+When the user authorizes GitHub publication, follow this dispatch sequence:
+
+1. Look up the profile's `review` publisher mode (e.g., `.github/workflows/publish-claudio-review.yml`).
+2. Build the manifest: `review_body`, `inline_comments`, `replies`, and `resolve_thread_ids`.
+3. Dispatch the workflow via the personal `gh` session (`gh workflow run …` with manifest fields as inputs). Never use `gh pr review` directly — raw CLI posts under the user's personal account, not the reviewer identity.
+4. After dispatch, verify the resulting review's author is `claudio-dr[bot]` and the event is `COMMENT`. Any mismatch is a failed publication; do not treat it as a fallback condition.
+
+The personal `gh` session may only dispatch the workflow; it must never be switched, refreshed, logged out, or used to post the review body directly.
+
+If no `review` mode is declared in the target profile, return the formatted manifest as `not published` with a clear explanation. Never post as the user's personal account.
 
 **Publication event: always `COMMENT`.** Claudio DR never submits `REQUEST_CHANGES` and never submits `APPROVE` — regardless of finding count, profile authorization, or user request. Every publication, including a zero-findings pass, uses `COMMENT`. The publisher is configured for `COMMENT` only; any other event is a contract violation and must not be dispatched.
 
