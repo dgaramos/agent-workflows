@@ -115,6 +115,7 @@ readonly required_paths=(
   "plugins/cody-dr/agents/cody-author.md"
   "plugins/cody-dr/agents/cody-executor.md"
   "plugins/cody-dr/agents/cody-designer.md"
+  "plugins/cody-dr/agents/cody-spec.md"
   "plugins/cody-dr/references/reviewer-identity.md"
   "docs/cody-dr.md"
   ".claude-plugin/marketplace.json"
