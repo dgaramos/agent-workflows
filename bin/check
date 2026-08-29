@@ -60,6 +60,7 @@ readonly required_paths=(
   "core/pr-review/agents/openai.yaml"
   "core/profile-discovery/references/profile-discovery-contract.md"
   "core/profile-discovery/scripts/discover-project-profile.sh"
+  "core/spec/SKILL.md"
   "core/spec/references/spec-contract.md"
   "core/issue-authoring/SKILL.md"
   "core/issue-authoring/references/issue-contract.md"
