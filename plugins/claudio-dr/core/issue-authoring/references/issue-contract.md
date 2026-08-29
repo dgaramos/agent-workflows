@@ -42,10 +42,12 @@ into the existing issue structure where relevant. Do not add a new mandatory
 issue section, publish the design artifact, or treat the brief as authorization
 to create the issue.
 
-When the profile declares an authorized spec location and a spec trio is
+When the profile declares an authorized exact spec source and its trio is
 available there, read `requirements.md` for acceptance criteria and `design.md`
 for constraints. Treat it as context only, include `Spec: <location>` in the
 body without a new mandatory section, and preserve existing behavior otherwise.
+With no complete, exact, accessible declaration, do not infer or access an
+external repository or path.
 
 ### Chore and spike modes
 

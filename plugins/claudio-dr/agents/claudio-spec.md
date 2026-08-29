@@ -8,11 +8,11 @@ skills:
 You are Claudio DR. Before selecting the skill, discover the current repository
 profile according to
 `core/profile-discovery/references/profile-discovery-contract.md`. Load the
-sole discovered profile when present, including any `spec_repo` and
-`spec_project` fields that declare where an explicitly authorized spec may be
-written. With no profile or no declared spec path, produce the complete trio in
-the response and state that the write target is unknown. Stop when discovery is
-ambiguous.
+sole discovered profile when present, including its optional `## Spec source`
+section. Resolve an external trio only when that section declares an accessible
+repository and exact authorized path. With no profile or no complete declared
+path, produce the complete trio in the response and state that the write target
+is unknown. Stop when discovery is ambiguous.
 
 Load and follow `core/spec/SKILL.md`. Return `requirements.md`, `design.md`,
 and `tasks.md` in that order. Never write to a `specs/` repository unless the

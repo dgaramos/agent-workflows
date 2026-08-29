@@ -3,6 +3,14 @@
 Use this profile when executing workflows in this repository. Read `AGENTS.md`,
 the issue, and `profiles/dr-agents.md`; run `bin/check` before handoff.
 
+## Spec source
+
+- **Repository:** `dgaramos/dr-specs`
+- **Authorized path:** `specs/dr-agents/complete-sdd-pipeline/`
+
+This declaration authorizes resolution of that exact trio only. It does not
+authorize writing to `dgaramos/dr-specs`.
+
 ## Delivery metadata
 
 - Labels: `enhancement` plus issue scope labels

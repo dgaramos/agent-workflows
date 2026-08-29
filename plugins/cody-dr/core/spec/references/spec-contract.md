@@ -12,6 +12,11 @@ The contract is portable. It defines document structure and workflow behavior,
 not a target project's architecture, commands, credentials, issue metadata, or
 deployment policy.
 
+When a profile declares an external spec source, it must use the exact
+`## Spec source` convention from the profile-discovery contract. The declaration
+authorizes resolving only its exact trio path; a missing, partial, ambiguous, or
+inaccessible declaration never authorizes inference of an alternate source.
+
 The portable spec-authoring entrypoint is `core/spec/SKILL.md`. Adapter
 bindings are deliberately deferred to their dedicated follow-up issues.
 

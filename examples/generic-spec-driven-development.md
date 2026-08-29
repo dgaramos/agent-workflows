@@ -4,6 +4,28 @@ A request asks for a service to notify a customer when an invoice becomes
 overdue. A spec agent can produce this minimal trio without assuming a specific
 application stack.
 
+## Design Brief
+
+- **Outcome:** notify a customer once when an unpaid invoice becomes overdue.
+- **Constraint:** the host project owns retry policy and provider selection.
+- **Open question:** whether retries are enabled; this becomes a checkpoint,
+  not an inferred implementation detail.
+
+## Authorized source
+
+The consuming profile declares exactly one accessible source before an agent
+resolves the trio:
+
+```md
+## Spec source
+
+- **Repository:** `acme/specs`
+- **Authorized path:** `specs/billing/overdue-invoice-notifications/`
+```
+
+Without both fields, an agent can draft the trio in conversation but does not
+read or write an external repository.
+
 ## `requirements.md`
 
 ````md
@@ -82,6 +104,21 @@ message for each invoice.
 
 Confirm the host project's retry policy before adding retries.
 ```
+
+## Issue reference and execution
+
+After the trio is accepted, the implementation issue records its exact source:
+
+```md
+Spec: acme/specs/specs/billing/overdue-invoice-notifications/
+```
+
+The executor verifies that the issue reference exactly matches the loaded
+profile declaration, then reads `tasks.md` as read-only input. It performs the
+tasks in order and runs each `Verification:` command after its task. At the
+checkpoint, it stops unless the caller explicitly authorized continuous
+execution. The checkpoint does not authorize publication, merge, or an
+unrelated external write.
 
 The example is illustrative: its commands and components are not portable
 requirements for consuming projects.

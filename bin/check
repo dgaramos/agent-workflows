@@ -643,6 +643,32 @@ grep -qF 'Verification:' "$spec_contract"
 grep -qF '**Publication:** not published' "$spec_contract"
 grep -qF '## Checkpoint' "$spec_contract"
 grep -qF 'tasks.md is read-only' "$spec_contract"
+grep -qF 'exact `## Spec source` convention' "$spec_contract"
+
+# External spec resolution is intentionally profile-controlled. These anchors
+# prevent adapters or contracts from silently regressing to inferred sources.
+readonly profile_discovery_contract="core/profile-discovery/references/profile-discovery-contract.md"
+grep -qF '## Authorized spec source' "$profile_discovery_contract"
+grep -qF '**Repository:**' "$profile_discovery_contract"
+grep -qF '**Authorized path:**' "$profile_discovery_contract"
+grep -qF 'must not infer' "$profile_discovery_contract"
+grep -qF '## Spec source' .dr-agents/dr-agents/PROFILE.md
+grep -qF '**Repository:**' .dr-agents/dr-agents/PROFILE.md
+grep -qF '**Authorized path:**' .dr-agents/dr-agents/PROFILE.md
+
+# The generic SDD example is the portable end-to-end reference for the
+# Design Brief → trio → issue reference → execution handoff.
+readonly sdd_example="examples/generic-spec-driven-development.md"
+for required_anchor in \
+  '## Design Brief' \
+  '## Spec source' \
+  'Spec: acme/specs/specs/billing/overdue-invoice-notifications/' \
+  '## Issue reference and execution' \
+  'ordered tasks' \
+  'Verification' \
+  '## Checkpoint'; do
+  grep -qF "$required_anchor" "$sdd_example"
+done
 
 # The four lifecycle phases must be present and preserve their approval gates.
 for phase in plan-issue start-issue execute-issue ship-issue; do

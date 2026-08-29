@@ -1,4 +1,4 @@
-# claudio-dr: v0.1.21
+# claudio-dr: v0.1.22
 name: Publish Claudio DR review
 on:
   workflow_dispatch:
