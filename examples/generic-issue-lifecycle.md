@@ -145,3 +145,9 @@ the branch, validation, or PR state:
 **Stopped at:** none
 **PR:** https://github.com/acme/widgets/pull/42
 ```
+# Spec-driven execution example
+
+For an authorized, profile-declared `Spec:` location, the executor reads
+`tasks.md`, performs tasks in order, and runs only profile-compliant
+`Verification:` commands. It stops at `## Checkpoint` unless continuous
+execution was explicitly authorized; an unavailable spec produces a handoff.
