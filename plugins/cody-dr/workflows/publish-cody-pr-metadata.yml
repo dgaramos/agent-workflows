@@ -1,4 +1,4 @@
-# cody-dr: v0.1.20
+# cody-dr: v0.1.21
 name: Apply Cody DR PR metadata
 on:
   workflow_dispatch:
