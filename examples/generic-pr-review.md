@@ -42,6 +42,26 @@ decide whether to request another page.
 Without publisher authorization, the review body and inline comments are
 returned as `not published`. The summary records `Publication: not requested`.
 
+## Publisher dispatch sequence
+
+When publication is authorized, the reviewer follows this sequence:
+
+1. **Look up** the target profile's `review` publisher mode (e.g.,
+   `.github/workflows/publish-claudio-review.yml`).
+2. **Build the manifest** — `review_body`, `inline_comments`, `replies`,
+   `resolve_thread_ids`.
+3. **Dispatch via workflow** — `gh workflow run publish-claudio-review.yml
+   --field manifest='<json>'`. Never use `gh pr review` directly when a
+   publisher is configured.
+4. **Verify** the resulting review's author is `claudio-dr[bot]` and event
+   is `COMMENT`. A mismatch is reported as a failed publication, not silently
+   accepted.
+
+When no `review` publisher mode is declared in the target profile, the reviewer
+falls back to `gh pr review` under the caller's authenticated personal account
+and clearly labels the review as posted by that personal account — never as the
+bot identity.
+
 The example intentionally contains no project command, credential, or
 vendor assumption. Both Claudio DR and Cody DR produce equivalent scope,
 evidence, findings, and summary structure from the same input; they differ only
