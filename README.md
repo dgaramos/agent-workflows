@@ -60,13 +60,13 @@ flowchart TD
     PL["plan-issue\nRead-only test-first plan\nSurfaces plan · waits for explicit approval"]
     S["start-issue\nLoad profile · check dependencies\nCreate working branch"]
     IM["implement-issue\nMinimal in-scope changes\nQuality gate after each unit"]
-    SH["ship-issue\nFinal quality gate · push branch\nOpen fully-populated PR · awaits explicit approval"]
+    SH["ship-issue\nFinal quality gate · push branch\nOpen fully-populated PR"]
     RV["review-pr\nIndependent review of explicit PR/ref\nPublication separately authorized"]
 
     I --> PL
     PL -->|"explicit approval"| S
-    S -->|"explicit approval"| IM
-    IM -->|"explicit approval"| SH
+    S --> IM
+    IM --> SH
     R["explicit PR/ref\nany contributor"] --> RV
 ```
 
@@ -86,8 +86,8 @@ contributor.
 | `design-and-author` | Chain design discovery into issue authoring in a single invocation |
 | `plan-issue` | Surface a read-only, test-first implementation plan and wait for explicit approval before any file is touched |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
-| `execute-issue` | Orchestrate the 4-phase lifecycle (plan → start → implement → ship) with explicit approval gates between each phase |
-| `ship-issue` | Run final quality gate, push branch, and open fully-populated PR — requires explicit approval |
+| `execute-issue` | Orchestrate the full lifecycle (plan → start → implement → ship) with a single human gate after plan approval |
+| `ship-issue` | Run final quality gate, push branch, and open fully-populated PR (no extra approval gate when reached via execute-issue) |
 | `plan-implementation` | _(internal)_ Read-only plan step used within execute-issue |
 | `implement-issue` | _(internal)_ In-scope implementation step used within execute-issue |
 | `ship-change` | _(internal)_ Delivery step used within execute-issue |
@@ -250,7 +250,7 @@ Current milestone: **3** · [Project board](https://github.com/users/dgaramos/pr
 What is in place:
 
 - Full PR review and findings-handling contracts (Claudio DR + Cody DR)
-- 4-phase issue lifecycle (plan-issue → start-issue → execute-issue → ship-issue) with explicit approval gates between each phase
+- Full issue lifecycle (plan-issue → start-issue → execute-issue → ship-issue) with a single human gate after plan approval — implement, push, and PR proceed without interruption
 - Issue authoring with mode-detection, profile-discovery, and optional bot publication
 - Contribution guidance discovery in start-issue and implement-issue
 - Designer agents (`claudio-designer`, `cody-designer`) for evidence-grounded UX/UI design discovery

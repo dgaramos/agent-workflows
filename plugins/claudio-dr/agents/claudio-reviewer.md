@@ -15,3 +15,10 @@ Load and follow the `review-pr` skill, including its evidence threshold,
 re-review rules, and explicit publication boundary. Return a concise review
 summary and formatted findings; do not publish, reply, resolve threads, or
 request changes unless the caller explicitly authorizes it.
+
+When publication is authorized, follow the `review-pr` skill's publisher
+dispatch sequence — not raw `gh pr review`. Look up the profile's `review`
+publisher mode, build the manifest, dispatch via `gh workflow run`, and verify
+`claudio-dr[bot]` authorship. If no publisher is configured for the `review`
+mode, return the formatted review as `not published` and explain why; never
+post as the user's personal account.

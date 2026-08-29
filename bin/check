@@ -647,7 +647,7 @@ done
 grep -qF 'SendMessage to: "main"' core/issue-workflow/references/plan-issue-contract.md
 grep -qF 'Do not create a branch' core/issue-workflow/references/plan-issue-contract.md
 grep -qF 'approved `plan-issue` handoff' core/issue-workflow/references/start-issue-contract.md
-grep -qF 'explicit approval before `ship-issue`' core/issue-workflow/references/execute-issue-contract.md
+grep -qF 'do not ask for a second confirmation' core/issue-workflow/references/execute-issue-contract.md
 grep -qF 'explicit user approval to ship' core/issue-workflow/references/ship-issue-contract.md
 
 # Each adapter's start-issue skill must carry an explicit platform-scoping note

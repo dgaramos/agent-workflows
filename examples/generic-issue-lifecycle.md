@@ -5,6 +5,30 @@ the neutral `acme/widgets` repository. It uses only illustrative values: a
 real project profile supplies its branch convention, quality command, PR
 metadata, and publisher details.
 
+## Single human gate
+
+An explicit `execute-issue` request authorizes the full lifecycle. The only
+human gate is after `plan-issue` surfaces the plan: the caller reviews it and
+approves before any file is touched. After that single approval, `start-issue`,
+`execute-issue`, implement, push, and PR all proceed without further
+confirmation. `ship-issue` does not require an extra approval gate when reached
+within an `execute-issue` run — that gate only applies when `ship-issue` is
+invoked standalone.
+
+```md
+## Plan — #42
+[plan content]
+
+Next: start-issue (awaiting explicit approval)
+```
+
+After the caller approves:
+
+```md
+[start-issue proceeds → implement-issue proceeds → ship-issue proceeds → PR opened]
+No further confirmation requested.
+```
+
 ## 1. Start the explicit issue
 
 The caller explicitly asks to execute `#42`. `start-issue` loads the one
