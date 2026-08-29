@@ -34,6 +34,11 @@ A profile may declare one exact external spec trio using this section:
 
 `Repository` identifies the source when it is external; a profile may instead
 declare a local repository identity when the trio lives in the target project.
+It may also be one environment placeholder, such as
+`${DR_SPECS_REPOSITORY}`. The resolver substitutes it only from the invoking
+environment; an unset, empty, or malformed value makes the source inaccessible
+and the agent must stop. Placeholders do not support defaults, concatenation,
+or shell evaluation.
 `Authorized path` is a directory containing exactly `requirements.md`,
 `design.md`, and `tasks.md`.
 

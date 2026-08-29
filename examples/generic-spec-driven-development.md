@@ -19,12 +19,13 @@ resolves the trio:
 ```md
 ## Spec source
 
-- **Repository:** `acme/specs`
+- **Repository:** `${ACME_SPECS_REPOSITORY}`
 - **Authorized path:** `specs/billing/overdue-invoice-notifications/`
 ```
 
-Without both fields, an agent can draft the trio in conversation but does not
-read or write an external repository.
+The invoking environment sets `ACME_SPECS_REPOSITORY=acme/specs`. Without both
+fields and a resolved value, an agent can draft the trio in conversation but
+does not read or write an external repository.
 
 ## `requirements.md`
 

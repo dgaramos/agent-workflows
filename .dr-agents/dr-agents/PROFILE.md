@@ -5,11 +5,12 @@ the issue, and `profiles/dr-agents.md`; run `bin/check` before handoff.
 
 ## Spec source
 
-- **Repository:** `dgaramos/dr-specs`
+- **Repository:** `${DR_SPECS_REPOSITORY}`
 - **Authorized path:** `specs/dr-agents/complete-sdd-pipeline/`
 
-This declaration authorizes resolution of that exact trio only. It does not
-authorize writing to `dgaramos/dr-specs`.
+Set `DR_SPECS_REPOSITORY=dgaramos/dr-specs` in the environment that invokes an
+agent. This declaration authorizes resolution of that exact trio only; it does
+not authorize writing to the resolved repository.
 
 ## Delivery metadata
 

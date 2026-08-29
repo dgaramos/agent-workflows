@@ -1,4 +1,4 @@
-# cody-dr: v0.1.22
+# cody-dr: v0.1.23
 name: Resolve Cody DR review thread
 on:
   workflow_dispatch:
