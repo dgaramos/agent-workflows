@@ -78,3 +78,5 @@ Drafting a spec does not authorize creating an issue, writing to an external
 request. A spec is written outside the current response only when the caller
 explicitly authorizes that exact write and the loaded profile declares the
 target path.
+
+**Publication:** not published unless that explicit write authorization and profile-declared target are present.
