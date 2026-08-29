@@ -141,10 +141,22 @@ when the target project's `PROFILE.md` declares its exact trio path. Configure
 the repository identity in the environment before starting Codex or Claude:
 
 ```bash
-local-env set SPECS_REPOSITORY "owner/private-specs"
-exec zsh
+export SPECS_REPOSITORY="owner/private-specs"
 ```
 
+This sets it for the current terminal session. To persist it, add the same
+`export` line to the startup file for the shell you use, then open a new
+terminal:
+
+```bash
+# zsh (macOS default and many Linux setups)
+printf '\nexport SPECS_REPOSITORY="owner/private-specs"\n' >> ~/.zshrc
+
+# bash (choose the startup file your system loads, commonly ~/.bashrc)
+printf '\nexport SPECS_REPOSITORY="owner/private-specs"\n' >> ~/.bashrc
+```
+
+Start Codex or Claude from that new terminal so it inherits the variable.
 `SPECS_REPOSITORY` is intentionally not stored in the catalog or profile as a
 literal value. If the variable is missing, empty, or invalid, the agent stops
 instead of guessing a repository. The profile still controls the authorized
