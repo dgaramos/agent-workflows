@@ -1,5 +1,8 @@
 # Generic issue authoring example
 
+With a profile-declared, authorized spec location, authoring may use the trio
+as context and add `Spec: <location>`; without it, no spec source is inferred.
+
 Input: `draft an issue for the missing pagination contract`
 
 The author loads `core/issue-authoring/references/issue-contract.md` and the
