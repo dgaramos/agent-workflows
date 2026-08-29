@@ -47,6 +47,8 @@ jobs:
         run: bash tests/test_discover_project_profile.sh
       - name: test_plugin_core_bundles
         run: bash tests/test_plugin_core_bundles.sh
+      - name: test_helper_agents
+        run: bash tests/test_helper_agents.sh
       - name: test_publish_claudio_thread_action
         run: bash tests/test_publish_claudio_thread_action.sh
       - name: test_publish_cody_thread_action
