@@ -340,6 +340,7 @@ tests/test_publish_cody_thread_action.sh
 tests/test_publish_pr_metadata.sh
 tests/test_discover_project_profile.sh
 tests/test_plugin_core_bundles.sh
+tests/test_helper_agents.sh
 bin/sync-plugin-core-bundles.sh --check
 
 # Agent reviews inform humans; they do not block a PR through REQUEST_CHANGES.
