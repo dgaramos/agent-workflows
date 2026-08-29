@@ -655,7 +655,7 @@ grep -qF 'must not infer' "$profile_discovery_contract"
 grep -qF '## Spec source' .dr-agents/dr-agents/PROFILE.md
 grep -qF '**Repository:**' .dr-agents/dr-agents/PROFILE.md
 grep -qF '**Authorized path:**' .dr-agents/dr-agents/PROFILE.md
-grep -qF 'DR_SPECS_REPOSITORY' .dr-agents/dr-agents/PROFILE.md
+grep -qF 'SPECS_REPOSITORY' .dr-agents/dr-agents/PROFILE.md
 grep -qF 'Placeholders do not support defaults' "$profile_discovery_contract"
 
 # The generic SDD example is the portable end-to-end reference for the

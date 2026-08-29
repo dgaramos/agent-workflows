@@ -134,6 +134,22 @@ agents update --all                  # pull and update both installs
 The install scripts detect conflicts and never silently overwrite an existing
 file whose content differs from the source.
 
+### External SDD specs
+
+Spec-Driven Development can use an external, private specs repository only
+when the target project's `PROFILE.md` declares its exact trio path. Configure
+the repository identity in the environment before starting Codex or Claude:
+
+```bash
+local-env set SPECS_REPOSITORY "owner/private-specs"
+exec zsh
+```
+
+`SPECS_REPOSITORY` is intentionally not stored in the catalog or profile as a
+literal value. If the variable is missing, empty, or invalid, the agent stops
+instead of guessing a repository. The profile still controls the authorized
+path and external writes always require a separate explicit request.
+
 ### Tarball install (no git required)
 
 Download and install directly from a GitHub release without cloning the

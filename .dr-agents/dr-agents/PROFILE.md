@@ -5,10 +5,10 @@ the issue, and `profiles/dr-agents.md`; run `bin/check` before handoff.
 
 ## Spec source
 
-- **Repository:** `${DR_SPECS_REPOSITORY}`
+- **Repository:** `${SPECS_REPOSITORY}`
 - **Authorized path:** `specs/dr-agents/complete-sdd-pipeline/`
 
-Set `DR_SPECS_REPOSITORY` to the private `owner/repository` identifier in the
+Set `SPECS_REPOSITORY` to the private `owner/repository` identifier in the
 environment that invokes an agent. This declaration authorizes resolution of
 that exact trio only; it does not authorize writing to the resolved repository.
 

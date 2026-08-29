@@ -1,4 +1,4 @@
-# cody-dr: v0.1.23
+# cody-dr: v0.1.24
 name: Publish Cody DR review
 on:
   workflow_dispatch:
