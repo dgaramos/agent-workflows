@@ -34,5 +34,7 @@ mode declared in the target profile's dispatch contract. Never fall back to a
 raw authenticated CLI session (such as `gh pr review`) when a publisher mode is
 configured — doing so attributes the review to the user's personal account
 instead of the reviewer identity. If the target profile does not declare a
-`review` publisher mode, return the formatted manifest as `not published` with a
-clear explanation; do not attempt any other publication path.
+`review` publisher mode, an explicitly authorized authenticated personal account
+may post the review via `gh pr review` as a personal fallback; the outcome must
+clearly identify the personal GitHub account as the author and label the action
+as a personal fallback — never represent it as the reviewer identity.

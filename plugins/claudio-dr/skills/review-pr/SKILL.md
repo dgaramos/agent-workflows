@@ -30,7 +30,11 @@ When the user authorizes GitHub publication, follow this dispatch sequence:
 
 The personal `gh` session may only dispatch the workflow; it must never be switched, refreshed, logged out, or used to post the review body directly.
 
-If no `review` mode is declared in the target profile, return the formatted manifest as `not published` with a clear explanation. Never post as the user's personal account.
+If no `review` mode is declared in the target profile, an explicitly authorized
+authenticated personal account may post the review via `gh pr review` as a
+personal fallback. The outcome must clearly identify the personal GitHub account
+as the author and label the action as a personal fallback; never represent it as
+`claudio-dr[bot]`.
 
 **Publication event: always `COMMENT`.** Claudio DR never submits `REQUEST_CHANGES` and never submits `APPROVE` — regardless of finding count, profile authorization, or user request. Every publication, including a zero-findings pass, uses `COMMENT`. The publisher is configured for `COMMENT` only; any other event is a contract violation and must not be dispatched.
 
