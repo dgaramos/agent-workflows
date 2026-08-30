@@ -45,7 +45,7 @@ Notify the customer once when an invoice becomes overdue.
 
 ## Critérios de aceite
 
-- Given an unpaid invoice past its due date, when the overdue job runs, then
+- [AC-01] Given an unpaid invoice past its due date, when the overdue job runs, then
   one notification is requested; if delivery fails, the failure is recorded
   and the invoice is not marked as notified.
 
@@ -96,9 +96,9 @@ message for each invoice.
 ## `tasks.md`
 
 ```md
-- [ ] Add overdue-invoice selection to the scheduled job.
+- [ ] T01 [AC-01] Add overdue-invoice selection to the scheduled job.
   - Verification: `npm test -- overdue-job-selection`
-- [ ] Request notification delivery and record failures.
+- [ ] T02 [AC-01] Request notification delivery and record failures.
   - Verification: `npm test -- overdue-job-notification`
 
 ## Checkpoint
@@ -116,10 +116,12 @@ Spec: acme/specs/specs/billing/overdue-invoice-notifications/
 
 The executor verifies that the issue reference exactly matches the loaded
 profile declaration, then reads `tasks.md` as read-only input. It performs the
-tasks in order and runs each `Verification:` command after its task. At the
-checkpoint, it stops unless the caller explicitly authorized continuous
-execution. The checkpoint does not authorize publication, merge, or an
-unrelated external write.
+tasks in order and runs each `Verification:` command after its task. Its
+summary records `T01 → AC-01 → passed` and `T02 → AC-01 → passed`; a legacy
+trio without these links is reported as traceability unavailable rather than
+being inferred. At the checkpoint, it stops unless the caller explicitly
+authorized continuous execution. The checkpoint does not authorize publication,
+merge, or an unrelated external write.
 
 The example is illustrative: its commands and components are not portable
 requirements for consuming projects.

@@ -45,9 +45,12 @@ to create the issue.
 When the profile declares an authorized exact spec source and its trio is
 available there, read `requirements.md` for acceptance criteria and `design.md`
 for constraints. Treat it as context only, include `Spec: <location>` in the
-body without a new mandatory section, and preserve existing behavior otherwise.
+body without a new mandatory section, and preserve every relevant declared
+criterion ID and its criterion context in the acceptance-criteria checklist.
 With no complete, exact, accessible declaration, do not infer or access an
-external repository or path.
+external repository or path. If the authorized trio lacks criterion IDs or
+task-to-criterion references, state that traceability limitation in the draft
+without inventing references.
 
 ### Chore and spike modes
 

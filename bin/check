@@ -644,6 +644,18 @@ grep -qF '**Publication:** not published' "$spec_contract"
 grep -qF '## Checkpoint' "$spec_contract"
 grep -qF 'tasks.md is read-only' "$spec_contract"
 grep -qF '`## Spec source` convention' "$spec_contract"
+grep -qF '[AC-01]' "$spec_contract"
+grep -qF 'Traceability compatibility' "$spec_contract"
+grep -qF 'must not infer criterion IDs' "$spec_contract"
+
+# Traceable specs must retain criterion context through authoring and execution.
+grep -qF 'preserve every relevant declared criterion ID' "$issue_contract"
+grep -qF 'traceability limitation' "$issue_contract"
+readonly execute_issue_contract="core/issue-workflow/references/execute-issue-contract.md"
+readonly implement_issue_contract="core/issue-workflow/references/implement-issue-contract.md"
+grep -qF 'declared covered criterion IDs' "$execute_issue_contract"
+grep -qF 'traceability limitation without inventing links' "$execute_issue_contract"
+grep -qF '**Spec task traceability:**' "$implement_issue_contract"
 
 # External spec resolution is intentionally profile-controlled. These anchors
 # prevent adapters or contracts from silently regressing to inferred sources.
@@ -665,6 +677,9 @@ for required_anchor in \
   '## Design Brief' \
   '## Spec source' \
   'Spec: acme/specs/specs/billing/overdue-invoice-notifications/' \
+  '[AC-01]' \
+  'T01 [AC-01]' \
+  'traceability unavailable' \
   '## Issue reference and execution' \
   'tasks in order' \
   'Verification' \

@@ -30,7 +30,9 @@ bindings are deliberately deferred to their dedicated follow-up issues.
    accessibility, performance, compatibility, and operational constraints.
 4. `## Critérios de aceite` — independently verifiable criteria in
    Given/When/Then form. Every criterion must state the expected failure state
-   when the relevant condition fails.
+   when the relevant condition fails. Prefix every criterion with a unique,
+   stable identifier in the form `[AC-01]`; preserve that identifier whenever
+   the criterion is cited by a task, issue, or execution report.
 5. `## Condições de falha` — failure modes, user-visible behavior, recovery,
    and any escalation path.
 6. `## Boundaries` — a table using `✅`, `⚠️`, and `🚫` to distinguish included,
@@ -59,20 +61,31 @@ constraint. It must not add implementation scope that the requirements exclude.
 ## `tasks.md`
 
 `tasks.md` must express implementation work as ordered Markdown checkbox tasks.
-Each task must include a nested `Verification:` sub-item naming the exact
-command or structural check that demonstrates completion. Tasks may be grouped
-under optional `## Checkpoint` headings; a checkpoint names the decision or
-approval boundary before later tasks proceed.
+Each task must name one or more covered acceptance-criterion identifiers from
+`requirements.md`, for example `T01 [AC-01]`. Each task must include a nested
+`Verification:` sub-item naming the exact command or structural check that
+demonstrates completion. Tasks may be grouped under optional `## Checkpoint`
+headings; a checkpoint names the decision or approval boundary before later
+tasks proceed.
 
 Every acceptance criterion in `requirements.md` must map to one or more tasks,
 and every task must be justified by a requirement, constraint, or necessary
 validation activity. The task sequence must make dependencies explicit.
 
+## Traceability compatibility
+
+An older trio may lack criterion identifiers or task-to-criterion references.
+An agent reading such a trio must state that traceability is unavailable and
+must not infer criterion IDs, task coverage, or verification evidence. It may
+still use the trio according to the compatibility policy of its consuming
+workflow.
+
 ## Executor boundary
 
 For an executor, tasks.md is read-only execution input. The executor reads
-tasks in order, runs each task's `Verification:` command after completing that
-task, and does not rewrite the spec as part of implementation. At a
+tasks in order, records each completed task, its declared covered criterion
+IDs, and its `Verification:` result, and does not rewrite the spec as part of
+implementation. At a
 `## Checkpoint`, the executor stops for approval unless the caller explicitly
 authorized continuous execution.
 
