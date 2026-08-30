@@ -86,6 +86,7 @@ contributor.
 | `design-and-author` | Chain design discovery into issue authoring in a single invocation |
 | `clarify-spec` | Surface material spec decisions and explicit defaults without writing |
 | `analyze-spec` | Report spec coverage, conflicts, boundaries, and checkpoint readiness |
+| `classify-spec-drift` | Classify code/spec drift and recommend the smallest authorized next action |
 | `plan-issue` | Surface a read-only, test-first implementation plan and wait for explicit approval before any file is touched |
 | `start-issue` | Load a profile and issue, check dependencies, create working branch |
 | `execute-issue` | Orchestrate the full lifecycle (plan → start → implement → ship) with a single human gate after plan approval |

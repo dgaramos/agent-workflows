@@ -52,6 +52,11 @@ external repository or path. If the authorized trio lacks criterion IDs or
 task-to-criterion references, state that traceability limitation in the draft
 without inventing references.
 
+When a profile explicitly requires accepted specs for authoring, inspect the
+resolved optional `spec.yaml`. Stop with a handoff when it is missing or its
+status is not `accepted`; do not infer that a draft, review, or superseded spec
+is current.
+
 ### Chore and spike modes
 
 Before drafting, assess scope and risk:
