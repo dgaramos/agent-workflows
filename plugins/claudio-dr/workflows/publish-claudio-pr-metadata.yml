@@ -1,4 +1,4 @@
-# claudio-dr: v0.1.26
+# claudio-dr: v0.1.27
 name: Apply Claudio DR PR metadata
 on:
   workflow_dispatch:
