@@ -90,7 +90,7 @@ Strengthen the core contract with these project-specific checks:
 | --- | --- |
 | Start an issue | `start-issue` with this profile |
 | Implement changes | `implement-issue` with this profile |
-| Open a PR | `ship-change` with this profile |
+| Open a PR | `ship-issue` with this profile |
 | Full lifecycle | `execute-issue` with this profile |
 | Review a PR | `review-pr` with this profile |
 | Handle findings | `handle-findings` with this profile |

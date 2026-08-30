@@ -90,7 +90,7 @@ contributor.
 | `ship-issue` | Run final quality gate, push branch, and open fully-populated PR (no extra approval gate when reached via execute-issue) |
 | `plan-implementation` | _(internal)_ Read-only plan step used within execute-issue |
 | `implement-issue` | _(internal)_ In-scope implementation step used within execute-issue |
-| `ship-change` | _(internal)_ Delivery step used within execute-issue |
+| `ship-change` | _(legacy internal)_ Superseded by formal `ship-issue` delivery |
 
 ## Installation
 

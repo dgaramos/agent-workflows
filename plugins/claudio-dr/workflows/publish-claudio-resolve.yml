@@ -1,4 +1,4 @@
-# claudio-dr: v0.1.24
+# claudio-dr: v0.1.25
 name: Resolve Claudio DR review thread
 on:
   workflow_dispatch:

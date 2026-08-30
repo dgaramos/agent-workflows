@@ -679,8 +679,12 @@ done
 grep -qF 'SendMessage to: "main"' core/issue-workflow/references/plan-issue-contract.md
 grep -qF 'Do not create a branch' core/issue-workflow/references/plan-issue-contract.md
 grep -qF 'approved `plan-issue` handoff' core/issue-workflow/references/start-issue-contract.md
+grep -qF 'start-issue → plan-implementation → implement-issue → ship-issue' core/issue-workflow/references/execute-issue-contract.md
 grep -qF 'do not ask for a second confirmation' core/issue-workflow/references/execute-issue-contract.md
-grep -qF 'explicit user approval to ship' core/issue-workflow/references/ship-issue-contract.md
+grep -qF 'no second confirmation is required' core/issue-workflow/references/ship-issue-contract.md
+grep -qF 'invoked standalone, require explicit user approval to ship' core/issue-workflow/references/ship-issue-contract.md
+grep -qF 'Final quality gate' core/issue-workflow/references/ship-issue-contract.md
+grep -qF 'Metadata applied' core/issue-workflow/references/ship-issue-contract.md
 
 # Each adapter's start-issue skill must carry an explicit platform-scoping note
 # that names the platform-specific tooling and states it is intentionally not
@@ -717,7 +721,7 @@ for required_text in \
     exit 1
   fi
 done
-readonly contribution_lifecycle_skills=("start-issue" "implement-issue" "ship-change")
+readonly contribution_lifecycle_skills=("start-issue" "implement-issue" "ship-issue")
 for skill_name in "${contribution_lifecycle_skills[@]}"; do
   for prefix in "${adapter_prefixes[@]}"; do
     skill="${prefix}/skills/${skill_name}/SKILL.md"
@@ -734,7 +738,7 @@ readonly contribution_guidance_output='**Contribution guidance:** <applied: <ite
 for contract in \
   core/issue-workflow/references/start-issue-contract.md \
   core/issue-workflow/references/implement-issue-contract.md \
-  core/issue-workflow/references/ship-change-contract.md; do
+  core/issue-workflow/references/ship-issue-contract.md; do
   if ! grep -qF "$contribution_guidance_output" "$contract"; then
     echo "contribution-guidance: $contract does not report guidance in its output template" >&2
     exit 1

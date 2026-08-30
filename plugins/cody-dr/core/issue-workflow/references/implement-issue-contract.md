@@ -41,7 +41,7 @@ confirmed branch, issue reference, and test-first plan.
 **Test-first evidence:** <Red/Green/Refactor evidence per criterion>
 **Acceptance criteria:** <all addressed|not yet addressed: criterion>
 **Contribution guidance:** <applied: <items> | not found | conflict: <description>>
-**Next:** ship-change
+**Next:** ship-issue
 ```
 
 Stop and emit a handoff block if the quality command fails or any acceptance

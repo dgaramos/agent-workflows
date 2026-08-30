@@ -42,9 +42,9 @@ from `CONTRIBUTING.md`. Each commit carries the `Signed-off-by` trailer in
 addition to the adapter's `Co-Authored-By` trailer. The validation sequence
 runs `make lint` and `make test` after each logical unit.
 
-### ship-change behavior
+### ship-issue behavior
 
-`ship-change` reads `.github/pull_request_template.md`, fills every section,
+`ship-issue` reads `.github/pull_request_template.md`, fills every section,
 and passes the completed body to `gh pr create`. The `make lint && make test`
 validation from `CONTRIBUTING.md` runs before opening the PR.
 

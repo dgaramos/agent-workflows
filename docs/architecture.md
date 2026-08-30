@@ -28,7 +28,7 @@ commands, branch names, credentials, labels, or remote references.
 | `core/findings-handling/` | `findings-contract.md` | `handle-findings` |
 | `core/issue-authoring/` | `issue-contract.md` | `author-issue` |
 | `core/design-discovery/` | `design-discovery-contract.md` | `design-discovery` |
-| `core/issue-workflow/` | `workflow-contract.md`, `start-issue-contract.md`, `plan-implementation-contract.md`, `implement-issue-contract.md`, `ship-change-contract.md`, `execute-issue-contract.md` | `start-issue`, `plan-implementation`, `implement-issue`, `ship-change`, `execute-issue` |
+| `core/issue-workflow/` | `workflow-contract.md`, `start-issue-contract.md`, `plan-implementation-contract.md`, `implement-issue-contract.md`, `ship-issue-contract.md`, `execute-issue-contract.md` | `start-issue`, `plan-implementation`, `implement-issue`, `ship-issue`, `execute-issue` |
 
 ### Adapters
 
@@ -56,21 +56,21 @@ flowchart TD
     HPF["handle-pr-findings/SKILL.md"]
     SI["start-issue/SKILL.md"]
     II["implement-issue/SKILL.md"]
-    SC["ship-change/SKILL.md"]
+    SH["ship-issue/SKILL.md"]
     EI["execute-issue/SKILL.md"]
     CRP["core/pr-review/references/review-contract.md"]
     CFH["core findings-handling contracts"]
     CSI["core/issue-workflow/skills/start-issue/SKILL.md"]
     CII["core/issue-workflow/skills/implement-issue/SKILL.md"]
-    CSC["core/issue-workflow/skills/ship-change/SKILL.md"]
+    CSH["core/issue-workflow/skills/ship-issue/SKILL.md"]
     CEI["core/issue-workflow/skills/execute-issue/SKILL.md"]
 
-    M & AG & SK --> RPR & HPF & SI & II & SC & EI
+    M & AG & SK --> RPR & HPF & SI & II & SH & EI
     RPR -->|"references"| CRP
     HPF -->|"references"| CFH
     SI -->|"references"| CSI
     II -->|"references"| CII
-    SC -->|"references"| CSC
+    SH -->|"references"| CSH
     EI -->|"references"| CEI
 ```
 
@@ -133,7 +133,7 @@ The personal `gh` session dispatches the publisher but is never used to
 impersonate the reviewer or to post directly.
 
 For a repository-neutral walkthrough of `start-issue`, `implement-issue`, and
-`ship-change`, including dependency and quality-gate handoffs, see the
+`ship-issue`, including dependency and quality-gate handoffs, see the
 [generic issue-to-change lifecycle](../examples/generic-issue-lifecycle.md).
 
 ## Validation
