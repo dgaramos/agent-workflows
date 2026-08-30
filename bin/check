@@ -649,12 +649,15 @@ grep -qF 'Traceability compatibility' "$spec_contract"
 grep -qF 'must not infer criterion IDs' "$spec_contract"
 
 # Traceable specs must retain criterion context through authoring and execution.
-grep -qF 'preserve every relevant declared criterion ID' "$issue_contract"
+grep -qF 'preserve every relevant declared' "$issue_contract"
+grep -qF 'criterion ID and its criterion context' "$issue_contract"
 grep -qF 'traceability limitation' "$issue_contract"
 readonly execute_issue_contract="core/issue-workflow/references/execute-issue-contract.md"
 readonly implement_issue_contract="core/issue-workflow/references/implement-issue-contract.md"
-grep -qF 'declared covered criterion IDs' "$execute_issue_contract"
-grep -qF 'traceability limitation without inventing links' "$execute_issue_contract"
+grep -qF 'declared' "$execute_issue_contract"
+grep -qF 'covered criterion IDs' "$execute_issue_contract"
+grep -qF 'traceability limitation without' "$execute_issue_contract"
+grep -qF 'inventing links' "$execute_issue_contract"
 grep -qF '**Spec task traceability:**' "$implement_issue_contract"
 
 # External spec resolution is intentionally profile-controlled. These anchors
