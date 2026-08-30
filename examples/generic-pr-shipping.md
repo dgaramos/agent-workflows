@@ -2,7 +2,7 @@
 
 A target profile supplies the values and `apply-pr-metadata` publisher that are
 intentionally absent from the portable core. An explicit issue-execution request
-authorizes `gh pr create`; ship-change dispatches that publisher and waits for
+authorizes `gh pr create`; ship-issue dispatches that publisher and waits for
 its verified App result. Inside the publisher, the installation-token workflow
 may run:
 

@@ -10,10 +10,10 @@ metadata, and publisher details.
 An explicit `execute-issue` request authorizes the full lifecycle. The only
 human gate is after `plan-issue` surfaces the plan: the caller reviews it and
 approves before any file is touched. After that single approval, `start-issue`,
-`execute-issue`, implement, push, and PR all proceed without further
-confirmation. `ship-issue` does not require an extra approval gate when reached
-within an `execute-issue` run — that gate only applies when `ship-issue` is
-invoked standalone.
+`plan-implementation`, `implement-issue`, and `ship-issue` all proceed without
+further confirmation. `ship-issue` does not require an extra approval gate when
+reached within an `execute-issue` run — that gate only applies when
+`ship-issue` is invoked standalone.
 
 ```md
 ## Plan — #42
@@ -25,7 +25,7 @@ Next: start-issue (awaiting explicit approval)
 After the caller approves:
 
 ```md
-[start-issue proceeds → implement-issue proceeds → ship-issue proceeds → PR opened]
+[start-issue → plan-implementation → implement-issue → ship-issue → PR opened]
 No further confirmation requested.
 ```
 
@@ -42,7 +42,7 @@ creating a branch.
 **Branch:** `42-docs/widget-cache-invalidation` from `main`
 **Profile:** `acme/widgets`
 **Dependencies:** all resolved
-**Next:** implement-issue
+**Next:** plan-implementation
 ```
 
 If dependency `#41` is still open, the lifecycle stops here instead of
@@ -73,7 +73,7 @@ pushes or opens a pull request.
 **Commits:** 2
 **Quality command:** passed
 **Acceptance criteria:** all addressed
-**Next:** ship-change
+**Next:** ship-issue
 ```
 
 A failing quality gate is a terminal handoff for this execution. Later phases
@@ -89,10 +89,10 @@ do not run until the failure is fixed and validated:
 
 ## 3. Ship the completed change
 
-For an explicit `execute-issue` request, the normal delivery path is already
-authorized: commit, push, and opening a fully populated PR. `ship-change`
-runs the final quality gate, derives the title and body from the issue, and
-uses the profile values rather than hardcoding them in the portable workflow.
+For an approved `execute-issue` lifecycle, the normal delivery path is already
+authorized: commit, push, and opening a fully populated PR. `ship-issue` runs
+the final quality gate, derives the title and body from the issue, and uses the
+profile values rather than hardcoding them in the portable workflow.
 When the profile supplies a PR template, the body retains every template
 heading and fills each section with a change-specific answer or `Not
 applicable`.
@@ -109,9 +109,8 @@ Project `Widgets` / `In Progress`
 assignee → `maintainer`; Project → `In Progress`
 ```
 
-If a caller invokes `ship-change` on its own without an explicit
-issue-execution request, it prepares the same PR payload but does not publish
-it:
+If a caller invokes `ship-issue` on its own without explicit shipping approval,
+it prepares the same PR payload but does not publish it:
 
 ```md
 ## Ship — #42
@@ -122,9 +121,9 @@ it:
 **Metadata applied:** none
 **Metadata verified:** none
 
-## Handoff — ship-change
+## Handoff — ship-issue
 
-**Stopped at:** standalone shipping has no push and PR-creation authorization
+**Stopped at:** standalone shipping has no explicit approval
 **Last verified head:** `d4e5f6a`
 **Next step:** explicitly request issue execution or authorize shipping
 ```
@@ -141,7 +140,7 @@ the branch, validation, or PR state:
 ```md
 ## Execute — #42
 
-**Phases completed:** start-issue · plan-implementation · implement-issue · ship-change
+**Phases completed:** start-issue · plan-implementation · implement-issue · ship-issue
 **Stopped at:** none
 **PR:** https://github.com/acme/widgets/pull/42
 ```

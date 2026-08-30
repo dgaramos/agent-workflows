@@ -182,7 +182,7 @@ The execute summary below reflects the outcome of that lifecycle:
 ```md
 ## Execute — acme/widgets#99
 
-**Phases completed:** start-issue · plan-implementation · implement-issue · ship-change
+**Phases completed:** start-issue · plan-implementation · implement-issue · ship-issue
 **Stopped at:** none
 **PR:** https://github.com/acme/widgets/pull/99
 ```
