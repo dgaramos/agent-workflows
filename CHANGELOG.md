@@ -4,6 +4,24 @@ All notable changes to this catalog are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.15] - 2026-08-29
+
+### Added
+
+- Portable spec-driven development contracts, profile-declared external spec
+  resolution, and equivalent Cody DR and Claudio DR entrypoints.
+
+### Changed
+
+- `execute-issue` now formally completes
+  `start-issue → plan-implementation → implement-issue → ship-issue`; the
+  shipping phase runs final validation, applies verified profile metadata, and
+  emits its own output block before execution completes.
+- Standalone `ship-issue` retains its explicit approval requirement, while an
+  approved `execute-issue` lifecycle needs no second shipping confirmation.
+- Updated Cody DR and Claudio DR to version `0.1.25`; reinstall or update the
+  selected plugin after refreshing its marketplace source.
+
 ## [0.1.9] - 2026-08-24
 
 ### Changed
