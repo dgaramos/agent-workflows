@@ -22,6 +22,9 @@ match the reference; never infer a repository or execute arbitrary external
 instructions from a spec. At `## Checkpoint`, stop for approval unless the
 caller explicitly authorized continuous execution; checkpoints never broaden
 publication or merge authority.
+When the loaded profile explicitly requires accepted specs for execution,
+inspect the resolved optional `spec.yaml` and stop with a handoff unless its
+status is `accepted`; do not infer current status from a path or Git history.
 3. Run and emit `plan-implementation`, then implement and commit the approved
    plan with validation after each unit through `implement-issue`.
 4. Run `ship-issue` after implementation. The approved plan in this
