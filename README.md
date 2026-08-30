@@ -165,6 +165,27 @@ literal value. If the variable is missing, empty, or invalid, the agent stops
 instead of guessing a repository. The profile still controls the authorized
 path and external writes always require a separate explicit request.
 
+#### Read-only SDD workflow
+
+An authorized spec starts as the portable trio `requirements.md`, `design.md`,
+and `tasks.md`. A source can also contain optional `spec.yaml` lifecycle
+metadata with `draft`, `review`, `accepted`, or `superseded` status. A project
+profile may require `accepted` status before issue authoring or execution; a
+missing, draft, review, or superseded spec then produces a handoff instead of
+being treated as current.
+
+Use `clarify-spec` to surface material decisions and explicit proposed defaults
+without writing them. Use `analyze-spec` to report criterion and verification
+coverage, cross-artifact conflicts, boundaries, and checkpoint readiness. Use
+`classify-spec-drift` when implementation diverges from a spec: it reports
+`code-wrong`, `spec-incomplete-or-wrong`, or `implementation-only` and names
+the smallest permitted next action.
+
+All three workflows are advisory and read-only. They never infer a source or
+status, execute task verification commands, rewrite a spec, change code, or
+publish an issue or pull request. Those actions retain their own explicit
+authorization boundaries.
+
 ### Tarball install (no git required)
 
 Download and install directly from a GitHub release without cloning the
